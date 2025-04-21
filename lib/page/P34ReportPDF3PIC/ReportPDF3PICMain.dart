@@ -1,0 +1,3161 @@
+import 'package:dio/dio.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+import '../../Layout/head.dart';
+
+import '../../bloc/Cubit/31-ReportPDFCommoncubit.dart';
+import '../../data/CommonTestData.dart';
+import '../../data/global.dart';
+import '../../widget/GRAPH/LineGraph01.dart';
+import '../../widget/ReportComponent/CommonReport.dart';
+import '../../widget/ReportComponent/PicSlot.dart';
+import '../../widget/ReportComponent/SignSide.dart';
+import '../../widget/common/Advancedropdown.dart';
+import '../../widget/common/ComInputText.dart';
+import '../../widget/common/ErrorPopup.dart';
+import '../../widget/common/Error_NO_Popup.dart';
+import '../../widget/common/Loading.dart';
+import '../../widget/common/Safty.dart';
+import '../../widget/common/imgset.dart';
+import '../../widget/function/helper.dart';
+import '../P303QMMASTERQC/P303QMMASTERQCVAR.dart';
+import '../page303.dart';
+import 'ReportPDF3PICvar.dart';
+
+late BuildContext ReportPDF3PICcontext;
+
+class ReportPDF3PIC extends StatefulWidget {
+  ReportPDF3PIC({
+    Key? key,
+    this.dataCommon,
+  }) : super(key: key);
+  CommonReportOutput? dataCommon;
+  @override
+  State<ReportPDF3PIC> createState() => _ReportPDF3PICState();
+}
+
+class _ReportPDF3PICState extends State<ReportPDF3PIC> {
+  @override
+  void initState() {
+    ReportPDF3PICvar.TPKLOTEDIT = '';
+    if (ReportPDF3PICvar.PO != '') {
+      ReportPDF3PICvar.canf = false;
+      context
+          .read<ReportPDFCommon_Cubit>()
+          .ReportPDFCommonCubit(ReportPDF3PICvar.PO);
+    }
+    super.initState();
+  }
+
+  final GlobalKey _globalKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    ReportPDF3PICcontext = context;
+
+    CommonReportOutput _dataCOMMON = widget.dataCommon ??
+        CommonReportOutput(
+          databasic: BasicCommonDATA(),
+        );
+    int HardnessNO = 1;
+    int CoreNO = 1;
+    int GraphNO = 1;
+    int CompoundNO = 1;
+    int RoughnessNO = 1;
+    if (_dataCOMMON.datain.isNotEmpty) {
+      //
+      ReportPDF3PICvar.STATUS = 'REPORT READY';
+      ReportPDF3PICvar.CUSTOMER = _dataCOMMON.databasic.CUSTOMER;
+      ReportPDF3PICvar.PROCESS = _dataCOMMON.databasic.PROCESS;
+      ReportPDF3PICvar.PARTNAME = _dataCOMMON.databasic.PARTNAME;
+      ReportPDF3PICvar.PARTNO = _dataCOMMON.databasic.PARTNO;
+      ReportPDF3PICvar.CUSLOT = _dataCOMMON.databasic.CUSLOT;
+      ReportPDF3PICvar.TPKLOT = _dataCOMMON.databasic.TPKLOT;
+      ReportPDF3PICvar.MATERIAL = _dataCOMMON.databasic.MATERIAL;
+      if (_dataCOMMON.databasic.UNITSAP.toUpperCase() != 'KG') {
+        ReportPDF3PICvar.QTY =
+            '${double.parse(ConverstStr(_dataCOMMON.databasic.QTY)).toStringAsFixed(0)} ${_dataCOMMON.databasic.UNITSAP}';
+      } else {
+        ReportPDF3PICvar.QTY =
+            '${double.parse(ConverstStr(_dataCOMMON.databasic.QTY)).toStringAsFixed(1)} ${_dataCOMMON.databasic.UNITSAP}';
+      }
+
+      ReportPDF3PICvar.PIC01 = _dataCOMMON.databasic.PIC01;
+      ReportPDF3PICvar.PIC02 = _dataCOMMON.databasic.PIC02;
+      ReportPDF3PICvar.PICstd = _dataCOMMON.databasic.PICstd;
+
+      ReportPDF3PICvar.PASS = _dataCOMMON.databasic.PASS;
+      ReportPDF3PICvar.remark = '';
+      if (_dataCOMMON.databasic.PARTNAMEref != '') {
+        ReportPDF3PICvar.remark =
+            'Reference data from\n${_dataCOMMON.databasic.PARTNAMEref}\n${_dataCOMMON.databasic.PARTref}';
+      }
+
+      ReportPDF3PICvar.INC01 = _dataCOMMON.databasic.INC01;
+      ReportPDF3PICvar.INC02 = _dataCOMMON.databasic.INC02;
+//remark
+
+      // print(_dataCOMMON.datain[0]);
+      // print(_dataCOMMON.datain.length);
+      ReportPDF3PICvar.rawlistHardness = [];
+      ReportPDF3PICvar.rawlistCompound = [];
+      ReportPDF3PICvar.rawlistRoughness = [];
+      ReportPDF3PICvar.rawlistCORE = [];
+
+      ReportPDF3PICvar.graphupper = [];
+      ReportPDF3PICvar.graphdata = [];
+      ReportPDF3PICvar.graphdata2 = [];
+      ReportPDF3PICvar.graphdata3 = [];
+      ReportPDF3PICvar.graphdata4 = [];
+      ReportPDF3PICvar.graphunder = [];
+
+      for (var i = 0; i < _dataCOMMON.datain.length; i++) {
+        String Loadin = '';
+        if (_dataCOMMON.datain[i].LOAD != '' &&
+            _dataCOMMON.datain[i].LOAD != '-') {
+          Loadin = "( Load ${_dataCOMMON.datain[i].LOAD} )";
+        }
+        ReportPDF3PICvar.datalist[i].ITEMname =
+            " ${_dataCOMMON.datain[i].ITEMname} ${Loadin}";
+        ReportPDF3PICvar.datalist[i].SCMARK = _dataCOMMON.datain[i].SCMARK;
+        ReportPDF3PICvar.datalist[i].METHODname =
+            _dataCOMMON.datain[i].METHODname;
+        ReportPDF3PICvar.datalist[i].FREQ = _dataCOMMON.datain[i].FREQ;
+        ReportPDF3PICvar.datalist[i].SPECIFICATIONname =
+            _dataCOMMON.datain[i].SPECIFICATION;
+        ReportPDF3PICvar.datalist[i].RESULT = _dataCOMMON.datain[i].RESULT;
+        ReportPDF3PICvar.datalist[i].REMARK = _dataCOMMON.datain[i].Remark;
+        //print(ReportPDF3PICvar.datalist[i].RESULT.length);
+        //Surface Hardness
+
+        if (_dataCOMMON.datain[i].TYPE == 'Number') {
+          if (_dataCOMMON.datain[i].ITEMname
+                  .toUpperCase()
+                  .contains('HARDNESS') &&
+              _dataCOMMON.datain[i].ITEMname.toUpperCase().contains('CORE') ==
+                  false) {
+            for (var li = 0;
+                li < _dataCOMMON.datain[i].datapackset.length;
+                li++) {
+              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '1',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '2',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '3',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '4',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '5',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '6',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '7',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '8',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '9',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '10',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '11',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '12',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '13',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '14',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '15',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '16',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '17',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '18',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '19',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+                ReportPDF3PICvar.rawlistHardness.add(rawlist(
+                  DATANO: HardnessNO.toString(),
+                  DATAPCS: '20',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+                ));
+              }
+              HardnessNO++;
+              // print('>>${HardnessNO}');
+            }
+          } else if (_dataCOMMON.datain[i].ITEMname
+              .toUpperCase()
+              .contains('CORE')) {
+            for (var li = 0;
+                li < _dataCOMMON.datain[i].datapackset.length;
+                li++) {
+              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '1',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '2',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '3',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '4',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '5',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '6',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '7',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '8',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '9',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '10',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '11',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '12',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '13',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '14',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '15',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '16',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '17',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '18',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '19',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+                ));
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+                ReportPDF3PICvar.rawlistCORE.add(rawlist(
+                  DATANO: CoreNO.toString(),
+                  DATAPCS: '20',
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+                ));
+              }
+              CoreNO++;
+              // print('>>${CoreNO}');
+            }
+          }
+          //  CoreNO++;
+        }
+
+        if (_dataCOMMON.datain[i].TYPE == 'Graph') {
+          ReportPDF3PICvar.rawlistGraph = [];
+          if (_dataCOMMON.datain[i].ITEMname.contains('Hardness') ||
+                  _dataCOMMON.datain[i].ITEMname.contains('hardness') ||
+                  _dataCOMMON.datain[i].ITEMname.contains('Total') ||
+                  _dataCOMMON.datain[i].ITEMname.contains('(Graph)')
+
+              //
+              ) {
+            for (var li = 0;
+                li < _dataCOMMON.datain[i].datapackset.length;
+                li++) {
+              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA01p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA01p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA01))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA02p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA02p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA02))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA03p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA03p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA03))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA04p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA04p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA04))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA05p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA05p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA05))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA06p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA06p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA06))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA07p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA07p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA07))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA08p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA08p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA08))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA09p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA09p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA09))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA10p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA10p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA10))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA11p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA11p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA11))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA12p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA12p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA12))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA13p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA13p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA13))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA14p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA14p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA14))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA15p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA15p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA15))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA16p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA16p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA16))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA17p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA17p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA17))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA18p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA18p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA18))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA19p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA19p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA19))),
+                );
+              }
+              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+                ReportPDF3PICvar.rawlistGraph.add(rawlist(
+                  DATANO: GraphNO.toString(),
+                  DATAPCS: _dataCOMMON.datain[i].datapackset[li].DATA20p,
+                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+                ));
+
+                ReportPDF3PICvar.graphdata.add(
+                  FlSpot(
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA20p)),
+                      double.parse(ConverstStr(
+                          _dataCOMMON.datain[i].datapackset[li].DATA20))),
+                );
+              }
+              GraphNO++;
+              // print('>>${HardnessNO}');
+            }
+          }
+
+          // ReportPDF3PICvar.rawlistGraphCore = rawlist(
+          //   DATAPCS: "Core",
+          //   DATA: ReportPDF3PICvar
+          //       .rawlistGraph[ReportPDF3PICvar.rawlistGraph.length - 1].DATA,
+          // );
+          // print(">>>${ReportPDF3PICvar.rawlistGraph.length}");
+          // ReportPDF3PICvar.rawlistGraph.removeLast();
+          if (ReportPDF3PICvar.rawlistGraph.length > 2) {
+            ReportPDF3PICvar.rawlistGraphCore = rawlist(
+              DATAPCS: "Core",
+              DATA: ReportPDF3PICvar
+                  .rawlistGraph[ReportPDF3PICvar.rawlistGraph.length - 1].DATA,
+            );
+            // print(">>>${ReportPDF3PICvar.rawlistGraph.length}");
+
+            ReportPDF3PICvar.rawlistGraph
+                .removeAt(ReportPDF3PICvar.rawlistGraph.length - 1);
+          }
+
+          ReportPDF3PICvar.graphupper = [
+            FlSpot(ReportPDF3PICvar.graphdata[0].x, 1000),
+            FlSpot(
+                ReportPDF3PICvar
+                    .graphdata[ReportPDF3PICvar.graphdata.length - 2].x,
+                1000)
+          ];
+
+          ReportPDF3PICvar.graphdata2 = [
+            FlSpot(ReportPDF3PICvar.graphdata[0].x,
+                double.parse(ConverstStr(_dataCOMMON.datain[i].Cross))),
+            FlSpot(double.parse(ConverstStr(_dataCOMMON.datain[i].RESULT)),
+                double.parse(ConverstStr(_dataCOMMON.datain[i].Cross)))
+          ];
+
+          ReportPDF3PICvar.graphdata3 = [
+            FlSpot(double.parse(ConverstStr(_dataCOMMON.datain[i].RESULT)),
+                double.parse(ConverstStr(_dataCOMMON.datain[i].Cross))),
+            FlSpot(double.parse(ConverstStr(_dataCOMMON.datain[i].RESULT)), 0)
+          ];
+
+          ReportPDF3PICvar.graphdata4 = [
+            FlSpot(ReportPDF3PICvar.graphdata[0].x, 1000),
+            FlSpot(ReportPDF3PICvar.graphdata[0].x, 0)
+          ];
+
+          ReportPDF3PICvar.graphunder = [
+            FlSpot(ReportPDF3PICvar.graphdata[0].x, 0),
+            FlSpot(
+                ReportPDF3PICvar
+                    .graphdata[ReportPDF3PICvar.graphdata.length - 2].x,
+                0)
+          ];
+        }
+
+        if (ReportPDF3PICvar.graphupper.length > 1) {
+          ReportPDF3PICvar.graphupper;
+        }
+
+        if (ReportPDF3PICvar.graphdata2.length > 1) {
+          ReportPDF3PICvar.graphdata2;
+        }
+        if (ReportPDF3PICvar.graphdata3.length > 1) {
+          ReportPDF3PICvar.graphdata3;
+        }
+        if (ReportPDF3PICvar.graphdata4.length > 1) {
+          ReportPDF3PICvar.graphdata4;
+        }
+        if (ReportPDF3PICvar.graphunder.length > 1) {
+          ReportPDF3PICvar.graphunder;
+        }
+
+        //Compound Layer
+
+        // Roughness
+      }
+      if (ReportPDF3PICvar.graphdata.length > 1) {
+        ReportPDF3PICvar.graphdata.removeLast();
+        //     .removeAt(ReportPDF3PICvar.graphdata.length - 1);
+      }
+
+      // print(ReportPDF3PICvar.datalist);
+    } else {
+      ReportPDF3PICvar.STATUS = 'WATTING or NO-DATA';
+
+      ReportPDF3PICvar.CUSTOMER = '';
+      ReportPDF3PICvar.PROCESS = '';
+      ReportPDF3PICvar.PARTNAME = '';
+      ReportPDF3PICvar.PARTNO = '';
+      ReportPDF3PICvar.CUSLOT = '';
+      ReportPDF3PICvar.TPKLOT = '';
+      ReportPDF3PICvar.MATERIAL = '';
+      ReportPDF3PICvar.QTY = '';
+
+      ReportPDF3PICvar.PICstd = '';
+      ReportPDF3PICvar.PIC01 = '';
+      ReportPDF3PICvar.PIC02 = '';
+
+      ReportPDF3PICvar.rawlistHardness = [];
+      ReportPDF3PICvar.rawlistCompound = [];
+      ReportPDF3PICvar.rawlistRoughness = [];
+      ReportPDF3PICvar.rawlistCORE = [];
+      ReportPDF3PICvar.INC01 = '';
+      ReportPDF3PICvar.INC02 = '';
+
+      ReportPDF3PICvar.datalist = [
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+        ReportPDF3PIClist(),
+      ];
+
+      ReportPDF3PICvar.rawlistGraphCore = rawlist();
+
+      ReportPDF3PICvar.rawlistGraph = [];
+      ReportPDF3PICvar.graphupper = [];
+      ReportPDF3PICvar.graphdata = [];
+      ReportPDF3PICvar.graphdata2 = [];
+      ReportPDF3PICvar.graphdata3 = [];
+      ReportPDF3PICvar.graphdata4 = [];
+      ReportPDF3PICvar.graphunder = [];
+    }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 60),
+                child: ComInputText(
+                  height: 40,
+                  width: 200,
+                  isContr: ReportPDF3PICvar.iscontrol,
+                  fnContr: (input) {
+                    setState(() {
+                      ReportPDF3PICvar.iscontrol = input;
+                    });
+                  },
+                  isEnabled: ReportPDF3PICvar.canf,
+                  sValue: ReportPDF3PICvar.PO,
+                  returnfunc: (String s) {
+                    ReportPDF3PICvar.PO = s;
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: InkWell(
+                  onTap: () {
+                    if (ReportPDF3PICvar.PO != '') {
+                      context
+                          .read<ReportPDFCommon_Cubit>()
+                          .ReportPDFCommonCubit(ReportPDF3PICvar.PO);
+                    }
+                  },
+                  child: Container(
+                    color: Colors.black,
+                    height: 40,
+                    width: 40,
+                    child: const Center(
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: InkWell(
+                  onTap: () {
+                    context.read<ReportPDFCommon_Cubit>().Flush();
+                    ReportPDF3PICvar.canf = true;
+                    ReportPDF3PICvar.iscontrol = true;
+                    ReportPDF3PICvar.PO = '';
+                    setState(() {});
+                  },
+                  child: Container(
+                    color: Colors.red,
+                    height: 40,
+                    width: 100,
+                    child: const Center(
+                      child: Text("CLEAR"),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Container(
+                  color: ReportPDF3PICvar.STATUS == 'REPORT READY'
+                      ? Colors.green
+                      : Colors.yellow,
+                  height: 40,
+                  width: 200,
+                  child: Center(
+                    child: Text(ReportPDF3PICvar.STATUS),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: SizedBox(
+                  height: 40,
+                  width: 150,
+                  child: AdvanceDropDown(
+                    imgpath: 'assets/icons/icon-down_4@3x.png',
+                    listdropdown: const [
+                      MapEntry("-", "-"),
+                      MapEntry("General", "1"),
+                      MapEntry("JTEKT", "2"),
+                      MapEntry("NTN122-4-7", "3"),
+                      MapEntry("TBKK", "4"),
+                      MapEntry("GKN", "5"),
+                      MapEntry("SIAMADVANCE", "6"),
+                      MapEntry("NTN500T850T", "7"),
+                    ],
+                    onChangeinside: (d, v) {
+                      // print(d);
+                      ReportPDF3PICvar.TYPE = d;
+                      if (d == '1') {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = imgGeneral;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = '';
+                        });
+                      } else if (d == '2') {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = imgJTEKT;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = '';
+                        });
+                      } else if (d == '3') {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = imgNTN;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = imgNTNonH;
+                        });
+                      } else if (d == '4') {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = imgTBKK;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = '';
+                        });
+                      } else if (d == '5') {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = imgGKN;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = '';
+                        });
+                      } else if (d == '6') {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = SIAMADVANCE;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = '';
+                        });
+                      } else if (d == '7') {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = NTN500T850T;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = NTN500T850T;
+                        });
+                      } else {
+                        setState(() {
+                          ReportPDF3PICvar.SCMASKTYPE = imgGeneral;
+                          ReportPDF3PICvar.SCMASKTYPEonTop = '';
+                        });
+                      }
+                    },
+                    value: ReportPDF3PICvar.TYPE,
+                    height: 40,
+                    width: 100,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 60),
+                child: ComInputText(
+                  height: 40,
+                  width: 200,
+                  isContr: ReportPDF3PICvar.iscontrol,
+                  fnContr: (input) {
+                    setState(() {
+                      ReportPDF3PICvar.iscontrol = input;
+                    });
+                  },
+                  sPlaceholder: "Inspected By",
+                  sValue: ReportPDF3PICvar.SignInsBy,
+                  returnfunc: (String s) {
+                    setState(() {
+                      ReportPDF3PICvar.SignInsBy = s;
+                    });
+                  },
+                ),
+              ),
+              const Spacer(),
+              if (ReportPDF3PICvar.PASS == "PASSED") ...[
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: InkWell(
+                    onTap: () {
+                      PDFloader(context);
+                      Future.delayed(const Duration(milliseconds: 1000), () {
+                        // capture(
+                        captureToback(
+                          // capture(
+                          _globalKey,
+                          ReportPDF3PICvar.PO,
+                        ).then((value) {
+                          print(value);
+
+                          Navigator.pop(context);
+                        });
+                      });
+                    },
+                    child: Container(
+                      color: Colors.yellow,
+                      height: 50,
+                      width: 100,
+                      child: const Center(
+                        child: Text("Print"),
+                      ),
+                    ),
+                  ),
+                ),
+              ] else ...[
+                if (USERDATA.UserLV > 5 &&
+                    _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
+                  Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: InkWell(
+                      onTap: () {
+                        PDFloader(context);
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          // capture(
+                          captureToback(
+                            // capture(
+                            _globalKey,
+                            ReportPDF3PICvar.PO,
+                          ).then((value) {
+                            print(value);
+
+                            Navigator.pop(context);
+                          });
+                        });
+                      },
+                      child: Container(
+                        color: Colors.yellow,
+                        height: 50,
+                        width: 100,
+                        child: const Center(
+                          child: Text("Print"),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]
+              ],
+            ],
+          ),
+          Row(children: [
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: InkWell(
+                onTap: () {
+                  P303QMMASTERQCVAR.SETDAY = 'OK';
+                  P303QMMASTERQCVAR.SEARCH = ReportPDF3PICvar.PO;
+                  var now = DateTime.now().subtract(Duration(days: 25));
+                  P303QMMASTERQCVAR.day = DateFormat('dd').format(now);
+                  P303QMMASTERQCVAR.month = DateFormat('MM').format(now);
+                  P303QMMASTERQCVAR.year = DateFormat('yyyy').format(now);
+                  STDreport2(context);
+                },
+                child: Container(
+                  color: Colors.yellow,
+                  height: 50,
+                  width: 100,
+                  child: const Center(
+                    child: Text("UD and QCFN"),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: InkWell(
+                onTap: () {
+                  //ReportPDF3PICvar.PO
+                  QCFN(context);
+                },
+                child: Container(
+                  color: Colors.yellow,
+                  height: 50,
+                  width: 100,
+                  child: const Center(
+                    child: Text("QCFN"),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: InkWell(
+                onTap: () {
+                  //ReportPDF3PICvar.PO
+                  String server = 'http://172.23.10.40:1885/';
+                  String sap = "sap_GASHES_GB";
+
+                  Dio().post(
+                    server + sap,
+                    data: {},
+                  ).then((v) {
+                    //
+                    var databuff = v.data;
+                    for (var i = 0; i < databuff.length; i++) {
+                      //
+
+                      if (databuff[i]['PO'] == ReportPDF3PICvar.PO) {
+                        print(
+                            databuff[i]['PO'] + ':' + databuff[i]['FG_CHARG']);
+                        // print(databuff[i]);
+                        ReportPDF3PICvar.TPKLOTEDIT = databuff[i]['FG_CHARG'];
+                        setState(() {});
+                      }
+                    }
+                  });
+                },
+                child: Container(
+                  color: Colors.orange,
+                  height: 50,
+                  width: 100,
+                  child: const Center(
+                    child: Text("Re Lot"),
+                  ),
+                ),
+              ),
+            ),
+          ]),
+
+//QCFN
+          //STDreport2
+          // Row(
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.only(left: 60),
+          //       child: ComInputText(
+          //         sLabel: "Remark",
+          //         height: 40,
+          //         width: 500,
+          //         nLimitedChar: 500,
+          //         isContr: ReportPDF3PICvar.iscontrol,
+          //         fnContr: (input) {
+          //           setState(() {
+          //             ReportPDF3PICvar.iscontrol = input;
+          //           });
+          //         },
+          //         // isEnabled: ReportPDF3PICvar.canf,
+          //         sValue: ReportPDF3PICvar.remark,
+          //         returnfunc: (String s) {
+          //           setState(() {
+          //             ReportPDF3PICvar.remark = s;
+          //           });
+          //         },
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: RepaintBoundary(
+              key: _globalKey,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      // const SizedBox(
+                      //   width: 50,
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Container(
+                          height: 2000,
+                          width: 1364,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 3),
+                            // color: Colors.red,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(0)),
+                          ),
+                          child: Column(
+                            children: [
+                              headerreport(
+                                CUSTOMER: ReportPDF3PICvar.CUSTOMER,
+                                PROCESS: ReportPDF3PICvar.PROCESS,
+                                PARTNAME: ReportPDF3PICvar.PARTNAME,
+                                PARTNO: ReportPDF3PICvar.PARTNO,
+                                CUSLOT: ReportPDF3PICvar.CUSLOT,
+                                TPKLOT: ReportPDF3PICvar.TPKLOT,
+                                MATERIAL: ReportPDF3PICvar.MATERIAL,
+                                QTY: ReportPDF3PICvar.QTY,
+                              ),
+                              HEAD1SLOT(
+                                widget01: const Center(
+                                  child: Text(
+                                    "INCOMING INSPECTION",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              HEAD7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: const Center(
+                                  child: Text(
+                                    "ITEM",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget02: const Center(
+                                  child: Text(
+                                    "SC",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget03: const Center(
+                                  child: Text(
+                                    "Check Method",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget04: const Center(
+                                  child: Text(
+                                    "Frequency",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget05: const Center(
+                                  child: Text(
+                                    "Specification",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget06: const Center(
+                                  child: Text(
+                                    "Result",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget07: const Center(
+                                  child: Text(
+                                    "Remark",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: const [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC01 != ''
+                                        ? "Appearance for Rust"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: const Center(
+                                  child: Text(
+                                    "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC01 != ''
+                                        ? "Visual"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC01 != ''
+                                        ? "10 pcs/rcv.Lot"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC01 != ''
+                                        ? "No Rust"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC01 != ''
+                                        ? "No Rust"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: const Center(
+                                  child: Text(
+                                    "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC02 != ''
+                                        ? "Appearance for scratch"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC02 != '' ? "" : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC02 != ''
+                                        ? "Visual"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC02 != ''
+                                        ? "10 pcs/rcv.Lot"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC02 != ''
+                                        ? "No Scratch"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.INC02 != ''
+                                        ? "No Scratch"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: const Center(
+                                  child: Text(
+                                    "",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              HEAD1SLOT(
+                                widget01: const Center(
+                                  child: Text(
+                                    "FINAL INSPECTION",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              HEAD7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: const Center(
+                                  child: Text(
+                                    "ITEM",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget02: const Center(
+                                  child: Text(
+                                    "SC",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget03: const Center(
+                                  child: Text(
+                                    "Check Method",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget04: const Center(
+                                  child: Text(
+                                    "Frequency",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget05: const Center(
+                                  child: Text(
+                                    "Specification",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget06: const Center(
+                                  child: Text(
+                                    "Result",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                widget07: const Center(
+                                  child: Text(
+                                    "Remark",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[0].ITEMname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: ReportPDF3PICvar.datalist[0].SCMARK ==
+                                          'YES'
+                                      ? PicShow(
+                                          width: 42,
+                                          height: 42,
+                                          base64: ReportPDF3PICvar.SCMASKTYPE)
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[0].METHODname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[0].FREQ,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar
+                                        .datalist[0].SPECIFICATIONname,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar.datalist[0]
+                                                  .SPECIFICATIONname.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[0].RESULT,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[0].RESULT.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[0].REMARK,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[0].REMARK.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[1].ITEMname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: ReportPDF3PICvar.datalist[1].SCMARK ==
+                                          'YES'
+                                      ? PicShow(
+                                          width: 42,
+                                          height: 42,
+                                          base64: ReportPDF3PICvar.SCMASKTYPE)
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[1].METHODname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[1].FREQ,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar
+                                        .datalist[1].SPECIFICATIONname,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar.datalist[1]
+                                                  .SPECIFICATIONname.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[1].RESULT,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[1].RESULT.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[1].REMARK,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[1].REMARK.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[2].ITEMname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: ReportPDF3PICvar.datalist[2].SCMARK ==
+                                          'YES'
+                                      ? PicShow(
+                                          width: 42,
+                                          height: 42,
+                                          base64: ReportPDF3PICvar.SCMASKTYPE)
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[2].METHODname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[2].FREQ,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar
+                                        .datalist[2].SPECIFICATIONname,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar.datalist[2]
+                                                  .SPECIFICATIONname.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[2].RESULT,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[2].RESULT.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[2].REMARK,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[2].REMARK.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[3].ITEMname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: ReportPDF3PICvar.datalist[3].SCMARK ==
+                                          'YES'
+                                      ? PicShow(
+                                          width: 42,
+                                          height: 42,
+                                          base64: ReportPDF3PICvar.SCMASKTYPE)
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[3].METHODname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[3].FREQ,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar
+                                        .datalist[3].SPECIFICATIONname,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar.datalist[3]
+                                                  .SPECIFICATIONname.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[3].RESULT,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[3].RESULT.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[3].REMARK,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[3].REMARK.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[4].ITEMname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: ReportPDF3PICvar.datalist[4].SCMARK ==
+                                          'YES'
+                                      ? PicShow(
+                                          width: 42,
+                                          height: 42,
+                                          base64: ReportPDF3PICvar.SCMASKTYPE)
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[4].METHODname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[4].FREQ,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar
+                                        .datalist[4].SPECIFICATIONname,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar.datalist[4]
+                                                  .SPECIFICATIONname.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[4].RESULT,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[4].RESULT.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[4].REMARK,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[4].REMARK.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[5].ITEMname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: ReportPDF3PICvar.datalist[5].SCMARK ==
+                                          'YES'
+                                      ? PicShow(
+                                          width: 42,
+                                          height: 42,
+                                          base64: ReportPDF3PICvar.SCMASKTYPE)
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[5].METHODname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[5].FREQ,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar
+                                        .datalist[5].SPECIFICATIONname,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar.datalist[5]
+                                                  .SPECIFICATIONname.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[5].RESULT,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[5].RESULT.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[5].REMARK,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[5].REMARK.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              BODY7SLOT(
+                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                widget01: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[6].ITEMname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget02: Center(
+                                  child: ReportPDF3PICvar.datalist[6].SCMARK ==
+                                          'YES'
+                                      ? PicShow(
+                                          width: 42,
+                                          height: 42,
+                                          base64: ReportPDF3PICvar.SCMASKTYPE)
+                                      : const Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                                widget03: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[6].METHODname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget04: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[6].FREQ,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                widget05: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar
+                                        .datalist[6].SPECIFICATIONname,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar.datalist[6]
+                                                  .SPECIFICATIONname.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget06: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[6].RESULT,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[6].RESULT.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                                widget07: Center(
+                                  child: Text(
+                                    ReportPDF3PICvar.datalist[7].REMARK,
+                                    style: TextStyle(
+                                      fontSize: ReportPDF3PICvar
+                                                  .datalist[7].REMARK.length >
+                                              30
+                                          ? 12
+                                          : 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 8,
+                                    child: Column(
+                                      children: [
+                                        HEAD16SLOT(
+                                          ListFlex: S16slot,
+                                          widget01: const Center(
+                                            child: Text(
+                                              "SAMPLE NO.",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget02: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      1
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[0].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget03: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      2
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[1].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget04: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      3
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[2].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget05: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      4
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[3].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget06: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      5
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[4].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget07: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      6
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[5].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget08: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      7
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[6].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget09: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      8
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[7].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget10: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      9
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[8].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget11: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      10
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[9].DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget12: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      11
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[10]
+                                                      .DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget13: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      12
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[11]
+                                                      .DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget14: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      13
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[12]
+                                                      .DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget15: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      14
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[13]
+                                                      .DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget16: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      15
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[14]
+                                                      .DATANO
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        BODY16SLOT(
+                                          ListFlex: S16slot,
+                                          widget01: const Center(
+                                            child: Text(
+                                              "POINT NO.",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget02: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      1
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[0]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget03: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      2
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[1]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget04: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      3
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[2]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget05: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      4
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[3]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget06: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      5
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[4]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget07: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      6
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[5]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget08: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      7
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[6]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget09: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      8
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[7]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget10: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      9
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[8]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget11: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      10
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[9]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget12: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      11
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[10]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget13: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      12
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[11]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget14: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      13
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[12]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget15: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      14
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[13]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget16: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      15
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[14]
+                                                      .DATAPCS
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        BODY16SLOT(
+                                          ListFlex: S16slot,
+                                          widget01: const Center(
+                                            child: Text(
+                                              "Surface Hardness",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget02: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      1
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[0].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget03: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      2
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[1].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget04: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      3
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[2].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget05: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      4
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[3].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget06: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      5
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[4].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget07: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      6
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[5].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget08: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      7
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[6].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget09: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      8
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[7].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget10: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      9
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[8].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget11: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      10
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[9].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget12: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      11
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[10].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget13: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      12
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[11].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget14: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      13
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[12].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget15: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      14
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[13].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          widget16: Center(
+                                            child: Text(
+                                              ReportPDF3PICvar.rawlistHardness
+                                                          .length >=
+                                                      15
+                                                  ? ReportPDF3PICvar
+                                                      .rawlistHardness[14].DATA
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Expanded(
+                                  //   flex: 2,
+                                  //   child: Column(
+                                  //     children: [
+                                  //       HEAD2SLOT(
+                                  //         ListFlex: [2, 1, 1, 1, 1, 1],
+                                  //         widget01: const Center(
+                                  //           child: Text(
+                                  //             "SAMPLE NO.",
+                                  //             style: TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget02: Center(
+                                  //           child: Text(
+                                  //             ReportPDF3PICvar
+                                  //                         .rawlistCORE.length >=
+                                  //                     1
+                                  //                 ? ReportPDF3PICvar
+                                  //                     .rawlistCORE[0].DATANO
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       BODY2SLOT(
+                                  //         ListFlex: [2, 1, 1, 1, 1, 1],
+                                  //         widget01: const Center(
+                                  //           child: Text(
+                                  //             "POINT NO.",
+                                  //             style: TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget02: Center(
+                                  //           child: Text(
+                                  //             ReportPDF3PICvar
+                                  //                         .rawlistCORE.length >=
+                                  //                     1
+                                  //                 ? ReportPDF3PICvar
+                                  //                     .rawlistCORE[0].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         // widget03: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             2
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[1].DATAPCS
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //         // widget04: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             3
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[2].DATAPCS
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //         // widget05: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             4
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[3].DATAPCS
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //         // widget06: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             5
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[4].DATAPCS
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //       ),
+                                  //       BODY2SLOT(
+                                  //         ListFlex: [2, 1, 1, 1, 1, 1],
+                                  //         widget01: const Center(
+                                  //           child: Text(
+                                  //             "CORE",
+                                  //             style: TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget02: Center(
+                                  //           child: Text(
+                                  //             ReportPDF3PICvar
+                                  //                         .rawlistCORE.length >=
+                                  //                     1
+                                  //                 ? ReportPDF3PICvar
+                                  //                     .rawlistCORE[0].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         // widget03: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             2
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[1].DATA
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //         // widget04: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             3
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[2].DATA
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //         // widget05: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             4
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[3].DATA
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //         // widget06: Center(
+                                  //         //   child: Text(
+                                  //         //     ReportPDF3PICvar
+                                  //         //                 .rawlistCORE.length >=
+                                  //         //             5
+                                  //         //         ? ReportPDF3PICvar
+                                  //         //             .rawlistCORE[4].DATA
+                                  //         //         : '',
+                                  //         //     style: const TextStyle(
+                                  //         //       fontSize: 16,
+                                  //         //       fontWeight: FontWeight.bold,
+                                  //         //     ),
+                                  //         //   ),
+                                  //         // ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // )
+                                ],
+                              ),
+                              PICSLO3NOSIDEGRAPH(
+                                PIC01: _dataCOMMON.databasic.PIC01,
+                                // PIC02: _dataCOMMON.databasic.PIC02 == wpic
+                                //     ? _dataCOMMON.databasic.PIC03
+                                //     : _dataCOMMON.databasic.PIC02,
+                                PIC02: _dataCOMMON.databasic.PIC02,
+                                PIC03: _dataCOMMON.databasic.PIC03,
+                              ),
+                              TAILSLOT(
+                                PASS: ReportPDF3PICvar.PASS,
+                                PICS: _dataCOMMON.databasic.PICstd,
+                                Remark: ReportPDF3PICvar.remark,
+                                NAME01: ReportPDF3PICvar.SignInsBy,
+                                NAME02: "",
+                                NAME03: "",
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: 50,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+List<int> S16slot = const [
+  3,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+];
+
+void STDreport2(
+  BuildContext contextin,
+) {
+  showDialog(
+    context: contextin,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: SizedBox(
+          height: 1000,
+          width: 1500,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Page303(),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void QCFN(BuildContext contextin) {
+  showDialog(
+    context: contextin,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: QCFNWD(),
+      );
+    },
+  );
+}
+
+class QCFNWD extends StatefulWidget {
+  const QCFNWD({super.key});
+
+  @override
+  State<QCFNWD> createState() => QCFNWDState();
+}
+
+class QCFNWDState extends State<QCFNWD> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 400,
+      width: 600,
+      child: Center(
+        child: SizedBox(
+          child: InkWell(
+            onTap: () {
+              print("00" + ReportPDF3PICvar.PO);
+              Dio().post(
+                "${server2}10GETDATAFROMJOBBINGAQC/QCFN",
+                // "${'http://127.0.0.1:14094/'}10GETDATAFROMJOBBINGAQC/QCFN",
+                data: {
+                  "BAPI_NAME": "ZFMPPQCFN_IN",
+                  "ORDERID": ReportPDF3PICvar.PO,
+                  "PERNR_ID": USERDATA.ID
+                },
+              ).then((v) {
+                Navigator.pop(context);
+
+                //
+                print(v.data);
+                if (v.data['ExportParameter'] != null) {
+                  if (v.data['ExportParameter']['INACT_NEW'].toString() ==
+                      'E') {
+                    showErrorPopup(context, v.data.toString());
+                  } else {
+                    showGoodPopup(context, v.data.toString());
+                  }
+                } else {
+                  showErrorPopup(context, v.data.toString());
+                }
+              });
+            },
+            child: Container(
+              width: 400,
+              height: 100,
+              color: Colors.blue,
+              child: Center(
+                child: Text("QCFN"),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
