@@ -46,16 +46,35 @@ class PicShowActState extends State<PicShowAct> {
   @override
   Widget build(BuildContext context) {
     if (widget.base64 == "") return Container();
-    Uint8List bytes = base64.decode(widget.base64);
-    return SizedBox(
-      height: widget.height ?? 50,
-      width: widget.width ?? 50,
-      child: Transform.rotate(
-          angle: 1.57,
-          child: Image.memory(
-            bytes,
-          )),
-    );
+    if (widget.base64.contains("data:image/jpeg;base64,")) {
+      Uint8List bytes = base64.decode(widget.base64);
+      return SizedBox(
+        height: widget.height ?? 50,
+        width: widget.width ?? 50,
+        child: Transform.rotate(
+            // angle: 1.57,
+            angle: 0,
+            child: Image.memory(
+              bytes,
+            )),
+      );
+    } else {
+      // return SizedBox(
+      //   height: widget.height ?? 50,
+      //   width: widget.width ?? 50,
+      // );
+      Uint8List bytes = base64.decode("${widget.base64}");
+      return SizedBox(
+        height: widget.height ?? 50,
+        width: widget.width ?? 50,
+        child: Transform.rotate(
+            // angle: 1.57,
+            angle: 0,
+            child: Image.memory(
+              bytes,
+            )),
+      );
+    }
   }
 }
 

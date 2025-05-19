@@ -34,7 +34,9 @@ class ReportPDF2GPvar {
   //rawlistCORE
 
   static List<rawlist> rawlistGraph = [];
+  static List<rawlist> rawlistGraphs = [];
   static rawlist rawlistGraphCore = rawlist();
+  static rawlist rawlistGraphCoreS = rawlist();
 
   static String remark = '';
 
@@ -62,12 +64,21 @@ class ReportPDF2GPvar {
     ReportPDF2GPlist(),
     ReportPDF2GPlist(),
   ];
+
+  static int graphset = 0;
   static List<FlSpot> graphupper = [];
   static List<FlSpot> graphdata = [];
   static List<FlSpot> graphdata2 = [];
   static List<FlSpot> graphdata3 = [];
   static List<FlSpot> graphdata4 = [];
   static List<FlSpot> graphunder = [];
+
+  static List<FlSpot> graphupperS = [];
+  static List<FlSpot> graphdataS = [];
+  static List<FlSpot> graphdata2S = [];
+  static List<FlSpot> graphdata3S = [];
+  static List<FlSpot> graphdata4S = [];
+  static List<FlSpot> graphunderS = [];
 }
 
 class ReportPDF2GPlist {

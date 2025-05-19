@@ -34,14 +34,14 @@ class _ClearRoomBODYState extends State<ClearRoomBODY> {
   Widget build(BuildContext context) {
     return Container(
       width: 700,
-      height: 451,
+      height: 500,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
         borderRadius: const BorderRadius.all(Radius.circular(0)),
       ),
       child: SizedBox(
         width: 700,
-        height: 450,
+        height: 500,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -586,6 +586,71 @@ class _ClearRoomBODYState extends State<ClearRoomBODY> {
                             onTap: () {
                               //
                               CLEARroomdata.room = 'PO8';
+                              context
+                                  .read<CLEARroom_Bloc>()
+                                  .add(CLEARroom_CLEAR());
+                            },
+                            child: Container(
+                              color: Colors.blue,
+                              child: const Center(
+                                child: Text(
+                                  "CLEAR",
+                                  style: TxtStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: const BorderRadius.all(Radius.circular(0)),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(0)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "REF-GRAPH : ${widget.data?.PO9 ?? ""}",
+                            style: TxtStyle(
+                              fontWeight: FontWeight.bold,
+                              color: widget.data!.PO9 == ''
+                                  ? Colors.black
+                                  : Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(0)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.all(5),
+                          child: InkWell(
+                            onTap: () {
+                              //
+                              CLEARroomdata.room = 'PO9';
                               context
                                   .read<CLEARroom_Bloc>()
                                   .add(CLEARroom_CLEAR());

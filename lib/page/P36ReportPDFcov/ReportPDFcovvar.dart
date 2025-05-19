@@ -2,14 +2,13 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../widget/common/imgset.dart';
 
-class ReportPDFwmvar {
+class ReportPDFcovvar {
   static bool iscontrol = false;
   static bool canf = true;
   static String PO = '';
+  static bool HIDEDATAPIC = false;
 
   static String STATUS = '';
-
-  static bool HIDEDATAPIC = false;
 
   static String CUSTOMER = '';
   static String PROCESS = '';
@@ -49,20 +48,20 @@ class ReportPDFwmvar {
 
   static String SignInsBy = '';
 
-  static List<ReportPDFCommonlist> datalist = [
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
+  static List<ReportPDFcovlist> datalist = [
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
   ];
   static List<FlSpot> graphupper = [];
   static List<FlSpot> graphdata = [];
@@ -72,8 +71,8 @@ class ReportPDFwmvar {
   static List<FlSpot> graphunder = [];
 }
 
-class ReportPDFCommonlist {
-  ReportPDFCommonlist({
+class ReportPDFcovlist {
+  ReportPDFcovlist({
     this.ITEM = '',
     this.ITEMname = '',
     this.METHOD = '',
@@ -114,42 +113,44 @@ class rawlist {
     this.DATANO = '',
     this.DATAPCS = '',
     this.DATA = '',
+    this.DATA2 = '',
   });
   String DATANO;
   String DATAPCS = '';
   String DATA = '';
+  String DATA2 = '';
 }
 
 ReportPDFACTclear() {
-  ReportPDFwmvar.PO = '';
+  ReportPDFcovvar.PO = '';
 
-  ReportPDFwmvar.CUSTOMER = '';
-  ReportPDFwmvar.PROCESS = '';
-  ReportPDFwmvar.PARTNAME = '';
-  ReportPDFwmvar.PARTNO = '';
-  ReportPDFwmvar.CUSLOT = '';
-  ReportPDFwmvar.TPKLOT = '';
-  ReportPDFwmvar.MATERIAL = '';
-  ReportPDFwmvar.QTY = '';
+  ReportPDFcovvar.CUSTOMER = '';
+  ReportPDFcovvar.PROCESS = '';
+  ReportPDFcovvar.PARTNAME = '';
+  ReportPDFcovvar.PARTNO = '';
+  ReportPDFcovvar.CUSLOT = '';
+  ReportPDFcovvar.TPKLOT = '';
+  ReportPDFcovvar.MATERIAL = '';
+  ReportPDFcovvar.QTY = '';
 
-  ReportPDFwmvar.PICstd = '';
-  ReportPDFwmvar.PIC01 = '';
-  ReportPDFwmvar.PIC02 = '';
+  ReportPDFcovvar.PICstd = '';
+  ReportPDFcovvar.PIC01 = '';
+  ReportPDFcovvar.PIC02 = '';
 
-  ReportPDFwmvar.SignInsBy = '';
-  ReportPDFwmvar.datalist = [
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
-    ReportPDFCommonlist(),
+  ReportPDFcovvar.SignInsBy = '';
+  ReportPDFcovvar.datalist = [
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
+    ReportPDFcovlist(),
   ];
 }

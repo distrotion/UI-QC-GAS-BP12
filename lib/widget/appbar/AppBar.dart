@@ -38,7 +38,10 @@ class _App_BarState extends State<App_Bar> {
           //Text("  |  <--->  |  " + current_page.toString()),
           SizedBox(
             width: 200,
-            child: Text("${USERDATA.NAME} (${USERDATA.Section})"),
+            child: Text(
+              "${USERDATA.NAME} (${USERDATA.Section})",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           Pack_topright_bar(),
         ],
@@ -95,7 +98,7 @@ class Logo1 extends StatelessWidget {
       child: Container(
         color: const Color(0xff0b1327),
         child: const Text(
-          "TPK UI BP12",
+          "TPK UI GAS BP12",
           style: TextStyle(
             fontFamily: 'Mitr',
             color: Colors.white,

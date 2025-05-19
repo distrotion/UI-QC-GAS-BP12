@@ -174,10 +174,9 @@ class _ROCKWELL_GASHMV001bodyState extends State<ROCKWELL_GASHMV001body> {
             .add(TRICKER_GASHMV001confirmdata2());
       },
       DATA3: (v) {
-        print("----");
-        context
-            .read<TRICKER_GASHMV001_Bloc>()
-            .add(TRICKER_GASHMV001confirmdata3());
+        // context
+        //     .read<TRICKER_GASHMV001_Bloc>()
+        //     .add(TRICKER_GASHMV001confirmdata());
       },
       FINISH: (v) {
         if (GASHMV001var.PCS != '' &&

@@ -112,7 +112,7 @@ class headerreport extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 30, bottom: 10),
+                              padding: EdgeInsets.only(top: 30, bottom: 0),
                               child: Text(
                                 "(ใบรายงานผลการตรวจสอบผลิตภัณฑ์สำหรับกระบวนการ GAS)",
                                 style: TextStyle(

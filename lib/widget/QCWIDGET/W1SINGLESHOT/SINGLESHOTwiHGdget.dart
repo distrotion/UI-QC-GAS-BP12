@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../styles/TextStyle.dart';
 
+import '../../common/Advancedropdown.dart';
 import '../../common/Easydropdown.dart';
 import '../../common/imgset.dart';
 import '../consolelayout.dart';
 
-class MULTISHOTmain extends StatelessWidget {
-  MULTISHOTmain({
+class SINGLESHOTHGmain extends StatelessWidget {
+  SINGLESHOTHGmain({
     Key? key,
     //------ Left
     this.LABEL,
@@ -37,9 +38,8 @@ class MULTISHOTmain extends StatelessWidget {
     required this.GAPnamePick,
     this.GAPnameList,
     //------- Bottom
-    required this.DATA1,
-    required this.DATA2,
-    required this.DATA3,
+    required this.GET,
+    required this.ACCEPT,
     required this.FINISH,
     this.preview,
     this.confirmdata,
@@ -51,6 +51,7 @@ class MULTISHOTmain extends StatelessWidget {
     this.ITEMleftVALUE,
     //-------
     this.PICB64,
+    this.dropdown,
   }) : super(key: key);
 
   //Left --------------------------------------------
@@ -84,9 +85,8 @@ class MULTISHOTmain extends StatelessWidget {
   Function(String) GAPnamePick;
   //Bottom --------------------------------------------
 
-  Function DATA1;
-  Function DATA2;
-  Function DATA3;
+  Function GET;
+  Function ACCEPT;
   Function FINISH;
 
   List<INSDATA>? preview; //ok
@@ -96,10 +96,11 @@ class MULTISHOTmain extends StatelessWidget {
   Function CLEAR;
   Function BACKPAGE;
   Function RESETVALUE;
+  Widget? dropdown;
 
   List<INSDATA>? ITEMleftUNIT; // ok
   List<INSDATA>? ITEMleftVALUE; // ok
-  //
+
   String? PICB64;
 
   @override
@@ -124,6 +125,7 @@ class MULTISHOTmain extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             child: Column(
               children: [
+                dropdown ?? SizedBox(),
                 Row(
                   children: [
                     Expanded(
@@ -132,13 +134,13 @@ class MULTISHOTmain extends StatelessWidget {
                         padding: const EdgeInsets.all(1.0),
                         child: InkWell(
                           onTap: () {
-                            DATA1(PO) ?? () {};
+                            GET(PO) ?? () {};
                           },
                           child: Container(
                             height: 40,
                             color: Colors.blue,
                             child: const Center(
-                              child: Text("Surface",
+                              child: Text("GET",
                                   style: TxtStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
@@ -153,13 +155,13 @@ class MULTISHOTmain extends StatelessWidget {
                         padding: const EdgeInsets.all(1.0),
                         child: InkWell(
                           onTap: () {
-                            DATA2(PO) ?? () {};
+                            ACCEPT(PO) ?? () {};
                           },
                           child: Container(
                             height: 40,
                             color: Colors.blue,
                             child: const Center(
-                              child: Text("Compound",
+                              child: Text("ACCEPT",
                                   style: TxtStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
@@ -174,13 +176,13 @@ class MULTISHOTmain extends StatelessWidget {
                         padding: const EdgeInsets.all(1.0),
                         child: InkWell(
                           onTap: () {
-                            DATA3(PO) ?? () {};
+                            FINISH(PO) ?? () {};
                           },
                           child: Container(
                             height: 40,
-                            color: Colors.blue,
+                            color: Colors.green,
                             child: const Center(
-                              child: Text("NEXT >",
+                              child: Text("FINISH",
                                   style: TxtStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
@@ -192,40 +194,34 @@ class MULTISHOTmain extends StatelessWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 25,
                   child: Row(
                     children: [
                       Expanded(
                         flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: InkWell(
-                            onTap: () {
-                              FINISH(PO) ?? () {};
-                            },
-                            child: Container(
-                              height: 50,
-                              color: Colors.green,
-                              child: const Center(
-                                child: Text("FINISH",
-                                    style: TxtStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                            ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            color: Colors.grey,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(0)),
+                          ),
+                          child: const Text(
+                            "Preview value",
+                            style: TxtStyle(color: Colors.white),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                // SizedBox(
-                //   height: 40,
-                //   child: _tabtableB3(
-                //     height: 40,
-                //     value: preview ?? [INSDATA()],
-                //   ),
-                // ),
+                SizedBox(
+                  height: 40,
+                  child: _tabtableB3(
+                    height: 40,
+                    value: preview ?? [INSDATA()],
+                  ),
+                ),
                 SizedBox(
                   height: 25,
                   child: Row(
@@ -249,7 +245,7 @@ class MULTISHOTmain extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 165,
+                  height: 125,
                   child: SingleChildScrollView(
                     child: _tabtableB3(
                       height: 40,
@@ -364,6 +360,26 @@ class MULTISHOTmain extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
+                  height: 90,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: const BorderRadius.all(Radius.circular(0)),
+                  ),
+                  child: PicShow(
+                    base64: PICB64 ?? "",
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
                   height: 25,
                   color: Colors.grey,
                   child: _tabtableB2(
@@ -431,26 +447,23 @@ class MULTISHOTmain extends StatelessWidget {
             ),
           ],
         ),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Container(
-                  height: 90,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: const BorderRadius.all(Radius.circular(0)),
-                  ),
-                  child: PicShow(
-                    base64: PICB64 ?? "",
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       flex: 1,
+        //       child: Padding(
+        //         padding: const EdgeInsets.all(2.0),
+        //         child: Container(
+        //           height: 90,
+        //           decoration: BoxDecoration(
+        //             border: Border.all(color: Colors.black),
+        //             borderRadius: const BorderRadius.all(Radius.circular(0)),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

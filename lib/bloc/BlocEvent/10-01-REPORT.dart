@@ -32,23 +32,31 @@ class REPORT_Bloc extends Bloc<REPORT_Event, List<dataset>> {
     List<dataset> output = [];
     if (response.statusCode == 200) {
       var databuff = response.data;
+
       for (int i = 0; i < databuff.length; i++) {
-        output.add(
-          dataset(
-            id: i + 1,
-            f01: databuff[i]['PO'] == null ? '' : databuff[i]['PO'].toString(),
-            f02: databuff[i]['CP'] == null ? '' : databuff[i]['CP'].toString(),
-            f03: databuff[i]['CUSTOMER'] == null
-                ? ''
-                : databuff[i]['CUSTOMER'].toString(),
-            f04: databuff[i]['PART'] == null
-                ? ''
-                : databuff[i]['PART'].toString(),
-            f05: databuff[i]['PARTNAME'] == null
-                ? ''
-                : databuff[i]['PARTNAME'].toString(),
-          ),
-        );
+        output.add(dataset(
+          id: i + 1,
+          f01: databuff[i]['PO'] == null ? '' : databuff[i]['PO'].toString(),
+          f02: databuff[i]['CP'] == null ? '' : databuff[i]['CP'].toString(),
+          f03: databuff[i]['CUSTOMER'] == null
+              ? ''
+              : databuff[i]['CUSTOMER'].toString(),
+          f04:
+              databuff[i]['PART'] == null ? '' : databuff[i]['PART'].toString(),
+          f05: databuff[i]['PARTNAME'] == null
+              ? ''
+              : databuff[i]['PARTNAME'].toString(),
+          //-------------------------------------------
+          f21: databuff[i]['IDInspected'] == null
+              ? ''
+              : databuff[i]['IDInspected'].toString(),
+          f22: databuff[i]['IDCheck'] == null
+              ? ''
+              : databuff[i]['IDCheck'].toString(),
+          f23: databuff[i]['IDApprove'] == null
+              ? ''
+              : databuff[i]['IDApprove'].toString(),
+        ));
       }
       Navigator.pop(REPORTuiMAINcontext);
     } else {

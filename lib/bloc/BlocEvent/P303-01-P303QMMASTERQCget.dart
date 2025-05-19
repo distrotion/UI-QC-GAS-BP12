@@ -49,7 +49,7 @@ class P303QMMASTERQCget_Bloc
               "${P303QMMASTERQCVAR.day}.${P303QMMASTERQCVAR.month}.${P303QMMASTERQCVAR.year}",
           "TO_DATE":
               "${P303QMMASTERQCVAR.day_next}.${P303QMMASTERQCVAR.month_next}.${P303QMMASTERQCVAR.year_next}",
-          "PLANT": P303QMMASTERQCVAR.PLANT,
+          "PLANT": "2100",
           // "LOT_ORI": P303QMMASTERQCVAR.LOT_ORI,
           "LOT_ORI": "03",
           "MATERIAL": "",

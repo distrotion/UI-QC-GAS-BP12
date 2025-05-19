@@ -45,7 +45,7 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
       ReportPDF3PICvar.canf = false;
       context
           .read<ReportPDFCommon_Cubit>()
-          .ReportPDFCommonCubit(ReportPDF3PICvar.PO);
+          .ReportPDFCommonCubit(ReportPDF3PICvar.PO, "cov");
     }
     super.initState();
   }
@@ -922,7 +922,7 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
                     if (ReportPDF3PICvar.PO != '') {
                       context
                           .read<ReportPDFCommon_Cubit>()
-                          .ReportPDFCommonCubit(ReportPDF3PICvar.PO);
+                          .ReportPDFCommonCubit(ReportPDF3PICvar.PO, "cov");
                     }
                   },
                   child: Container(
@@ -1233,1799 +1233,1998 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
           // ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: RepaintBoundary(
-              key: _globalKey,
-              child: Column(
-                children: [
-                  Row(
+            child: Column(
+              children: [
+                RepaintBoundary(
+                  key: _globalKey,
+                  child: Column(
                     children: [
-                      // const SizedBox(
-                      //   width: 50,
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Container(
-                          height: 2000,
-                          width: 1364,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 3),
-                            // color: Colors.red,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(0)),
-                          ),
-                          child: Column(
-                            children: [
-                              headerreport(
-                                CUSTOMER: ReportPDF3PICvar.CUSTOMER,
-                                PROCESS: ReportPDF3PICvar.PROCESS,
-                                PARTNAME: ReportPDF3PICvar.PARTNAME,
-                                PARTNO: ReportPDF3PICvar.PARTNO,
-                                CUSLOT: ReportPDF3PICvar.CUSLOT,
-                                TPKLOT: ReportPDF3PICvar.TPKLOT,
-                                MATERIAL: ReportPDF3PICvar.MATERIAL,
-                                QTY: ReportPDF3PICvar.QTY,
+                      Row(
+                        children: [
+                          // const SizedBox(
+                          //   width: 50,
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Container(
+                              height: 2000,
+                              width: 1364,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.black, width: 3),
+                                // color: Colors.red,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(0)),
                               ),
-                              HEAD1SLOT(
-                                widget01: const Center(
-                                  child: Text(
-                                    "INCOMING INSPECTION",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              HEAD7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: const Center(
-                                  child: Text(
-                                    "ITEM",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget02: const Center(
-                                  child: Text(
-                                    "SC",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget03: const Center(
-                                  child: Text(
-                                    "Check Method",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget04: const Center(
-                                  child: Text(
-                                    "Frequency",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget05: const Center(
-                                  child: Text(
-                                    "Specification",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget06: const Center(
-                                  child: Text(
-                                    "Result",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget07: const Center(
-                                  child: Text(
-                                    "Remark",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: const [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC01 != ''
-                                        ? "Appearance for Rust"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: const Center(
-                                  child: Text(
-                                    "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC01 != ''
-                                        ? "Visual"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC01 != ''
-                                        ? "10 pcs/rcv.Lot"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC01 != ''
-                                        ? "No Rust"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC01 != ''
-                                        ? "No Rust"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: const Center(
-                                  child: Text(
-                                    "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC02 != ''
-                                        ? "Appearance for scratch"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC02 != '' ? "" : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC02 != ''
-                                        ? "Visual"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC02 != ''
-                                        ? "10 pcs/rcv.Lot"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC02 != ''
-                                        ? "No Scratch"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.INC02 != ''
-                                        ? "No Scratch"
-                                        : "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: const Center(
-                                  child: Text(
-                                    "",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              HEAD1SLOT(
-                                widget01: const Center(
-                                  child: Text(
-                                    "FINAL INSPECTION",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              HEAD7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: const Center(
-                                  child: Text(
-                                    "ITEM",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget02: const Center(
-                                  child: Text(
-                                    "SC",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget03: const Center(
-                                  child: Text(
-                                    "Check Method",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget04: const Center(
-                                  child: Text(
-                                    "Frequency",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget05: const Center(
-                                  child: Text(
-                                    "Specification",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget06: const Center(
-                                  child: Text(
-                                    "Result",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                widget07: const Center(
-                                  child: Text(
-                                    "Remark",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[0].ITEMname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: ReportPDF3PICvar.datalist[0].SCMARK ==
-                                          'YES'
-                                      ? PicShow(
-                                          width: 42,
-                                          height: 42,
-                                          base64: ReportPDF3PICvar.SCMASKTYPE)
-                                      : const Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[0].METHODname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[0].FREQ,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar
-                                        .datalist[0].SPECIFICATIONname,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar.datalist[0]
-                                                  .SPECIFICATIONname.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[0].RESULT,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[0].RESULT.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[0].REMARK,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[0].REMARK.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[1].ITEMname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: ReportPDF3PICvar.datalist[1].SCMARK ==
-                                          'YES'
-                                      ? PicShow(
-                                          width: 42,
-                                          height: 42,
-                                          base64: ReportPDF3PICvar.SCMASKTYPE)
-                                      : const Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[1].METHODname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[1].FREQ,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar
-                                        .datalist[1].SPECIFICATIONname,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar.datalist[1]
-                                                  .SPECIFICATIONname.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[1].RESULT,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[1].RESULT.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[1].REMARK,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[1].REMARK.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[2].ITEMname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: ReportPDF3PICvar.datalist[2].SCMARK ==
-                                          'YES'
-                                      ? PicShow(
-                                          width: 42,
-                                          height: 42,
-                                          base64: ReportPDF3PICvar.SCMASKTYPE)
-                                      : const Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[2].METHODname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[2].FREQ,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar
-                                        .datalist[2].SPECIFICATIONname,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar.datalist[2]
-                                                  .SPECIFICATIONname.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[2].RESULT,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[2].RESULT.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[2].REMARK,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[2].REMARK.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[3].ITEMname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: ReportPDF3PICvar.datalist[3].SCMARK ==
-                                          'YES'
-                                      ? PicShow(
-                                          width: 42,
-                                          height: 42,
-                                          base64: ReportPDF3PICvar.SCMASKTYPE)
-                                      : const Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[3].METHODname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[3].FREQ,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar
-                                        .datalist[3].SPECIFICATIONname,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar.datalist[3]
-                                                  .SPECIFICATIONname.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[3].RESULT,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[3].RESULT.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[3].REMARK,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[3].REMARK.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[4].ITEMname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: ReportPDF3PICvar.datalist[4].SCMARK ==
-                                          'YES'
-                                      ? PicShow(
-                                          width: 42,
-                                          height: 42,
-                                          base64: ReportPDF3PICvar.SCMASKTYPE)
-                                      : const Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[4].METHODname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[4].FREQ,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar
-                                        .datalist[4].SPECIFICATIONname,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar.datalist[4]
-                                                  .SPECIFICATIONname.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[4].RESULT,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[4].RESULT.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[4].REMARK,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[4].REMARK.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[5].ITEMname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: ReportPDF3PICvar.datalist[5].SCMARK ==
-                                          'YES'
-                                      ? PicShow(
-                                          width: 42,
-                                          height: 42,
-                                          base64: ReportPDF3PICvar.SCMASKTYPE)
-                                      : const Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[5].METHODname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[5].FREQ,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar
-                                        .datalist[5].SPECIFICATIONname,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar.datalist[5]
-                                                  .SPECIFICATIONname.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[5].RESULT,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[5].RESULT.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[5].REMARK,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[5].REMARK.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BODY7SLOT(
-                                ListFlex: [6, 1, 4, 2, 2, 2, 2],
-                                widget01: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[6].ITEMname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget02: Center(
-                                  child: ReportPDF3PICvar.datalist[6].SCMARK ==
-                                          'YES'
-                                      ? PicShow(
-                                          width: 42,
-                                          height: 42,
-                                          base64: ReportPDF3PICvar.SCMASKTYPE)
-                                      : const Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                ),
-                                widget03: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[6].METHODname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget04: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[6].FREQ,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                widget05: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar
-                                        .datalist[6].SPECIFICATIONname,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar.datalist[6]
-                                                  .SPECIFICATIONname.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget06: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[6].RESULT,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[6].RESULT.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                                widget07: Center(
-                                  child: Text(
-                                    ReportPDF3PICvar.datalist[7].REMARK,
-                                    style: TextStyle(
-                                      fontSize: ReportPDF3PICvar
-                                                  .datalist[7].REMARK.length >
-                                              30
-                                          ? 12
-                                          : 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Row(
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    flex: 8,
-                                    child: Column(
-                                      children: [
-                                        HEAD16SLOT(
-                                          ListFlex: S16slot,
-                                          widget01: const Center(
-                                            child: Text(
-                                              "SAMPLE NO.",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget02: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      1
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[0].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget03: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      2
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[1].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget04: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      3
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[2].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget05: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      4
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[3].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget06: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      5
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[4].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget07: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      6
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[5].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget08: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      7
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[6].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget09: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      8
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[7].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget10: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      9
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[8].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget11: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      10
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[9].DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget12: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      11
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[10]
-                                                      .DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget13: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      12
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[11]
-                                                      .DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget14: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      13
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[12]
-                                                      .DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget15: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      14
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[13]
-                                                      .DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget16: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      15
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[14]
-                                                      .DATANO
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
+                                  headerreport(
+                                    CUSTOMER: ReportPDF3PICvar.CUSTOMER,
+                                    PROCESS: ReportPDF3PICvar.PROCESS,
+                                    PARTNAME: ReportPDF3PICvar.PARTNAME,
+                                    PARTNO: ReportPDF3PICvar.PARTNO,
+                                    CUSLOT: ReportPDF3PICvar.CUSLOT,
+                                    TPKLOT: ReportPDF3PICvar.TPKLOT,
+                                    MATERIAL: ReportPDF3PICvar.MATERIAL,
+                                    QTY: ReportPDF3PICvar.QTY,
+                                  ),
+                                  HEAD1SLOT(
+                                    widget01: const Center(
+                                      child: Text(
+                                        "INCOMING INSPECTION",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        BODY16SLOT(
-                                          ListFlex: S16slot,
-                                          widget01: const Center(
-                                            child: Text(
-                                              "POINT NO.",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget02: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      1
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[0]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget03: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      2
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[1]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget04: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      3
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[2]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget05: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      4
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[3]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget06: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      5
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[4]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget07: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      6
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[5]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget08: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      7
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[6]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget09: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      8
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[7]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget10: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      9
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[8]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget11: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      10
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[9]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget12: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      11
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[10]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget13: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      12
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[11]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget14: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      13
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[12]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget15: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      14
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[13]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget16: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      15
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[14]
-                                                      .DATAPCS
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        BODY16SLOT(
-                                          ListFlex: S16slot,
-                                          widget01: const Center(
-                                            child: Text(
-                                              "Surface Hardness",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget02: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      1
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[0].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget03: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      2
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[1].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget04: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      3
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[2].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget05: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      4
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[3].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget06: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      5
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[4].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget07: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      6
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[5].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget08: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      7
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[6].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget09: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      8
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[7].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget10: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      9
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[8].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget11: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      10
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[9].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget12: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      11
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[10].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget13: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      12
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[11].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget14: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      13
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[12].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget15: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      14
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[13].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          widget16: Center(
-                                            child: Text(
-                                              ReportPDF3PICvar.rawlistHardness
-                                                          .length >=
-                                                      15
-                                                  ? ReportPDF3PICvar
-                                                      .rawlistHardness[14].DATA
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                  // Expanded(
-                                  //   flex: 2,
-                                  //   child: Column(
-                                  //     children: [
-                                  //       HEAD2SLOT(
-                                  //         ListFlex: [2, 1, 1, 1, 1, 1],
-                                  //         widget01: const Center(
-                                  //           child: Text(
-                                  //             "SAMPLE NO.",
-                                  //             style: TextStyle(
-                                  //               fontSize: 16,
-                                  //               fontWeight: FontWeight.bold,
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //         widget02: Center(
-                                  //           child: Text(
-                                  //             ReportPDF3PICvar
-                                  //                         .rawlistCORE.length >=
-                                  //                     1
-                                  //                 ? ReportPDF3PICvar
-                                  //                     .rawlistCORE[0].DATANO
-                                  //                 : '',
-                                  //             style: const TextStyle(
-                                  //               fontSize: 16,
-                                  //               fontWeight: FontWeight.bold,
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //       BODY2SLOT(
-                                  //         ListFlex: [2, 1, 1, 1, 1, 1],
-                                  //         widget01: const Center(
-                                  //           child: Text(
-                                  //             "POINT NO.",
-                                  //             style: TextStyle(
-                                  //               fontSize: 16,
-                                  //               fontWeight: FontWeight.bold,
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //         widget02: Center(
-                                  //           child: Text(
-                                  //             ReportPDF3PICvar
-                                  //                         .rawlistCORE.length >=
-                                  //                     1
-                                  //                 ? ReportPDF3PICvar
-                                  //                     .rawlistCORE[0].DATAPCS
-                                  //                 : '',
-                                  //             style: const TextStyle(
-                                  //               fontSize: 16,
-                                  //               fontWeight: FontWeight.bold,
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //         // widget03: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             2
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[1].DATAPCS
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //         // widget04: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             3
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[2].DATAPCS
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //         // widget05: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             4
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[3].DATAPCS
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //         // widget06: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             5
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[4].DATAPCS
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //       ),
-                                  //       BODY2SLOT(
-                                  //         ListFlex: [2, 1, 1, 1, 1, 1],
-                                  //         widget01: const Center(
-                                  //           child: Text(
-                                  //             "CORE",
-                                  //             style: TextStyle(
-                                  //               fontSize: 16,
-                                  //               fontWeight: FontWeight.bold,
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //         widget02: Center(
-                                  //           child: Text(
-                                  //             ReportPDF3PICvar
-                                  //                         .rawlistCORE.length >=
-                                  //                     1
-                                  //                 ? ReportPDF3PICvar
-                                  //                     .rawlistCORE[0].DATA
-                                  //                 : '',
-                                  //             style: const TextStyle(
-                                  //               fontSize: 16,
-                                  //               fontWeight: FontWeight.bold,
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //         // widget03: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             2
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[1].DATA
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //         // widget04: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             3
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[2].DATA
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //         // widget05: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             4
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[3].DATA
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //         // widget06: Center(
-                                  //         //   child: Text(
-                                  //         //     ReportPDF3PICvar
-                                  //         //                 .rawlistCORE.length >=
-                                  //         //             5
-                                  //         //         ? ReportPDF3PICvar
-                                  //         //             .rawlistCORE[4].DATA
-                                  //         //         : '',
-                                  //         //     style: const TextStyle(
-                                  //         //       fontSize: 16,
-                                  //         //       fontWeight: FontWeight.bold,
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // )
+                                  HEAD7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: const Center(
+                                      child: Text(
+                                        "ITEM",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: const Center(
+                                      child: Text(
+                                        "SC",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget03: const Center(
+                                      child: Text(
+                                        "Check Method",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: const Center(
+                                      child: Text(
+                                        "Frequency",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: const Center(
+                                      child: Text(
+                                        "Specification",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: const Center(
+                                      child: Text(
+                                        "Result",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: const Center(
+                                      child: Text(
+                                        "Remark",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: const [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC01 != ''
+                                            ? "Appearance for Rust"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: const Center(
+                                      child: Text(
+                                        "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC01 != ''
+                                            ? "Visual"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC01 != ''
+                                            ? "10 pcs/rcv.Lot"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC01 != ''
+                                            ? "No Rust"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC01 != ''
+                                            ? "No Rust"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: const Center(
+                                      child: Text(
+                                        "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC02 != ''
+                                            ? "Appearance for scratch"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC02 != '' ? "" : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC02 != ''
+                                            ? "Visual"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC02 != ''
+                                            ? "10 pcs/rcv.Lot"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC02 != ''
+                                            ? "No Scratch"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.INC02 != ''
+                                            ? "No Scratch"
+                                            : "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: const Center(
+                                      child: Text(
+                                        "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  HEAD1SLOT(
+                                    widget01: const Center(
+                                      child: Text(
+                                        "FINAL INSPECTION",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  HEAD7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: const Center(
+                                      child: Text(
+                                        "ITEM",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: const Center(
+                                      child: Text(
+                                        "SC",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget03: const Center(
+                                      child: Text(
+                                        "Check Method",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: const Center(
+                                      child: Text(
+                                        "Frequency",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: const Center(
+                                      child: Text(
+                                        "Specification",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: const Center(
+                                      child: Text(
+                                        "Result",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: const Center(
+                                      child: Text(
+                                        "Remark",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[0].ITEMname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: ReportPDF3PICvar
+                                                  .datalist[0].SCMARK ==
+                                              'YES'
+                                          ? PicShow(
+                                              width: 42,
+                                              height: 42,
+                                              base64:
+                                                  ReportPDF3PICvar.SCMASKTYPE)
+                                          : const Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[0].METHODname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[0].FREQ,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar
+                                            .datalist[0].SPECIFICATIONname,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar
+                                                      .datalist[0]
+                                                      .SPECIFICATIONname
+                                                      .length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[0].RESULT,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[0]
+                                                      .RESULT.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[0].REMARK,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[0]
+                                                      .REMARK.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[1].ITEMname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: ReportPDF3PICvar
+                                                  .datalist[1].SCMARK ==
+                                              'YES'
+                                          ? PicShow(
+                                              width: 42,
+                                              height: 42,
+                                              base64:
+                                                  ReportPDF3PICvar.SCMASKTYPE)
+                                          : const Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[1].METHODname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[1].FREQ,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar
+                                            .datalist[1].SPECIFICATIONname,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar
+                                                      .datalist[1]
+                                                      .SPECIFICATIONname
+                                                      .length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[1].RESULT,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[1]
+                                                      .RESULT.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[1].REMARK,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[1]
+                                                      .REMARK.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[2].ITEMname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: ReportPDF3PICvar
+                                                  .datalist[2].SCMARK ==
+                                              'YES'
+                                          ? PicShow(
+                                              width: 42,
+                                              height: 42,
+                                              base64:
+                                                  ReportPDF3PICvar.SCMASKTYPE)
+                                          : const Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[2].METHODname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[2].FREQ,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar
+                                            .datalist[2].SPECIFICATIONname,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar
+                                                      .datalist[2]
+                                                      .SPECIFICATIONname
+                                                      .length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[2].RESULT,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[2]
+                                                      .RESULT.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[2].REMARK,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[2]
+                                                      .REMARK.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[3].ITEMname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: ReportPDF3PICvar
+                                                  .datalist[3].SCMARK ==
+                                              'YES'
+                                          ? PicShow(
+                                              width: 42,
+                                              height: 42,
+                                              base64:
+                                                  ReportPDF3PICvar.SCMASKTYPE)
+                                          : const Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[3].METHODname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[3].FREQ,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar
+                                            .datalist[3].SPECIFICATIONname,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar
+                                                      .datalist[3]
+                                                      .SPECIFICATIONname
+                                                      .length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[3].RESULT,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[3]
+                                                      .RESULT.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[3].REMARK,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[3]
+                                                      .REMARK.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[4].ITEMname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: ReportPDF3PICvar
+                                                  .datalist[4].SCMARK ==
+                                              'YES'
+                                          ? PicShow(
+                                              width: 42,
+                                              height: 42,
+                                              base64:
+                                                  ReportPDF3PICvar.SCMASKTYPE)
+                                          : const Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[4].METHODname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[4].FREQ,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar
+                                            .datalist[4].SPECIFICATIONname,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar
+                                                      .datalist[4]
+                                                      .SPECIFICATIONname
+                                                      .length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[4].RESULT,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[4]
+                                                      .RESULT.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[4].REMARK,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[4]
+                                                      .REMARK.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[5].ITEMname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: ReportPDF3PICvar
+                                                  .datalist[5].SCMARK ==
+                                              'YES'
+                                          ? PicShow(
+                                              width: 42,
+                                              height: 42,
+                                              base64:
+                                                  ReportPDF3PICvar.SCMASKTYPE)
+                                          : const Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[5].METHODname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[5].FREQ,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar
+                                            .datalist[5].SPECIFICATIONname,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar
+                                                      .datalist[5]
+                                                      .SPECIFICATIONname
+                                                      .length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[5].RESULT,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[5]
+                                                      .RESULT.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[5].REMARK,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[5]
+                                                      .REMARK.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  BODY7SLOT(
+                                    ListFlex: [6, 1, 4, 2, 2, 2, 2],
+                                    widget01: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[6].ITEMname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget02: Center(
+                                      child: ReportPDF3PICvar
+                                                  .datalist[6].SCMARK ==
+                                              'YES'
+                                          ? PicShow(
+                                              width: 42,
+                                              height: 42,
+                                              base64:
+                                                  ReportPDF3PICvar.SCMASKTYPE)
+                                          : const Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                    ),
+                                    widget03: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[6].METHODname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget04: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[6].FREQ,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget05: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar
+                                            .datalist[6].SPECIFICATIONname,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar
+                                                      .datalist[6]
+                                                      .SPECIFICATIONname
+                                                      .length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget06: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[6].RESULT,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[6]
+                                                      .RESULT.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                    widget07: Center(
+                                      child: Text(
+                                        ReportPDF3PICvar.datalist[7].REMARK,
+                                        style: TextStyle(
+                                          fontSize: ReportPDF3PICvar.datalist[7]
+                                                      .REMARK.length >
+                                                  30
+                                              ? 12
+                                              : 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 8,
+                                        child: Column(
+                                          children: [
+                                            HEAD16SLOT(
+                                              ListFlex: S16slot,
+                                              widget01: const Center(
+                                                child: Text(
+                                                  "SAMPLE NO.",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget02: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          1
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[0]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget03: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          2
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[1]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget04: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          3
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[2]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget05: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          4
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[3]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget06: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          5
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[4]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget07: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          6
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[5]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget08: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          7
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[6]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget09: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          8
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[7]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget10: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          9
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[8]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget11: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          10
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[9]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget12: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          11
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[10]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget13: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          12
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[11]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget14: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          13
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[12]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget15: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          14
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[13]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget16: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          15
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[14]
+                                                          .DATANO
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            BODY16SLOT(
+                                              ListFlex: S16slot,
+                                              widget01: const Center(
+                                                child: Text(
+                                                  "POINT NO.",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget02: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          1
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[0]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget03: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          2
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[1]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget04: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          3
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[2]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget05: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          4
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[3]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget06: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          5
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[4]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget07: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          6
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[5]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget08: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          7
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[6]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget09: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          8
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[7]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget10: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          9
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[8]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget11: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          10
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[9]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget12: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          11
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[10]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget13: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          12
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[11]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget14: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          13
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[12]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget15: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          14
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[13]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget16: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          15
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[14]
+                                                          .DATAPCS
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            BODY16SLOT(
+                                              ListFlex: S16slot,
+                                              widget01: const Center(
+                                                child: Text(
+                                                  "Surface Hardness",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget02: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          1
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[0]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget03: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          2
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[1]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget04: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          3
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[2]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget05: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          4
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[3]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget06: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          5
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[4]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget07: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          6
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[5]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget08: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          7
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[6]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget09: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          8
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[7]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget10: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          9
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[8]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget11: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          10
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[9]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget12: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          11
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[10]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget13: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          12
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[11]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget14: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          13
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[12]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget15: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          14
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[13]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              widget16: Center(
+                                                child: Text(
+                                                  ReportPDF3PICvar
+                                                              .rawlistHardness
+                                                              .length >=
+                                                          15
+                                                      ? ReportPDF3PICvar
+                                                          .rawlistHardness[14]
+                                                          .DATA
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // Expanded(
+                                      //   flex: 2,
+                                      //   child: Column(
+                                      //     children: [
+                                      //       HEAD2SLOT(
+                                      //         ListFlex: [2, 1, 1, 1, 1, 1],
+                                      //         widget01: const Center(
+                                      //           child: Text(
+                                      //             "SAMPLE NO.",
+                                      //             style: TextStyle(
+                                      //               fontSize: 16,
+                                      //               fontWeight: FontWeight.bold,
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //         widget02: Center(
+                                      //           child: Text(
+                                      //             ReportPDF3PICvar
+                                      //                         .rawlistCORE.length >=
+                                      //                     1
+                                      //                 ? ReportPDF3PICvar
+                                      //                     .rawlistCORE[0].DATANO
+                                      //                 : '',
+                                      //             style: const TextStyle(
+                                      //               fontSize: 16,
+                                      //               fontWeight: FontWeight.bold,
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       BODY2SLOT(
+                                      //         ListFlex: [2, 1, 1, 1, 1, 1],
+                                      //         widget01: const Center(
+                                      //           child: Text(
+                                      //             "POINT NO.",
+                                      //             style: TextStyle(
+                                      //               fontSize: 16,
+                                      //               fontWeight: FontWeight.bold,
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //         widget02: Center(
+                                      //           child: Text(
+                                      //             ReportPDF3PICvar
+                                      //                         .rawlistCORE.length >=
+                                      //                     1
+                                      //                 ? ReportPDF3PICvar
+                                      //                     .rawlistCORE[0].DATAPCS
+                                      //                 : '',
+                                      //             style: const TextStyle(
+                                      //               fontSize: 16,
+                                      //               fontWeight: FontWeight.bold,
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //         // widget03: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             2
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[1].DATAPCS
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //         // widget04: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             3
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[2].DATAPCS
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //         // widget05: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             4
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[3].DATAPCS
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //         // widget06: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             5
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[4].DATAPCS
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //       ),
+                                      //       BODY2SLOT(
+                                      //         ListFlex: [2, 1, 1, 1, 1, 1],
+                                      //         widget01: const Center(
+                                      //           child: Text(
+                                      //             "CORE",
+                                      //             style: TextStyle(
+                                      //               fontSize: 16,
+                                      //               fontWeight: FontWeight.bold,
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //         widget02: Center(
+                                      //           child: Text(
+                                      //             ReportPDF3PICvar
+                                      //                         .rawlistCORE.length >=
+                                      //                     1
+                                      //                 ? ReportPDF3PICvar
+                                      //                     .rawlistCORE[0].DATA
+                                      //                 : '',
+                                      //             style: const TextStyle(
+                                      //               fontSize: 16,
+                                      //               fontWeight: FontWeight.bold,
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //         // widget03: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             2
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[1].DATA
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //         // widget04: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             3
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[2].DATA
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //         // widget05: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             4
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[3].DATA
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //         // widget06: Center(
+                                      //         //   child: Text(
+                                      //         //     ReportPDF3PICvar
+                                      //         //                 .rawlistCORE.length >=
+                                      //         //             5
+                                      //         //         ? ReportPDF3PICvar
+                                      //         //             .rawlistCORE[4].DATA
+                                      //         //         : '',
+                                      //         //     style: const TextStyle(
+                                      //         //       fontSize: 16,
+                                      //         //       fontWeight: FontWeight.bold,
+                                      //         //     ),
+                                      //         //   ),
+                                      //         // ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // )
+                                    ],
+                                  ),
+                                  PICSLO3NOSIDEGRAPH(
+                                    PIC01: _dataCOMMON.databasic.PIC01,
+                                    // PIC02: _dataCOMMON.databasic.PIC02 == wpic
+                                    //     ? _dataCOMMON.databasic.PIC03
+                                    //     : _dataCOMMON.databasic.PIC02,
+                                    PIC02: _dataCOMMON.databasic.PIC02,
+                                    PIC03: _dataCOMMON.databasic.PIC03,
+                                  ),
+                                  TAILSLOT(
+                                    PASS: ReportPDF3PICvar.PASS,
+                                    PICS: _dataCOMMON.databasic.PICstd,
+                                    Remark: ReportPDF3PICvar.remark,
+                                    signs: true,
+                                    NAME01:
+                                        _dataCOMMON.databasic.Inspected_sign,
+                                    NAME02: _dataCOMMON.databasic.Check_sign,
+                                    NAME03: _dataCOMMON.databasic.Approve_sign,
+                                  ),
                                 ],
                               ),
-                              PICSLO3NOSIDEGRAPH(
-                                PIC01: _dataCOMMON.databasic.PIC01,
-                                // PIC02: _dataCOMMON.databasic.PIC02 == wpic
-                                //     ? _dataCOMMON.databasic.PIC03
-                                //     : _dataCOMMON.databasic.PIC02,
-                                PIC02: _dataCOMMON.databasic.PIC02,
-                                PIC03: _dataCOMMON.databasic.PIC03,
-                              ),
-                              TAILSLOT(
-                                PASS: ReportPDF3PICvar.PASS,
-                                PICS: _dataCOMMON.databasic.PICstd,
-                                Remark: ReportPDF3PICvar.remark,
-                                NAME01: ReportPDF3PICvar.SignInsBy,
-                                NAME02: "",
-                                NAME03: "",
-                              ),
-                            ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    if ((USERDATA.UserLV) > 1) ...[
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: InkWell(
+                          onTap: () {
+                            Dio().post(
+                              GLOserver + "Inspected-sign",
+                              data: {
+                                "ID": USERDATA.ID,
+                                "PO": ReportPDF3PICvar.PO,
+                              },
+                            ).then((v) {
+                              var databuff = v.data;
+                              context
+                                  .read<ReportPDFCommon_Cubit>()
+                                  .ReportPDFCommonCubit(
+                                      ReportPDF3PICvar.PO, "");
+                            });
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            color: Colors.blue,
+                            child: Center(
+                              child: Text("Inspected"),
+                            ),
                           ),
                         ),
                       ),
                     ],
-                  ),
-                ],
-              ),
+                    if ((USERDATA.UserLV) > 20) ...[
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: InkWell(
+                          onTap: () {
+                            Dio().post(
+                              GLOserver + "Check-sign",
+                              data: {
+                                "ID": USERDATA.ID,
+                                "PO": ReportPDF3PICvar.PO,
+                              },
+                            ).then((v) {
+                              var databuff = v.data;
+                              context
+                                  .read<ReportPDFCommon_Cubit>()
+                                  .ReportPDFCommonCubit(
+                                      ReportPDF3PICvar.PO, "");
+                            });
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            color: Colors.blue,
+                            child: Center(
+                              child: Text("Check"),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if ((USERDATA.UserLV) > 30) ...[
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: InkWell(
+                          onTap: () {
+                            Dio().post(
+                              GLOserver + "Approve-sign",
+                              data: {
+                                "ID": USERDATA.ID,
+                                "PO": ReportPDF3PICvar.PO,
+                              },
+                            ).then((v) {
+                              var databuff = v.data;
+                              context
+                                  .read<ReportPDFCommon_Cubit>()
+                                  .ReportPDFCommonCubit(
+                                      ReportPDF3PICvar.PO, "");
+                            });
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            color: Colors.blue,
+                            child: Center(
+                              child: Text("Approve"),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
             ),
           ),
           Container(

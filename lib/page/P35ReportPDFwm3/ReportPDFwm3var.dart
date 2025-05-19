@@ -6,6 +6,7 @@ class ReportPDFwm3var {
   static bool iscontrol = false;
   static bool canf = true;
   static String PO = '';
+  static bool HIDEDATAPIC = false;
 
   static String STATUS = '';
 

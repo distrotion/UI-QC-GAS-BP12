@@ -15,6 +15,7 @@ import '../widget/common/imgset.dart';
 
 import 'TEST.dart';
 import 'page1.dart';
+import 'page10.dart';
 import 'page11.dart';
 import 'page2.dart';
 import 'page31.dart';
@@ -31,7 +32,8 @@ class Page0 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Page1();
-    // return Page35();
+    // return Page31();
+    // return Page10();
   }
 }
 

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,14 +20,17 @@ import '../../widget/common/ComInputText.dart';
 import '../../widget/common/Freescroll.dart';
 import '../../widget/common/Loading.dart';
 import '../../widget/onlyINqcui/popup.dart';
+import '../P30SELECTReport/P30SELECTReportvar.dart';
 import '../P31ReportPDFcommon/ReportPDFCommonvar.dart';
 
 import '../P32ReportPDFwm/ReportPDFwmvar.dart';
 import '../P33ReportPDF2GP/ReportPDF2GPvar.dart';
 import '../P34ReportPDF3PIC/ReportPDF3PICvar.dart';
 import '../P35ReportPDFwm3/ReportPDFwm3var.dart';
+import '../P36ReportPDFcov/ReportPDFcovvar.dart';
+import '../P37ReportPDFASI/ReportPDFASIvar.dart';
+import '../P50ReportPDFcommonlist/ReportPDFcommonlistvar.dart';
 import '../page30.dart';
-import '../page31.dart';
 
 import 'REPORTvar.dart';
 
@@ -195,24 +199,25 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                       source: _data,
                       header: Row(
                         children: [
-                          const Text('ISN REPORT'),
+                          const Text('GAS BP12 REPORT'),
                           const Spacer(),
                           Padding(
                             padding: const EdgeInsetsDirectional.only(
                                 start: 2, end: 2, top: 10, bottom: 10),
                             child: InkWell(
                               onTap: () {
-                                WORNINGpop(context, "Please clear cookies ");
-                                context
-                                    .read<REPORT_CALL_Bloc>()
-                                    .add(REPORT_CALL_RESET());
+                                // WORNINGpop(context, "Please clear cookies ");
+                                // context
+                                //     .read<REPORT_CALL_Bloc>()
+                                //     .add(REPORT_CALL_RESET());
+                                context.read<REPORT_Bloc>().add(REPORT_GET());
                               },
                               child: Container(
                                 width: 100,
-                                color: Colors.red,
+                                color: Colors.blueAccent,
                                 child: const Center(
                                   child: Text(
-                                    "RESET REPORT",
+                                    "Refresh",
                                     style: TxtStyle(color: Colors.white),
                                   ),
                                 ),
@@ -251,6 +256,13 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                             onSort: (int columnIndex, bool ascending) =>
                                 _sort<String>((dataset d) => d.f05, columnIndex,
                                     ascending)),
+
+                        DataColumn(
+                            label: const Text('STATUS'),
+                            onSort: (int columnIndex, bool ascending) =>
+                                _sort<String>((dataset d) => d.f05, columnIndex,
+                                    ascending)),
+
                         DataColumn(
                             label: const Text('ACTION'),
                             onSort: (int columnIndex, bool ascending) =>
@@ -450,6 +462,17 @@ class _MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     final dataset data = _data_exp[index];
+    String STATUS = '-';
+
+    if (data.f21 != '') {
+      STATUS = 'Inspected';
+    }
+    if (data.f22 != '') {
+      STATUS = 'Checked';
+    }
+    if (data.f23 != '') {
+      STATUS = 'Approved';
+    }
 
     return DataRow.byIndex(
         index: index,
@@ -465,7 +488,25 @@ class _MyData extends DataTableSource {
           DataCell(Text(data.f02)),
           DataCell(Text(data.f03)),
           DataCell(Text(data.f04)),
+
           DataCell(Text(data.f05)),
+          DataCell(
+            Container(
+              height: 45,
+              width: 90,
+              color: STATUS == 'Inspected'
+                  ? Colors.blue.shade400
+                  : STATUS == 'Checked'
+                      ? Colors.blue
+                      : STATUS == 'Approved'
+                          ? Colors.green
+                          : Colors.white,
+              child: Center(
+                child: Text(STATUS),
+              ),
+            ),
+          ),
+
           DataCell(Padding(
             padding: const EdgeInsets.all(2.0),
             child: Row(
@@ -513,11 +554,15 @@ class _MyData extends DataTableSource {
                     // REPORTvar.reportTYPE = 0;
                     // REPORTvar.PO = data.f01;
                     // context.read<REPORT_CALL_Bloc>().add(REPORT_CALL());
+                    SELECTReportvar.PO = data.f01;
                     ReportPDFCommonvar.PO = data.f01;
                     ReportPDFwmvar.PO = data.f01;
                     ReportPDF2GPvar.PO = data.f01;
                     ReportPDF3PICvar.PO = data.f01;
                     ReportPDFwm3var.PO = data.f01;
+                    ReportPDFcommonlistvar.PO = data.f01;
+                    ReportPDFcovvar.PO = data.f01;
+                    ReportPDFASIvar.PO = data.f01;
                     STDreport(context);
                   },
                   child: Container(

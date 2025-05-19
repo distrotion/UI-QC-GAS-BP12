@@ -198,25 +198,25 @@ class _ROCKWELL_GASMCS002bodyState extends State<ROCKWELL_GASMCS002body> {
       ACCEPT: (v) {
         // print(checkpic());
         if (checkpic()) {
-          if (pointpic()) {
-            if (GASMCS002var.PCS != '' &&
-                GASMCS002var.POINTs != '' &&
-                GASMCS002var.ItemPickSELECT != '') {
-              onLoadingFAKEintTIME(context, 3);
-              if (int.parse(GASMCS002var.PCSleft) > 0) {
-                context
-                    .read<TRICKER_GASMCS002_Bloc>()
-                    .add(TRICKER_GASMCS002FINISH());
-                Timer(const Duration(seconds: 3), () {
-                  context.read<GASMCS002_Bloc>().add(GASMCS002_READ());
-                });
-              }
-            } else {
-              WORNINGpop(context, "Please select item");
+          // if (pointpic()) {
+          if (GASMCS002var.PCS != '' &&
+              GASMCS002var.POINTs != '' &&
+              GASMCS002var.ItemPickSELECT != '') {
+            onLoadingFAKEintTIME(context, 3);
+            if (int.parse(GASMCS002var.PCSleft) > 0) {
+              context
+                  .read<TRICKER_GASMCS002_Bloc>()
+                  .add(TRICKER_GASMCS002FINISH());
+              Timer(const Duration(seconds: 3), () {
+                context.read<GASMCS002_Bloc>().add(GASMCS002_READ());
+              });
             }
           } else {
-            WORNINGpop(context, "Please insert data");
+            WORNINGpop(context, "Please select item");
           }
+          // } else {
+          //   WORNINGpop(context, "Please insert data");
+          // }
         } else {
           WORNINGpop(context, "Please upload picture for Compound Layer");
         }

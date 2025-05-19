@@ -2,14 +2,12 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../widget/common/imgset.dart';
 
-class ReportPDFwmvar {
+class ReportPDFcommonlistvar {
   static bool iscontrol = false;
   static bool canf = true;
   static String PO = '';
 
   static String STATUS = '';
-
-  static bool HIDEDATAPIC = false;
 
   static String CUSTOMER = '';
   static String PROCESS = '';
@@ -19,8 +17,6 @@ class ReportPDFwmvar {
   static String TPKLOT = '';
   static String MATERIAL = '';
   static String QTY = '';
-
-  static String TPKLOTEDIT = '';
 
   static String PICstd = '';
   static String PIC01 = '';
@@ -33,7 +29,15 @@ class ReportPDFwmvar {
   static List<rawlist> rawlistRoughness = [];
   static List<rawlist> rawlistCORE = [];
 
+  static List<List<rawlist>> rawlistDATA = [];
+
+  static String INSBY = '';
+  static String CHECKBY = '';
+  static String APPBY = '';
+
   //rawlistCORE
+
+  static String MATERIALEDIT = '';
 
   static List<rawlist> rawlistGraph = [];
   static rawlist rawlistGraphCore = rawlist();
@@ -49,7 +53,25 @@ class ReportPDFwmvar {
 
   static String SignInsBy = '';
 
+  static String QTYEDIT = '';
+  static String INCresult = '';
+
   static List<ReportPDFCommonlist> datalist = [
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+    ReportPDFCommonlist(),
+  ];
+  static List<ReportPDFCommonlist> datalist_ic = [
     ReportPDFCommonlist(),
     ReportPDFCommonlist(),
     ReportPDFCommonlist(),
@@ -70,6 +92,8 @@ class ReportPDFwmvar {
   static List<FlSpot> graphdata3 = [];
   static List<FlSpot> graphdata4 = [];
   static List<FlSpot> graphunder = [];
+
+  static List<String> Listitemname = [];
 }
 
 class ReportPDFCommonlist {
@@ -114,30 +138,37 @@ class rawlist {
     this.DATANO = '',
     this.DATAPCS = '',
     this.DATA = '',
+    this.DATA2 = '',
   });
   String DATANO;
   String DATAPCS = '';
   String DATA = '';
+  String DATA2 = '';
 }
 
 ReportPDFACTclear() {
-  ReportPDFwmvar.PO = '';
+  ReportPDFcommonlistvar.PO = '';
 
-  ReportPDFwmvar.CUSTOMER = '';
-  ReportPDFwmvar.PROCESS = '';
-  ReportPDFwmvar.PARTNAME = '';
-  ReportPDFwmvar.PARTNO = '';
-  ReportPDFwmvar.CUSLOT = '';
-  ReportPDFwmvar.TPKLOT = '';
-  ReportPDFwmvar.MATERIAL = '';
-  ReportPDFwmvar.QTY = '';
+  ReportPDFcommonlistvar.CUSTOMER = '';
+  ReportPDFcommonlistvar.PROCESS = '';
+  ReportPDFcommonlistvar.PARTNAME = '';
+  ReportPDFcommonlistvar.PARTNO = '';
+  ReportPDFcommonlistvar.CUSLOT = '';
+  ReportPDFcommonlistvar.TPKLOT = '';
+  ReportPDFcommonlistvar.MATERIAL = '';
+  ReportPDFcommonlistvar.QTY = '';
+  ReportPDFcommonlistvar.rawlistDATA = [];
 
-  ReportPDFwmvar.PICstd = '';
-  ReportPDFwmvar.PIC01 = '';
-  ReportPDFwmvar.PIC02 = '';
+  ReportPDFcommonlistvar.PICstd = '';
+  ReportPDFcommonlistvar.PIC01 = '';
+  ReportPDFcommonlistvar.PIC02 = '';
 
-  ReportPDFwmvar.SignInsBy = '';
-  ReportPDFwmvar.datalist = [
+  ReportPDFcommonlistvar.INSBY = '';
+  ReportPDFcommonlistvar.CHECKBY = '';
+  ReportPDFcommonlistvar.APPBY = '';
+
+  ReportPDFcommonlistvar.SignInsBy = '';
+  ReportPDFcommonlistvar.datalist = [
     ReportPDFCommonlist(),
     ReportPDFCommonlist(),
     ReportPDFCommonlist(),
@@ -152,4 +183,6 @@ ReportPDFACTclear() {
     ReportPDFCommonlist(),
     ReportPDFCommonlist(),
   ];
+
+  ReportPDFcommonlistvar.Listitemname = [];
 }

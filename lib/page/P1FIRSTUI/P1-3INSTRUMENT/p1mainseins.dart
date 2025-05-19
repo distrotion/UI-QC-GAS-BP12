@@ -11,6 +11,7 @@ import '../../../mainBody.dart';
 import '../../../styles/TextStyle.dart';
 import '../../../widget/onlyINqcui/popup.dart';
 import '../../page12.dart';
+import '../../page13.dart';
 import '../../page2.dart';
 import '../../page3.dart';
 
@@ -106,6 +107,9 @@ class SELECtINSTRUMENTbody extends StatelessWidget {
       } else if (FIRSTUI.SECLECTins == 'GAS-OHR-001') {
         CuPage = Page12();
         MainBodyContext.read<ChangePage_Bloc>().add(ChangePage_nodrower());
+      } else if (FIRSTUI.SECLECTins == 'Ref-graph') {
+        CuPage = Page13();
+        MainBodyContext.read<ChangePage_Bloc>().add(ChangePage_nodrower());
       }
     } else {
       if (FIRSTUI.SECLECTins != '') {
@@ -126,6 +130,8 @@ class SELECtINSTRUMENTbody extends StatelessWidget {
         } else if (FIRSTUI.SECLECTins == 'GAS-OHR-001') {
           FIRSTUI.INSnotREADY[FIRSTUI.INSint] = 1;
         } else if (FIRSTUI.SECLECTins == 'GAS-OHR-001') {
+          FIRSTUI.INSnotREADY[FIRSTUI.INSint] = 1;
+        } else if (FIRSTUI.SECLECTins == 'Ref-graph') {
           FIRSTUI.INSnotREADY[FIRSTUI.INSint] = 1;
         }
 
@@ -280,6 +286,12 @@ class SELECtINSTRUMENTbody extends StatelessWidget {
                                 context
                                     .read<TRICKERMASTER_Bloc>()
                                     .add(TRICKERMASTER_GETINtoGASOHR001());
+                              }
+
+                              if (_INSlist[i] == 'Ref-graph') {
+                                context
+                                    .read<TRICKERMASTER_Bloc>()
+                                    .add(TRICKERMASTER_GETINtoRefgraph());
                               }
                             },
                             child: INSBOX(
