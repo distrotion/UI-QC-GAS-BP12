@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -16,19 +17,18 @@ String server = 'http://172.23.10.40:16700/';
 
 class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
   ReportPDFCommon_Cubit()
-      : super(CommonReportOutput(databasic: BasicCommonDATA()));
+    : super(CommonReportOutput(databasic: BasicCommonDATA()));
 
   Future<void> ReportPDFCommonCubit(String PO, String covs) async {
-    CommonReportOutput output =
-        CommonReportOutput(databasic: BasicCommonDATA());
+    CommonReportOutput output = CommonReportOutput(
+      databasic: BasicCommonDATA(),
+    );
     BasicCommonDATA BasicCommonDATAs = BasicCommonDATA();
     List<String> passlist = [];
 
     final response = await Dio().post(
       server + "BP12G_TEST_Report_PDF",
-      data: {
-        "PO": PO,
-      },
+      data: {"PO": PO},
     );
 
     if (response.statusCode == 200) {
@@ -63,6 +63,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
         var SPECIFICATIONlist = databuff['SPECIFICATION'] ?? [];
         var UNITlist = databuff['UNIT'] ?? [];
         var DESIMALlist = databuff['DESIMAL'] ?? [];
+
+        var GTClist = databuff['GTC'] ?? [];
 
         int NO_NUMBER = 0;
 
@@ -99,14 +101,19 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
           CUSTOMER: BasicDATAr['CUSTNAME'] != null
               ? BasicDATAr['CUSTNAME'].toString()
               : '',
+
           PROCESS: BasicDATAr['PROCESS'] != null
               ? BasicDATAr['PROCESS'].toString()
               : '',
           PARTNAME: BasicDATAr['PARTNAME'] != null
               ? BasicDATAr['PARTNAME'].toString()
               : '',
-          PARTNO:
-              BasicDATAr['PART'] != null ? BasicDATAr['PART'].toString() : '',
+          PARTNO: BasicDATAr['PART_s'] != null
+              ? BasicDATAr['PART_s'].toString()
+              : '',
+          PARTNO_s: BasicDATAr['PART'] != null
+              ? BasicDATAr['PART'].toString()
+              : '',
           CUSLOT: BasicDATAr['CUSLOT'] != null
               ? BasicDATAr['CUSLOT'].toString()
               : '',
@@ -133,8 +140,22 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
               ? BasicDATAr['IDApprove'].toString()
               : '',
 
+          dateInspected: BasicDATAr['dateInspected'] != null
+              ? BasicDATAr['dateInspected'].toString()
+              : '',
+          dateCheck: BasicDATAr['dateCheck'] != null
+              ? BasicDATAr['dateCheck'].toString()
+              : '',
+          dateApprove: BasicDATAr['dateApprove'] != null
+              ? BasicDATAr['dateApprove'].toString()
+              : '',
+
           GP3POINT: PATTERNlist['GP3POINT'] != null
               ? PATTERNlist['GP3POINT'].toString()
+              : '',
+
+          remark: databuff['PATTERN'][0]['remark'] != null
+              ? databuff['PATTERN'][0]['remark'].toString()
               : '',
 
           // PICstd: BasicDATAr['PIC'] != null
@@ -142,7 +163,12 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
           //     : '',
         );
 
-        // print(BasicCommonDATAs.Inspected);
+        if (BasicCommonDATAs.CUSTOMER == '') {
+          BasicCommonDATAs.CUSTOMER = BasicDATAr['CUSTNAME_s'] != null
+              ? BasicDATAr['CUSTNAME_s'].toString()
+              : '';
+        }
+
         // print(BasicCommonDATAs.Check);
         // print(BasicCommonDATAs.Approve);
 
@@ -158,8 +184,9 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
             //SIGNATURE
             // print(responseS1.data);
             var input = responseS1.data;
-            BasicCommonDATAs.Inspected_sign =
-                input['SIGNATURE'] != null ? input['SIGNATURE'].toString() : '';
+            BasicCommonDATAs.Inspected_sign = input['SIGNATURE'] != null
+                ? input['SIGNATURE'].toString()
+                : '';
           }
         }
 
@@ -175,8 +202,9 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
             //SIGNATURE
             // print(response.data);
             var input = responseS2.data;
-            BasicCommonDATAs.Check_sign =
-                input['SIGNATURE'] != null ? input['SIGNATURE'].toString() : '';
+            BasicCommonDATAs.Check_sign = input['SIGNATURE'] != null
+                ? input['SIGNATURE'].toString()
+                : '';
           }
         }
 
@@ -192,8 +220,9 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
             //SIGNATURE
             // print(response.data);
             var input = responseS3.data;
-            BasicCommonDATAs.Approve_sign =
-                input['SIGNATURE'] != null ? input['SIGNATURE'].toString() : '';
+            BasicCommonDATAs.Approve_sign = input['SIGNATURE'] != null
+                ? input['SIGNATURE'].toString()
+                : '';
           }
         }
 
@@ -221,8 +250,9 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
         if (PATTERNlist['Pimg'] != null) {
           if (PATTERNlist['Pimg']['P1'] != null) {
-            List<String> datalist =
-                PATTERNlist['Pimg']['P1'].toString().split(',');
+            List<String> datalist = PATTERNlist['Pimg']['P1'].toString().split(
+              ',',
+            );
             if (datalist.length > 1) {
               BasicCommonDATAs.PICstd = datalist[1];
             } else {
@@ -243,21 +273,22 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
             if (PATTERNlist['FINAL'][fi]['RESULTFORMAT'] == 'Text') {
               for (var mi = 0; mi < MACHINElist.length; mi++) {
                 if (FINALdata[MACHINElist[mi]] != null) {
-                  if (FINALdata[MACHINElist[mi]]
-                          [PATTERNlist['FINAL'][fi]['ITEMs']] !=
+                  if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']] !=
                       null) {
                     // print(PATTERNlist['FINAL'][fi]);
                     // print(FINALdata[MACHINElist[mi]]
                     //     [PATTERNlist['FINAL'][fi]['ITEMs']]);
 
-                    String POINTs = (int.parse(ConverstStrOne(
-                            PATTERNlist['FINAL'][fi]['PCS'].toString())))
-                        .toString();
+                    String POINTs = (int.parse(
+                      ConverstStrOne(
+                        PATTERNlist['FINAL'][fi]['PCS'].toString(),
+                      ),
+                    )).toString();
 
-                    String itemss =
-                        PATTERNlist['FINAL'][fi]['ITEMs'].toString();
-                    String SCmasks =
-                        PATTERNlist['FINAL'][fi]['SCMARK'].toString();
+                    String itemss = PATTERNlist['FINAL'][fi]['ITEMs']
+                        .toString();
+                    String SCmasks = PATTERNlist['FINAL'][fi]['SCMARK']
+                        .toString();
                     String ITEMname = '';
                     String METHODss = '';
                     String METHODname = '';
@@ -266,8 +297,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     String SPECIFICATION = '';
                     String LOAD = PATTERNlist['FINAL'][fi]['LOAD'].toString();
 
-                    String SRAWDATA =
-                        PATTERNlist['FINAL'][fi]['SRAWDATA'].toString();
+                    String SRAWDATA = PATTERNlist['FINAL'][fi]['SRAWDATA']
+                        .toString();
 
                     for (var Fci = 0; Fci < METHODlist.length; Fci++) {
                       if (METHODlist[Fci]['masterID'].toString() == METHODss) {
@@ -298,24 +329,26 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                               .toString()) {
                         //
                         // print(SPECIFICATIONlist[SPi]['SPECIFICATION'].toString());
-                        SPECIFICATION =
-                            SPECIFICATIONlist[SPi]['SPECIFICATION'].toString();
+                        SPECIFICATION = SPECIFICATIONlist[SPi]['SPECIFICATION']
+                            .toString();
                       }
                     }
 
-                    ITEMlist.add(FINALCHECKlistCommonClass(
-                      TYPE: "Text",
-                      ITEM: itemss,
-                      ITEMname: ITEMname,
-                      METHOD: METHODss,
-                      METHODname: METHODname,
-                      SCMARK: SCmasks,
-                      FREQ: FREQ,
-                      SPECIFICATION: SPECIFICATION,
-                      RESULT: SPECIFICATION,
-                      LOAD: LOAD,
-                      SRAWDATA: "",
-                    ));
+                    ITEMlist.add(
+                      FINALCHECKlistCommonClass(
+                        TYPE: "Text",
+                        ITEM: itemss,
+                        ITEMname: ITEMname,
+                        METHOD: METHODss,
+                        METHODname: METHODname,
+                        SCMARK: SCmasks,
+                        FREQ: FREQ,
+                        SPECIFICATION: SPECIFICATION,
+                        RESULT: SPECIFICATION,
+                        LOAD: LOAD,
+                        SRAWDATA: "",
+                      ),
+                    );
                   }
                 }
               }
@@ -326,24 +359,25 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
               for (var mi = 0; mi < MACHINElist.length; mi++) {
                 if (FINALdata[MACHINElist[mi]] != null) {
-                  if (FINALdata[MACHINElist[mi]]
-                          [PATTERNlist['FINAL'][fi]['ITEMs']] !=
+                  if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']] !=
                       null) {
                     // print(PATTERNlist['FINAL'][fi]['RESULTFORMAT']);
                     // print(FINALdata[MACHINElist[mi]]
                     //     [PATTERNlist['FINAL'][fi]['ITEMs']]);
 
-                    String POINTs = (int.parse(ConverstStrOne(
-                            PATTERNlist['FINAL'][fi]['PCS'].toString())))
+                    String POINTs = (int.parse(
+                      ConverstStrOne(
+                        PATTERNlist['FINAL'][fi]['PCS'].toString(),
+                      ),
+                    )).toString();
+                    String UNITssp = PATTERNlist['FINAL'][fi]['UNIT']
                         .toString();
-                    String UNITssp =
-                        PATTERNlist['FINAL'][fi]['UNIT'].toString();
                     String SPECIFICATIONbuff =
                         PATTERNlist['FINAL'][fi]['SPECIFICATIONve'].toString();
-                    String itemss =
-                        PATTERNlist['FINAL'][fi]['ITEMs'].toString();
-                    String SCmasks =
-                        PATTERNlist['FINAL'][fi]['SCMARK'].toString();
+                    String itemss = PATTERNlist['FINAL'][fi]['ITEMs']
+                        .toString();
+                    String SCmasks = PATTERNlist['FINAL'][fi]['SCMARK']
+                        .toString();
                     String ITEMname = '';
                     String METHODss = '';
                     String METHODname = '';
@@ -352,27 +386,27 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     String SPECIFICATION = '';
                     String LOAD = PATTERNlist['FINAL'][fi]['LOAD'].toString();
 
-                    String SRAWDATA =
-                        PATTERNlist['FINAL'][fi]['SRAWDATA'].toString();
+                    String SRAWDATA = PATTERNlist['FINAL'][fi]['SRAWDATA']
+                        .toString();
 
                     double maxdata = 0;
                     double mindata = 0;
 
-                    String remark =
-                        PATTERNlist['FINAL'][fi]['REMARK'].toString();
+                    String remark = PATTERNlist['FINAL'][fi]['REMARK']
+                        .toString();
 
                     // String remark = '';
 
-                    String SUMDATA =
-                        PATTERNlist['FINAL'][fi]['SUMDATA'].toString();
+                    String SUMDATA = PATTERNlist['FINAL'][fi]['SUMDATA']
+                        .toString();
 
-                    String LASTPcs =
-                        PATTERNlist['FINAL'][fi]['LASTPcs'].toString();
+                    String LASTPcs = PATTERNlist['FINAL'][fi]['LASTPcs']
+                        .toString();
 
                     // print('>>${remark}');
 
-                    String convss =
-                        PATTERNlist['FINAL'][fi]['CONVERSE'].toString();
+                    String convss = PATTERNlist['FINAL'][fi]['CONVERSE']
+                        .toString();
 
                     if (convss != '' && convss != '-') {
                       for (var ih = 0; ih < UNITlist.length; ih++) {
@@ -388,33 +422,44 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                         }
                       }
                     }
-
+                    String unitP = '';
+                    String unitPC = '';
                     try {
-                      String SPECIFICATIONbuff2 =
-                          SPECIFICATIONbuff.replaceAll('{', '{"');
-                      String SPECIFICATIONbuff3 =
-                          SPECIFICATIONbuff2.replaceAll('}', '"}');
-                      String SPECIFICATIONbuff4 =
-                          SPECIFICATIONbuff3.replaceAll(':', '":"');
-                      String SPECIFICATIONbuff5 =
-                          SPECIFICATIONbuff4.replaceAll(',', '","');
+                      String SPECIFICATIONbuff2 = SPECIFICATIONbuff.replaceAll(
+                        '{',
+                        '{"',
+                      );
+                      String SPECIFICATIONbuff3 = SPECIFICATIONbuff2.replaceAll(
+                        '}',
+                        '"}',
+                      );
+                      String SPECIFICATIONbuff4 = SPECIFICATIONbuff3.replaceAll(
+                        ':',
+                        '":"',
+                      );
+                      String SPECIFICATIONbuff5 = SPECIFICATIONbuff4.replaceAll(
+                        ',',
+                        '","',
+                      );
                       // print(SPECIFICATIONbuff5);
-                      var SPECIFICATIONdata =
-                          json.decode(SPECIFICATIONbuff5.replaceAll(' ', ''));
+                      var SPECIFICATIONdata = json.decode(
+                        SPECIFICATIONbuff5.replaceAll(' ', ''),
+                      );
                       if (SPECIFICATIONdata['condition'] != null) {
                         // print(SPECIFICATIONdata['condition']);
-                        String condition =
-                            SPECIFICATIONdata['condition'].toString();
+                        String condition = SPECIFICATIONdata['condition']
+                            .toString();
 
                         // print(condition.contains("LOL(<)"));
                         // print(condition.contains("HIM(>)"));
                         // Actual
                         // print(SPECIFICATIONdata);
 
-                        String dataUNIT =
-                            PATTERNlist['FINAL'][fi]['UNIT'].toString();
+                        String dataUNIT = PATTERNlist['FINAL'][fi]['UNIT']
+                            .toString();
 
-                        String unitP = '';
+                        String dataUNITC = PATTERNlist['FINAL'][fi]['CONVERSE']
+                            .toString();
 
                         for (var ih = 0; ih < UNITlist.length; ih++) {
                           // print(UNITlist[ih]['masterID'].toString());
@@ -425,28 +470,44 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                           }
                         }
 
+                        for (var ih = 0; ih < UNITlist.length; ih++) {
+                          // print(UNITlist[ih]['masterID'].toString());
+                          if (dataUNITC ==
+                              UNITlist[ih]['masterID'].toString()) {
+                            // print(UNITlist[ih]);
+                            unitPC = UNITlist[ih]['UNIT'].toString();
+                            break;
+                          }
+                        }
+
                         if (condition.contains("BTW")) {
                           print(SPECIFICATIONdata['BTW_LOW']);
                           print(SPECIFICATIONdata['BTW_HI']);
                           SPECIFICATION =
                               '${SPECIFICATIONdata['BTW_LOW'].toString()}-${SPECIFICATIONdata['BTW_HI'].toString()} ${unitP.replaceAll('?', 'µ')}';
 
-                          maxdata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['BTW_HI'].toString()));
-                          mindata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['BTW_LOW'].toString()));
+                          maxdata = double.parse(
+                            ConverstStr(SPECIFICATIONdata['BTW_HI'].toString()),
+                          );
+                          mindata = double.parse(
+                            ConverstStr(
+                              SPECIFICATIONdata['BTW_LOW'].toString(),
+                            ),
+                          );
                         } else if (condition.contains("LOL(<)")) {
                           // print(SPECIFICATIONdata['LOL_H']);
                           SPECIFICATION =
                               '≤ ${SPECIFICATIONdata['LOL_H'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                          maxdata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['LOL_H'].toString()));
+                          maxdata = double.parse(
+                            ConverstStr(SPECIFICATIONdata['LOL_H'].toString()),
+                          );
                         } else if (condition.contains("HIM(>)")) {
                           // print(SPECIFICATIONdata['HIM_L']);
                           SPECIFICATION =
                               '≥ ${SPECIFICATIONdata['HIM_L'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                          mindata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['HIM_L'].toString()));
+                          mindata = double.parse(
+                            ConverstStr(SPECIFICATIONdata['HIM_L'].toString()),
+                          );
                         } else if (condition.contains("Actual")) {
                           // print(SPECIFICATIONdata['TARGET']);
                           SPECIFICATION = 'Actual';
@@ -470,6 +531,7 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                       }
                     }
                     int desinal = 1;
+                    int desinalc = 1;
 
                     // for (var Fci = 0; Fci < ITEMSlist.length; Fci++) {
                     //   if (ITEMSlist[Fci]['masterID'].toString() == itemss) {
@@ -509,27 +571,39 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     for (var d = 0; d < UNITlist.length; d++) {
                       if (UNITlist[d]['masterID'].toString() == UNITssp) {
                         desinal = int.parse(
-                            ConverstStr(UNITlist[d]['DESIMAL'].toString()));
+                          ConverstStr(UNITlist[d]['DESIMAL'].toString()),
+                        );
 
                         break;
                       } else {
                         desinal = 1;
                       }
                     }
-                    // print(ITEMname);
+
+                    for (var d = 0; d < UNITlist.length; d++) {
+                      if (UNITlist[d]['masterID'].toString() == convss) {
+                        desinalc = int.parse(
+                          ConverstStr(UNITlist[d]['DESIMAL'].toString()),
+                        );
+
+                        break;
+                      } else {
+                        desinalc = desinal;
+                      }
+                    }
+                    print("------------desinalc");
+                    print(desinalc);
 
                     List<datainlist> listdataset = [];
                     for (var i = 0; i < 20; i++) {
-                      if (FINALdata[MACHINElist[mi]]
-                                  [PATTERNlist['FINAL'][fi]['ITEMs']]
-                              ['PSC${i + 1}'] !=
+                      if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'] !=
                           null) {
                         //
                         // print(FINALdata[MACHINElist[mi]]
                         //         [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}']
                         //     .length);
-                        var datainside = FINALdata[MACHINElist[mi]]
-                            [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
+                        var datainside =
+                            FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
                         datainlist datainpcsi = datainlist();
                         int pcsi = 0;
                         // print(PATTERNlist['FINAL'][fi]);
@@ -537,10 +611,10 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                         print(PATTERNlist['FINAL'][fi]['CONVERSEDATA']);
                         String conves =
                             PATTERNlist['FINAL'][fi]['CONVERSEDATA'] != null
-                                ? PATTERNlist['FINAL'][fi]['CONVERSEDATA']
-                                    .toString()
-                                    .toLowerCase()
-                                : '';
+                            ? PATTERNlist['FINAL'][fi]['CONVERSEDATA']
+                                  .toString()
+                                  .toLowerCase()
+                            : '';
 
                         String ConvesData = setps1;
                         String ConvesData2 = "PO5";
@@ -563,329 +637,489 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                           //   double.parse(ConverstStr(datainside[pcsi]['PIC1data'].toString())).toStringAsFixed(2);
 
                           if (pcsi == 0) {
-                            datainpcsi.DATA01 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA01 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA01c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA01c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 1) {
-                            datainpcsi.DATA02 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA02 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA02c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA02c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 2) {
-                            datainpcsi.DATA03 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA03 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA03c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA03c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 3) {
-                            datainpcsi.DATA04 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA04 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA04c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA04c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 4) {
-                            datainpcsi.DATA05 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA05 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA05c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA05c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 5) {
-                            datainpcsi.DATA06 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA06 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA06c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA06c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 6) {
-                            datainpcsi.DATA07 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA07 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA07c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA07c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 7) {
-                            datainpcsi.DATA08 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA08 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA08c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA08c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 8) {
-                            datainpcsi.DATA09 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA09 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA09c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            datainpcsi.DATA09c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 9) {
-                            datainpcsi.DATA10 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA10 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA10c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA10c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 10) {
-                            datainpcsi.DATA11 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA11 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA11c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA11c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 11) {
-                            datainpcsi.DATA12 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA12 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA12c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA12c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 12) {
-                            datainpcsi.DATA13 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA13 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA13c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA13c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 13) {
-                            datainpcsi.DATA14 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA14 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA14c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA14c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 14) {
-                            datainpcsi.DATA15 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA15 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA15c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA15c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 15) {
-                            datainpcsi.DATA16 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA16 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA16c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA16c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 16) {
-                            datainpcsi.DATA17 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA17 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA17c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA17c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 17) {
-                            datainpcsi.DATA18 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA18 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA18c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA18c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 18) {
-                            datainpcsi.DATA19 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA19 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA19c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA19c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 19) {
-                            datainpcsi.DATA20 = double.parse(ConverstStr(
-                                    datainside[pcsi][ConvesData].toString()))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA20 = double.parse(
+                              ConverstStr(
+                                datainside[pcsi][ConvesData].toString(),
+                              ),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA20c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][ConvesData2])))
-                                .toStringAsFixed(desinal);
+                            datainpcsi.DATA20c = double.parse(
+                              ConverstStr(
+                                checknull(datainside[pcsi][ConvesData2]),
+                              ),
+                            ).toStringAsFixed(desinalc);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(ConverstStr(datainside[pcsi]
-                                            [ConvesData]
-                                        .toString())))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(
+                                    datainside[pcsi][ConvesData].toString(),
+                                  ),
+                                ),
+                              ).toString(),
+                            );
                           }
                         }
 
-                        datainpcsi.DATAAVG =
-                            datainside[pcsi][ConvesData].toString();
+                        datainpcsi.DATAAVG = datainside[pcsi][ConvesData]
+                            .toString();
                         datainpcsi.dimensionX = pcsi;
 
                         datainpcsi.TYPE = 'Number';
@@ -899,32 +1133,38 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     double avgall = 0;
                     for (var ig = 0; ig < listdataset.length; ig++) {
                       // print(ConverstStr(listdataset[ig].DATAAVG));
-                      avgall = avgall +
+                      avgall =
+                          avgall +
                           double.parse(ConverstStr(listdataset[ig].DATAAVG));
                     }
                     // print(avgall);
-                    ITEMlist.add(FINALCHECKlistCommonClass(
-                      TYPE: "Number",
-                      ITEM: itemss,
-                      ITEMname: ITEMname,
-                      METHOD: METHODss,
-                      METHODname: METHODname,
-                      SCMARK: SCmasks,
-                      SPECIFICATION: SPECIFICATION,
-                      NO: NO_NUMBER,
-                      FREQ: FREQ,
-                      datapackset: listdataset,
-                      RESULT:
-                          // (avgall / listdataset.length).toStringAsFixed(desinal),
-                          (SUMDATA == 'NO'
-                              ? "See at table"
-                              : (avgall / listdataset.length)
-                                  .toStringAsFixed(desinal)),
-                      LOAD: LOAD,
-                      Remark: remark,
-                      SRAWDATA: SRAWDATA,
-                      // RESULTDSW: RESULTDSW,
-                    ));
+                    ITEMlist.add(
+                      FINALCHECKlistCommonClass(
+                        TYPE: "Number",
+                        ITEM: itemss,
+                        ITEMname: ITEMname,
+                        METHOD: METHODss,
+                        METHODname: METHODname,
+                        SCMARK: SCmasks,
+                        SPECIFICATION: SPECIFICATION,
+                        NO: NO_NUMBER,
+                        FREQ: FREQ,
+                        datapackset: listdataset,
+                        RESULT:
+                            // (avgall / listdataset.length).toStringAsFixed(desinal),
+                            (SUMDATA == 'NO'
+                            ? "See at table"
+                            : (avgall / listdataset.length).toStringAsFixed(
+                                desinal,
+                              )),
+                        LOAD: LOAD,
+                        Remark: remark,
+                        SRAWDATA: SRAWDATA,
+                        unitP: unitP,
+                        unitPC: unitPC,
+                        // RESULTDSW: RESULTDSW,
+                      ),
+                    );
                   }
                 }
               }
@@ -932,23 +1172,24 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
             if (PATTERNlist['FINAL'][fi]['RESULTFORMAT'] == 'Graph') {
               for (var mi = 0; mi < MACHINElist.length; mi++) {
                 if (FINALdata[MACHINElist[mi]] != null) {
-                  if (FINALdata[MACHINElist[mi]]
-                          [PATTERNlist['FINAL'][fi]['ITEMs']] !=
+                  if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']] !=
                       null) {
                     // print(PATTERNlist['FINAL'][fi]['RESULTFORMAT']);
                     // print(FINALdata[MACHINElist[mi]]
                     //     [PATTERNlist['FINAL'][fi]['ITEMs']]);
 
-                    String POINTs = (int.parse(ConverstStrOne(
-                            PATTERNlist['FINAL'][fi]['PCS'].toString())))
-                        .toString();
+                    String POINTs = (int.parse(
+                      ConverstStrOne(
+                        PATTERNlist['FINAL'][fi]['PCS'].toString(),
+                      ),
+                    )).toString();
 
                     String SPECIFICATIONbuff =
                         PATTERNlist['FINAL'][fi]['SPECIFICATIONve'].toString();
-                    String itemss =
-                        PATTERNlist['FINAL'][fi]['ITEMs'].toString();
-                    String SCmasks =
-                        PATTERNlist['FINAL'][fi]['SCMARK'].toString();
+                    String itemss = PATTERNlist['FINAL'][fi]['ITEMs']
+                        .toString();
+                    String SCmasks = PATTERNlist['FINAL'][fi]['SCMARK']
+                        .toString();
                     String ITEMname = '';
                     String METHODss = '';
                     String METHODname = '';
@@ -957,8 +1198,15 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     String SPECIFICATION = '';
                     String LOAD = PATTERNlist['FINAL'][fi]['LOAD'].toString();
 
-                    String SRAWDATA =
-                        PATTERNlist['FINAL'][fi]['SRAWDATA'].toString();
+                    String GTC = PATTERNlist['FINAL'][fi]['GTC'] != null
+                        ? PATTERNlist['FINAL'][fi]['GTC'].toString()
+                        : '';
+
+                    String SRAWDATA = PATTERNlist['FINAL'][fi]['SRAWDATA']
+                        .toString();
+
+                    String SUMDATA = PATTERNlist['FINAL'][fi]['SUMDATA']
+                        .toString();
 
                     double maxdata = 0;
                     double mindata = 0;
@@ -966,21 +1214,30 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     String remark = '';
 
                     try {
-                      String SPECIFICATIONbuff2 =
-                          SPECIFICATIONbuff.replaceAll('{', '{"');
-                      String SPECIFICATIONbuff3 =
-                          SPECIFICATIONbuff2.replaceAll('}', '"}');
-                      String SPECIFICATIONbuff4 =
-                          SPECIFICATIONbuff3.replaceAll(':', '":"');
-                      String SPECIFICATIONbuff5 =
-                          SPECIFICATIONbuff4.replaceAll(',', '","');
+                      String SPECIFICATIONbuff2 = SPECIFICATIONbuff.replaceAll(
+                        '{',
+                        '{"',
+                      );
+                      String SPECIFICATIONbuff3 = SPECIFICATIONbuff2.replaceAll(
+                        '}',
+                        '"}',
+                      );
+                      String SPECIFICATIONbuff4 = SPECIFICATIONbuff3.replaceAll(
+                        ':',
+                        '":"',
+                      );
+                      String SPECIFICATIONbuff5 = SPECIFICATIONbuff4.replaceAll(
+                        ',',
+                        '","',
+                      );
                       // print(SPECIFICATIONbuff5);
-                      var SPECIFICATIONdata =
-                          json.decode(SPECIFICATIONbuff5.replaceAll(' ', ''));
+                      var SPECIFICATIONdata = json.decode(
+                        SPECIFICATIONbuff5.replaceAll(' ', ''),
+                      );
                       if (SPECIFICATIONdata['condition'] != null) {
                         // print(SPECIFICATIONdata['condition']);
-                        String condition =
-                            SPECIFICATIONdata['condition'].toString();
+                        String condition = SPECIFICATIONdata['condition']
+                            .toString();
 
                         // print(condition);
                         // print(condition.contains("LOL(<)"));
@@ -993,8 +1250,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                         String remark = '';
 
-                        String dataUNIT =
-                            PATTERNlist['FINAL'][fi]['UNIT'].toString();
+                        String dataUNIT = PATTERNlist['FINAL'][fi]['UNIT']
+                            .toString();
 
                         String unitP = '';
 
@@ -1013,22 +1270,28 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                           SPECIFICATION =
                               '${SPECIFICATIONdata['BTW_LOW'].toString()}-${SPECIFICATIONdata['BTW_HI'].toString()} ${unitP.replaceAll('?', 'µ')}';
 
-                          maxdata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['BTW_HI'].toString()));
-                          mindata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['BTW_LOW'].toString()));
+                          maxdata = double.parse(
+                            ConverstStr(SPECIFICATIONdata['BTW_HI'].toString()),
+                          );
+                          mindata = double.parse(
+                            ConverstStr(
+                              SPECIFICATIONdata['BTW_LOW'].toString(),
+                            ),
+                          );
                         } else if (condition.contains("LOL(<)")) {
                           // print(SPECIFICATIONdata['LOL_H']);
                           SPECIFICATION =
                               '≤ ${SPECIFICATIONdata['LOL_H'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                          maxdata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['LOL_H'].toString()));
+                          maxdata = double.parse(
+                            ConverstStr(SPECIFICATIONdata['LOL_H'].toString()),
+                          );
                         } else if (condition.contains("HIM(>)")) {
                           // print(SPECIFICATIONdata['HIM_L']);
                           SPECIFICATION =
                               '≥ ${SPECIFICATIONdata['HIM_L'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                          mindata = double.parse(ConverstStr(
-                              SPECIFICATIONdata['HIM_L'].toString()));
+                          mindata = double.parse(
+                            ConverstStr(SPECIFICATIONdata['HIM_L'].toString()),
+                          );
                         } else if (condition.contains("Actual")) {
                           // print(SPECIFICATIONdata['TARGET']);
                           SPECIFICATION = 'Actual';
@@ -1082,11 +1345,13 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                     for (var d = 0; d < DESIMALlist.length; d++) {
                       if (DESIMALlist[d]['ITEMs'].toString() == itemss) {
-                        desinal =
-                            int.parse(ConverstStr(DESIMALlist[d]['DESIMAL01']));
+                        desinal = int.parse(
+                          ConverstStr(DESIMALlist[d]['DESIMAL01'].toString()),
+                        );
 
-                        desinalG =
-                            int.parse(ConverstStr(DESIMALlist[d]['DESIMAL02']));
+                        desinalG = int.parse(
+                          ConverstStr(DESIMALlist[d]['DESIMAL02'].toString()),
+                        );
                         break;
                       } else {
                         desinal = 1;
@@ -1102,16 +1367,14 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                     List<datainlist> listdataset = [];
                     for (var i = 0; i < 20; i++) {
-                      if (FINALdata[MACHINElist[mi]]
-                                  [PATTERNlist['FINAL'][fi]['ITEMs']]
-                              ['PSC${i + 1}'] !=
+                      if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'] !=
                           null) {
                         //
                         // print(FINALdata[MACHINElist[mi]]
                         //         [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}']
                         //     .length);
-                        var datainside = FINALdata[MACHINElist[mi]]
-                            [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
+                        var datainside =
+                            FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
                         datainlist datainpcsi = datainlist();
                         int pcsi = 0;
                         // print(PATTERNlist['FINAL'][fi]);
@@ -1424,7 +1687,7 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                         //   }
                         // }
 
-                        // print(datainside.length);
+                        print(datainside.length);
 
                         for (pcsi = 0; pcsi < datainside.length - 1; pcsi++) {
                           // print(pcsi);
@@ -1438,390 +1701,466 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                           // print(datainside[pcsi]); ConverstStr(datainside[pcsi]["PO3"]
                           if (pcsi == 0) {
                             datainpcsi.DATA01 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA01p = double.parse(
-                                    ConverstStr((datainside[pcsi]['PO8'])))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA01p = double.parse(
+                                ConverstStr((datainside[pcsi]['PO8'])),
+                              ).toStringAsFixed(desinalG);
+                            }
 
                             //desinalG
 
-                            datainpcsi.DATA01c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
+                            datainpcsi.DATA01c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 1) {
                             datainpcsi.DATA02 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA02p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA02p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA02c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA02c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 2) {
                             datainpcsi.DATA03 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA03p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA03p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA03c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA03c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 3) {
                             datainpcsi.DATA04 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA04p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA04p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA04c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA04c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 4) {
                             datainpcsi.DATA05 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA05p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA05p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA05c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA05c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 5) {
                             datainpcsi.DATA06 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA06p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA06p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA06c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA06c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 6) {
                             datainpcsi.DATA07 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA07p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA07p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA07c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA07c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 7) {
                             datainpcsi.DATA08 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA08p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA08p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA08c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA08c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 8) {
                             datainpcsi.DATA09 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA09p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA09c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA09p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
-
-                            datainpcsi.DATA09c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 9) {
                             datainpcsi.DATA10 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA10p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA10c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA10p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
-
-                            datainpcsi.DATA10c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 10) {
                             datainpcsi.DATA11 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA11p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA11c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA11p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
-
-                            datainpcsi.DATA11c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 11) {
                             datainpcsi.DATA12 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA12p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA12c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA12p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
-
-                            datainpcsi.DATA12c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 12) {
                             datainpcsi.DATA13 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA13p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA13c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA13p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
-
-                            datainpcsi.DATA13c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 13) {
                             datainpcsi.DATA14 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
-                            datainpcsi.DATA14p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA14p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toString();
+                            }
+                            datainpcsi.DATA14c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA14c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 14) {
                             datainpcsi.DATA15 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA15p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA15p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA15c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA15c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 15) {
                             datainpcsi.DATA16 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA16p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA16p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA16c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA16c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 16) {
                             datainpcsi.DATA17 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA17p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA17p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA17c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA17c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 17) {
                             datainpcsi.DATA18 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA18p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA18p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA18c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA18c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 18) {
                             datainpcsi.DATA19 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA19p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA19p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA19c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA19c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi]["PO3"])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi]["PO3"]),
+                                ),
+                              ).toString(),
+                            );
                           } else if (pcsi == 19) {
                             datainpcsi.DATA20 = double.parse(
-                                    ConverstStr(datainside[pcsi]["PO3"]))
-                                .toStringAsFixed(desinal);
+                              ConverstStr(datainside[pcsi]["PO3"]),
+                            ).toStringAsFixed(desinal);
 
-                            datainpcsi.DATA20p = double.parse(
-                                    ConverstStr(datainside[pcsi]['PO8']))
-                                .toStringAsFixed(desinalG);
+                            if (datainside[pcsi]['PO8'] != null) {
+                              datainpcsi.DATA20p = double.parse(
+                                ConverstStr(datainside[pcsi]['PO8']),
+                              ).toStringAsFixed(desinalG);
+                            }
+                            datainpcsi.DATA20c = double.parse(
+                              ConverstStr(checknull(datainside[pcsi][setps2])),
+                            ).toStringAsFixed(2);
 
-                            datainpcsi.DATA20c = double.parse(ConverstStr(
-                                    checknull(datainside[pcsi][setps2])))
-                                .toStringAsFixed(2);
-
-                            passlist.add(checkdata(
-                                    maxdata,
-                                    mindata,
-                                    double.parse(
-                                        ConverstStr(datainside[pcsi][setps1])))
-                                .toString());
+                            passlist.add(
+                              checkdata(
+                                maxdata,
+                                mindata,
+                                double.parse(
+                                  ConverstStr(datainside[pcsi][setps1]),
+                                ),
+                              ).toString(),
+                            );
                           }
                         }
 
-                        datainpcsi.DATAAVG =
-                            datainside[pcsi][setps1].toString();
+                        datainpcsi.DATAAVG = datainside[pcsi][setps1]
+                            .toString();
                         datainpcsi.dimensionX = pcsi;
 
                         datainpcsi.TYPE = 'Graph';
@@ -1835,7 +2174,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     double avgall = 0;
                     for (var ig = 0; ig < listdataset.length; ig++) {
                       // print(ConverstStr(listdataset[ig].DATAAVG));
-                      avgall = avgall +
+                      avgall =
+                          avgall +
                           double.parse(ConverstStr(listdataset[ig].DATAAVG));
                     }
                     // print(avgall);
@@ -1847,12 +2187,549 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     // print(FINALANSdata[itemss + "_point"]['y']);
                     String reslp = '';
                     String reslpCross = '';
+
+                    print(GTC);
+
+                    // if (GTC != '' && GTC != '-') {
                     if (FINALANSdata[itemss] != null) {
                       reslp = FINALANSdata[itemss].toString();
                     }
                     if (FINALANSdata[itemss + "_point"] != null) {
-                      reslpCross =
-                          FINALANSdata[itemss + "_point"]['y'].toString();
+                      reslpCross = FINALANSdata[itemss + "_point"]['y']
+                          .toString();
+                    }
+                    // }
+                    List<FlSpot> upper = [];
+                    List<FlSpot> lower = [];
+
+                    if (GTC != '' && GTC != '-') {
+                      for (var vdd = 0; vdd < GTClist.length; vdd++) {
+                        if (GTClist[vdd]['NO'].toString() == GTC) {
+                          print(GTClist[vdd]);
+                          //GT03POINT
+                          if (GTClist[vdd]['GT01POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT01POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT01H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT01POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT01L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT02POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT02POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT02H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT02POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT02L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT03POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT03POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT03H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT03POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT03L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT04POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT04POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT04H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT04POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT04L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT05POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT05POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT05H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT05POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT05L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT06POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT06POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT06H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT06POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT06L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT07POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT07POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT07H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT07POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT07L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT08POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT08POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT08H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT08POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT08L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT09POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT09POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT09H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT09POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT09L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT10POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT10POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT10H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT10POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT10L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+
+                          if (GTClist[vdd]['GT11POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT11POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT11H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT11POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT11L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT12POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT12POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT12H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT12POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT12L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT13POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT13POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT13H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT13POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT13L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT14POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT14POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT14H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT14POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT14L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT15POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT15POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT15H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT15POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT15L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT16POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT16POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT16H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT16POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT16L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT17POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT17POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT17H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT17POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT17L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT18POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT18POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT18H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT18POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT18L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT19POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT19POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT19H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT19POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT19L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                          if (GTClist[vdd]['GT20POINT'].toString() != '') {
+                            upper.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT20POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT20H'].toString()),
+                                ),
+                              ),
+                            );
+                            lower.add(
+                              FlSpot(
+                                double.parse(
+                                  ConverstStr(
+                                    GTClist[vdd]['GT20POINT'].toString(),
+                                  ),
+                                ),
+                                double.parse(
+                                  ConverstStr(GTClist[vdd]['GT20L'].toString()),
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      }
                     }
 
                     //---------
@@ -1861,23 +2738,31 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     // print((double.parse(ConverstStr(reslp))).toStringAsFixed(2));
                     // print("<<<<<<<<<<<<<<<");
 
-                    ITEMlist.add(FINALCHECKlistCommonClass(
-                      TYPE: "Graph",
-                      ITEM: itemss,
-                      ITEMname: ITEMname,
-                      METHOD: METHODss,
-                      METHODname: METHODname,
-                      SCMARK: SCmasks,
-                      SPECIFICATION: SPECIFICATION,
-                      NO: NO_NUMBER,
-                      FREQ: FREQ,
-                      datapackset: listdataset,
-                      RESULT:
-                          (double.parse(ConverstStr(reslp))).toStringAsFixed(2),
-                      LOAD: LOAD,
-                      Cross: reslpCross,
-                      SRAWDATA: "",
-                    ));
+                    ITEMlist.add(
+                      FINALCHECKlistCommonClass(
+                        TYPE: "Graph",
+                        ITEM: itemss,
+                        ITEMname: ITEMname,
+                        METHOD: METHODss,
+                        METHODname: METHODname,
+                        SCMARK: SCmasks,
+                        SPECIFICATION: SPECIFICATION,
+                        NO: NO_NUMBER,
+                        FREQ: FREQ,
+                        datapackset: listdataset,
+                        RESULT: (SUMDATA == 'NO'
+                            ? "See graph"
+                            : (double.parse(
+                                ConverstStr(reslp),
+                              )).toStringAsFixed(2)),
+                        LOAD: LOAD,
+                        Cross: reslpCross,
+                        SRAWDATA: "",
+                        GTC: GTC,
+                        upper: upper,
+                        lower: lower,
+                      ),
+                    );
                   }
                 }
               }
@@ -1887,24 +2772,25 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
               for (var mi = 0; mi < MACHINElist.length; mi++) {
                 // print("----${PATTERNlist['FINAL'][fi]['ITEMs']}");
                 if (FINALdata[MACHINElist[mi]] != null) {
-                  if (FINALdata[MACHINElist[mi]]
-                          [PATTERNlist['FINAL'][fi]['ITEMs']] !=
+                  if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']] !=
                       null) {
                     // print(PATTERNlist['FINAL'][fi]['RESULTFORMAT']);
                     // print(FINALdata[MACHINElist[mi]]
 
-                    String POINTs = (int.parse(ConverstStrOne(
-                            PATTERNlist['FINAL'][fi]['PCS'].toString())))
-                        .toString();
+                    String POINTs = (int.parse(
+                      ConverstStrOne(
+                        PATTERNlist['FINAL'][fi]['PCS'].toString(),
+                      ),
+                    )).toString();
 
                     String SPECIFICATIONbuff =
                         PATTERNlist['FINAL'][fi]['SPECIFICATIONve'].toString();
-                    String itemss =
-                        PATTERNlist['FINAL'][fi]['ITEMs'].toString();
-                    String SCmasks =
-                        PATTERNlist['FINAL'][fi]['SCMARK'].toString();
-                    String UNITssp =
-                        PATTERNlist['FINAL'][fi]['UNIT'].toString();
+                    String itemss = PATTERNlist['FINAL'][fi]['ITEMs']
+                        .toString();
+                    String SCmasks = PATTERNlist['FINAL'][fi]['SCMARK']
+                        .toString();
+                    String UNITssp = PATTERNlist['FINAL'][fi]['UNIT']
+                        .toString();
                     String ITEMname = '';
                     String METHODss = '';
                     String METHODname = '';
@@ -1914,8 +2800,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     String SPECIFICATION = '';
                     String LOAD = PATTERNlist['FINAL'][fi]['LOAD'].toString();
 
-                    String SRAWDATA =
-                        PATTERNlist['FINAL'][fi]['SRAWDATA'].toString();
+                    String SRAWDATA = PATTERNlist['FINAL'][fi]['SRAWDATA']
+                        .toString();
 
                     for (var Fci = 0; Fci < METHODlist.length; Fci++) {
                       if (METHODlist[Fci]['masterID'].toString() == METHODss) {
@@ -1984,17 +2870,15 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                     List<datainlist> listdataset = [];
                     for (var i = 0; i < 20; i++) {
-                      if (FINALdata[MACHINElist[mi]]
-                                  [PATTERNlist['FINAL'][fi]['ITEMs']]
-                              ['PSC${i + 1}'] !=
+                      if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'] !=
                           null) {
                         //
                         // print(FINALdata[MACHINElist[mi]]
                         //         [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}']
                         //     .length);
 
-                        var datainside = FINALdata[MACHINElist[mi]]
-                            [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
+                        var datainside =
+                            FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
 
                         datainlist datainpcsi = datainlist();
                         int pcsi = 0;
@@ -2016,12 +2900,13 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                           String SPECIFICATIONbuff5 =
                               SPECIFICATIONbuff4.replaceAll(',', '","');
                           // print(SPECIFICATIONbuff5);
-                          var SPECIFICATIONdata = json
-                              .decode(SPECIFICATIONbuff5.replaceAll(' ', ''));
+                          var SPECIFICATIONdata = json.decode(
+                            SPECIFICATIONbuff5.replaceAll(' ', ''),
+                          );
                           if (SPECIFICATIONdata['condition'] != null) {
                             // print(SPECIFICATIONdata['condition']);
-                            String condition =
-                                SPECIFICATIONdata['condition'].toString();
+                            String condition = SPECIFICATIONdata['condition']
+                                .toString();
 
                             // print(condition);
                             // print(condition.contains("LOL(<)"));
@@ -2030,8 +2915,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                             // print(SPECIFICATIONdata);
 
                             // print(PATTERNlist['FINAL'][fi]);
-                            String dataUNIT =
-                                PATTERNlist['FINAL'][fi]['UNIT'].toString();
+                            String dataUNIT = PATTERNlist['FINAL'][fi]['UNIT']
+                                .toString();
 
                             String unitP = '';
 
@@ -2050,22 +2935,34 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                               // print(SPECIFICATIONdata['BTW_HI']);
                               SPECIFICATION =
                                   '${SPECIFICATIONdata['BTW_LOW'].toString()}-${SPECIFICATIONdata['BTW_HI'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                              maxdata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['BTW_HI'].toString()));
-                              mindata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['BTW_LOW'].toString()));
+                              maxdata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['BTW_HI'].toString(),
+                                ),
+                              );
+                              mindata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['BTW_LOW'].toString(),
+                                ),
+                              );
                             } else if (condition.contains("LOL(<)")) {
                               // print(SPECIFICATIONdata['LOL_H']);
                               SPECIFICATION =
                                   '≤ ${SPECIFICATIONdata['LOL_H'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                              maxdata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['LOL_H'].toString()));
+                              maxdata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['LOL_H'].toString(),
+                                ),
+                              );
                             } else if (condition.contains("HIM(>)")) {
                               // print(SPECIFICATIONdata['HIM_L']);
                               SPECIFICATION =
                                   '≥ ${SPECIFICATIONdata['HIM_L'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                              mindata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['HIM_L'].toString()));
+                              mindata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['HIM_L'].toString(),
+                                ),
+                              );
                             } else if (condition.contains("Actual")) {
                               // print(SPECIFICATIONdata['TARGET']);
                               SPECIFICATION = 'Actual';
@@ -2099,18 +2996,18 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                         for (pcsi = 0; pcsi < datainside.length; pcsi++) {
                           // print(datainside[pcsi]);
-                          datainpcsi.DATA01 =
-                              double.parse(ConverstStr(PIC1dataBUFF))
-                                  .toStringAsFixed(desinal);
-                          datainpcsi.DATA02 =
-                              double.parse(ConverstStr(PIC2dataBUFF))
-                                  .toStringAsFixed(desinal);
-                          datainpcsi.DATA03 =
-                              double.parse(ConverstStr(PIC3dataBUFF))
-                                  .toStringAsFixed(desinal);
-                          datainpcsi.DATA04 =
-                              double.parse(ConverstStr(PIC4dataBUFF))
-                                  .toStringAsFixed(desinal);
+                          datainpcsi.DATA01 = double.parse(
+                            ConverstStr(PIC1dataBUFF),
+                          ).toStringAsFixed(desinal);
+                          datainpcsi.DATA02 = double.parse(
+                            ConverstStr(PIC2dataBUFF),
+                          ).toStringAsFixed(desinal);
+                          datainpcsi.DATA03 = double.parse(
+                            ConverstStr(PIC3dataBUFF),
+                          ).toStringAsFixed(desinal);
+                          datainpcsi.DATA04 = double.parse(
+                            ConverstStr(PIC4dataBUFF),
+                          ).toStringAsFixed(desinal);
 
                           if (PIC1dataBUFF == '0') {
                             //
@@ -2119,79 +3016,99 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                             datainpcsi.dimensionX = 0;
                           } else if (PIC2dataBUFF == '0') {
                             //
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
 
-                            datainpcsi.DATAAVG =
-                                ((data0001) / 1).toStringAsFixed(desinal);
+                            datainpcsi.DATAAVG = ((data0001) / 1)
+                                .toStringAsFixed(desinal);
 
                             datainpcsi.dimensionX = 1;
 
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
                           } else if (PIC3dataBUFF == '0') {
                             //
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
-                            double data0002 =
-                                double.parse(ConverstStr(PIC2dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
+                            double data0002 = double.parse(
+                              ConverstStr(PIC2dataBUFF),
+                            );
 
                             datainpcsi.DATAAVG = ((data0001 + data0002) / 2)
                                 .toStringAsFixed(desinal);
                             datainpcsi.dimensionX = 2;
 
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
 
-                            passlist.add(checkdata(maxdata, mindata, data0002)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0002).toString(),
+                            );
                           } else if (PIC4dataBUFF == '0') {
                             //
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
-                            double data0002 =
-                                double.parse(ConverstStr(PIC2dataBUFF));
-                            double data0003 =
-                                double.parse(ConverstStr(PIC3dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
+                            double data0002 = double.parse(
+                              ConverstStr(PIC2dataBUFF),
+                            );
+                            double data0003 = double.parse(
+                              ConverstStr(PIC3dataBUFF),
+                            );
 
                             datainpcsi.DATAAVG =
                                 ((data0001 + data0002 + data0003) / 3)
                                     .toStringAsFixed(desinal);
                             datainpcsi.dimensionX = 3;
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0002)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0003)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0002).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0003).toString(),
+                            );
                           } else {
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
-                            double data0002 =
-                                double.parse(ConverstStr(PIC2dataBUFF));
-                            double data0003 =
-                                double.parse(ConverstStr(PIC3dataBUFF));
-                            double data0004 =
-                                double.parse(ConverstStr(PIC4dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
+                            double data0002 = double.parse(
+                              ConverstStr(PIC2dataBUFF),
+                            );
+                            double data0003 = double.parse(
+                              ConverstStr(PIC3dataBUFF),
+                            );
+                            double data0004 = double.parse(
+                              ConverstStr(PIC4dataBUFF),
+                            );
 
                             datainpcsi.DATAAVG =
                                 ((data0001 + data0002 + data0003 + data0003) /
                                         4)
                                     .toStringAsFixed(desinal);
                             datainpcsi.dimensionX = 4;
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0002)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0003)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0004)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0002).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0003).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0004).toString(),
+                            );
                           }
                           if (datainside[pcsi] != null) {
                             if (BasicCommonDATAs.PIC01 != '') {
-                              BasicCommonDATAs.PIC03 =
-                                  datainside[pcsi]['PIC1'].toString();
+                              BasicCommonDATAs.PIC03 = datainside[pcsi]['PIC1']
+                                  .toString();
                               if (BasicCommonDATAs.PIC02 != NOPIC) {
                                 BasicCommonDATAs.ITEMPIC02 = ITEMname;
                               }
@@ -2210,6 +3127,13 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                                     datainside[pcsi]['PIC2'].toString();
                                 if (BasicCommonDATAs.PIC02 != NOPIC) {
                                   BasicCommonDATAs.ITEMPIC02 = ITEMname;
+                                }
+                              }
+                              if (BasicCommonDATAs.PIC03 == '') {
+                                BasicCommonDATAs.PIC03 =
+                                    datainside[pcsi]['PIC3'].toString();
+                                if (BasicCommonDATAs.PIC03 != NOPIC) {
+                                  BasicCommonDATAs.ITEMPIC03 = ITEMname;
                                 }
                               }
                             }
@@ -2364,26 +3288,29 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     double avgall = 0;
                     for (var ig = 0; ig < listdataset.length; ig++) {
                       // print(ConverstStr(listdataset[ig].DATAAVG));
-                      avgall = avgall +
+                      avgall =
+                          avgall +
                           double.parse(ConverstStr(listdataset[ig].DATAAVG));
                     }
 
-                    ITEMlist.add(FINALCHECKlistCommonClass(
-                      TYPE: "Picture",
-                      ITEM: itemss,
-                      ITEMname: ITEMname,
-                      METHOD: METHODss,
-                      METHODname: METHODname,
-                      SCMARK: SCmasks,
-                      SPECIFICATION: "TP STD",
-                      NO: NO_NUMBER,
-                      FREQ: FREQ,
-                      datapackset: listdataset,
-                      RESULT: "Good",
-                      LOAD: LOAD,
-                      SRAWDATA: "",
-                      // Remark: remark,
-                    ));
+                    ITEMlist.add(
+                      FINALCHECKlistCommonClass(
+                        TYPE: "Picture",
+                        ITEM: itemss,
+                        ITEMname: ITEMname,
+                        METHOD: METHODss,
+                        METHODname: METHODname,
+                        SCMARK: SCmasks,
+                        SPECIFICATION: "TP STD",
+                        NO: NO_NUMBER,
+                        FREQ: FREQ,
+                        datapackset: listdataset,
+                        RESULT: "Good",
+                        LOAD: LOAD,
+                        SRAWDATA: "",
+                        // Remark: remark,
+                      ),
+                    );
                   }
                 }
               }
@@ -2394,26 +3321,27 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
               for (var mi = 0; mi < MACHINElist.length; mi++) {
                 // print("----${PATTERNlist['FINAL'][fi]['ITEMs']}");
                 if (FINALdata[MACHINElist[mi]] != null) {
-                  if (FINALdata[MACHINElist[mi]]
-                          [PATTERNlist['FINAL'][fi]['ITEMs']] !=
+                  if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']] !=
                       null) {
                     // print(PATTERNlist['FINAL'][fi]['SPECIFICATION']);
                     // print(FINALdata[MACHINElist[mi]]
 
-                    String POINTs = (int.parse(ConverstStrOne(
-                            PATTERNlist['FINAL'][fi]['PCS'].toString())))
-                        .toString();
+                    String POINTs = (int.parse(
+                      ConverstStrOne(
+                        PATTERNlist['FINAL'][fi]['PCS'].toString(),
+                      ),
+                    )).toString();
 
                     String SPECIFICATIONbuff =
                         PATTERNlist['FINAL'][fi]['SPECIFICATIONve'].toString();
                     var SPECIFICATIONbuffs =
                         PATTERNlist['FINAL'][fi]['SPECIFICATION'];
-                    String itemss =
-                        PATTERNlist['FINAL'][fi]['ITEMs'].toString();
-                    String UNITssp =
-                        PATTERNlist['FINAL'][fi]['UNIT'].toString();
-                    String SCmasks =
-                        PATTERNlist['FINAL'][fi]['SCMARK'].toString();
+                    String itemss = PATTERNlist['FINAL'][fi]['ITEMs']
+                        .toString();
+                    String UNITssp = PATTERNlist['FINAL'][fi]['UNIT']
+                        .toString();
+                    String SCmasks = PATTERNlist['FINAL'][fi]['SCMARK']
+                        .toString();
                     String ITEMname = '';
                     String METHODss = '';
                     String METHODname = '';
@@ -2423,18 +3351,18 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     String SPECIFICATION = '';
                     String LOAD = PATTERNlist['FINAL'][fi]['LOAD'].toString();
 
-                    String SRAWDATA =
-                        PATTERNlist['FINAL'][fi]['SRAWDATA'].toString();
+                    String SRAWDATA = PATTERNlist['FINAL'][fi]['SRAWDATA']
+                        .toString();
 
-                    String remark =
-                        PATTERNlist['FINAL'][fi]['REMARK'].toString();
+                    String remark = PATTERNlist['FINAL'][fi]['REMARK']
+                        .toString();
 
-                    String SUMDATA =
-                        PATTERNlist['FINAL'][fi]['SUMDATA'].toString();
+                    String SUMDATA = PATTERNlist['FINAL'][fi]['SUMDATA']
+                        .toString();
                     // print('>>${remark}');
 
-                    String convss =
-                        PATTERNlist['FINAL'][fi]['CONVERSE'].toString();
+                    String convss = PATTERNlist['FINAL'][fi]['CONVERSE']
+                        .toString();
 
                     if (convss != '') {
                       for (var ih = 0; ih < UNITlist.length; ih++) {
@@ -2509,7 +3437,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     for (var d = 0; d < UNITlist.length; d++) {
                       if (UNITlist[d]['masterID'].toString() == UNITssp) {
                         desinal = int.parse(
-                            ConverstStr(UNITlist[d]['DESIMAL'].toString()));
+                          ConverstStr(UNITlist[d]['DESIMAL'].toString()),
+                        );
 
                         break;
                       } else {
@@ -2519,17 +3448,15 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                     List<datainlist> listdataset = [];
                     for (var i = 0; i < 20; i++) {
-                      if (FINALdata[MACHINElist[mi]]
-                                  [PATTERNlist['FINAL'][fi]['ITEMs']]
-                              ['PSC${i + 1}'] !=
+                      if (FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'] !=
                           null) {
                         //
                         // print(FINALdata[MACHINElist[mi]]
                         //         [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}']
                         //     .length);
 
-                        var datainside = FINALdata[MACHINElist[mi]]
-                            [PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
+                        var datainside =
+                            FINALdata[MACHINElist[mi]][PATTERNlist['FINAL'][fi]['ITEMs']]['PSC${i + 1}'];
 
                         datainlist datainpcsi = datainlist();
                         int pcsi = 0;
@@ -2552,14 +3479,15 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                               SPECIFICATIONbuff4.replaceAll(',', '","');
                           // print(SPECIFICATIONbuff5);
 
-                          var SPECIFICATIONdata = json
-                              .decode(SPECIFICATIONbuff5.replaceAll(' ', ''));
+                          var SPECIFICATIONdata = json.decode(
+                            SPECIFICATIONbuff5.replaceAll(' ', ''),
+                          );
                           //
 
                           if (SPECIFICATIONdata['condition'] != null) {
                             // print(SPECIFICATIONdata['condition']);
-                            String condition =
-                                SPECIFICATIONdata['condition'].toString();
+                            String condition = SPECIFICATIONdata['condition']
+                                .toString();
 
                             // print(condition);
                             // print(condition.contains("LOL(<)"));
@@ -2568,10 +3496,11 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                             // print(SPECIFICATIONdata);
 
                             // print(PATTERNlist['FINAL'][fi]);
-                            String dataUNIT =
-                                PATTERNlist['FINAL'][fi]['UNIT'].toString();
+                            String dataUNIT = PATTERNlist['FINAL'][fi]['UNIT']
+                                .toString();
 
                             String unitP = '';
+                            String unitPC = '';
 
                             for (var ih = 0; ih < UNITlist.length; ih++) {
                               // print(UNITlist[ih]['masterID'].toString());
@@ -2588,22 +3517,34 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                               // print(SPECIFICATIONdata['BTW_HI']);
                               SPECIFICATION =
                                   '${SPECIFICATIONdata['BTW_LOW'].toString()}-${SPECIFICATIONdata['BTW_HI'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                              maxdata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['BTW_HI'].toString()));
-                              mindata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['BTW_LOW'].toString()));
+                              maxdata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['BTW_HI'].toString(),
+                                ),
+                              );
+                              mindata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['BTW_LOW'].toString(),
+                                ),
+                              );
                             } else if (condition.contains("LOL(<)")) {
                               // print(SPECIFICATIONdata['LOL_H']);
                               SPECIFICATION =
                                   '≤ ${SPECIFICATIONdata['LOL_H'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                              maxdata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['LOL_H'].toString()));
+                              maxdata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['LOL_H'].toString(),
+                                ),
+                              );
                             } else if (condition.contains("HIM(>)")) {
                               // print(SPECIFICATIONdata['HIM_L']);
                               SPECIFICATION =
                                   '≥ ${SPECIFICATIONdata['HIM_L'].toString()} ${unitP.replaceAll('?', 'µ')}';
-                              mindata = double.parse(ConverstStr(
-                                  SPECIFICATIONdata['HIM_L'].toString()));
+                              mindata = double.parse(
+                                ConverstStr(
+                                  SPECIFICATIONdata['HIM_L'].toString(),
+                                ),
+                              );
                             } else if (condition.contains("Actual")) {
                               // print(SPECIFICATIONdata['TARGET']);
                               SPECIFICATION = 'Actual';
@@ -2628,8 +3569,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                               if (SPECIFICATIONbuffs.length > 0) {
                                 if (SPECIFICATIONbuffs[0]['name'] != null) {
-                                  SPECIFICATION =
-                                      SPECIFICATIONbuffs[0]['name'].toString();
+                                  SPECIFICATION = SPECIFICATIONbuffs[0]['name']
+                                      .toString();
                                 }
                               }
                             }
@@ -2638,8 +3579,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                           print(er);
                           if (SPECIFICATIONbuffs.length > 0) {
                             if (SPECIFICATIONbuffs[0]['name'] != null) {
-                              SPECIFICATION =
-                                  SPECIFICATIONbuffs[0]['name'].toString();
+                              SPECIFICATION = SPECIFICATIONbuffs[0]['name']
+                                  .toString();
                             }
                           }
                         }
@@ -2672,18 +3613,18 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                         for (pcsi = 0; pcsi < datainside.length; pcsi++) {
                           // print(datainside[pcsi]);
-                          datainpcsi.DATA01 =
-                              double.parse(ConverstStr(PIC1dataBUFF))
-                                  .toStringAsFixed(desinal);
-                          datainpcsi.DATA02 =
-                              double.parse(ConverstStr(PIC2dataBUFF))
-                                  .toStringAsFixed(desinal);
-                          datainpcsi.DATA03 =
-                              double.parse(ConverstStr(PIC3dataBUFF))
-                                  .toStringAsFixed(desinal);
-                          datainpcsi.DATA04 =
-                              double.parse(ConverstStr(PIC4dataBUFF))
-                                  .toStringAsFixed(desinal);
+                          datainpcsi.DATA01 = double.parse(
+                            ConverstStr(PIC1dataBUFF),
+                          ).toStringAsFixed(desinal);
+                          datainpcsi.DATA02 = double.parse(
+                            ConverstStr(PIC2dataBUFF),
+                          ).toStringAsFixed(desinal);
+                          datainpcsi.DATA03 = double.parse(
+                            ConverstStr(PIC3dataBUFF),
+                          ).toStringAsFixed(desinal);
+                          datainpcsi.DATA04 = double.parse(
+                            ConverstStr(PIC4dataBUFF),
+                          ).toStringAsFixed(desinal);
 
                           if (PIC1dataBUFF == '0') {
                             //
@@ -2692,80 +3633,100 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                             datainpcsi.dimensionX = 0;
                           } else if (PIC2dataBUFF == '0') {
                             //
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
 
-                            datainpcsi.DATAAVG =
-                                ((data0001) / 1).toStringAsFixed(desinal);
+                            datainpcsi.DATAAVG = ((data0001) / 1)
+                                .toStringAsFixed(desinal);
 
                             datainpcsi.dimensionX = 1;
 
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
                           } else if (PIC3dataBUFF == '0') {
                             //
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
-                            double data0002 =
-                                double.parse(ConverstStr(PIC2dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
+                            double data0002 = double.parse(
+                              ConverstStr(PIC2dataBUFF),
+                            );
 
                             datainpcsi.DATAAVG = ((data0001 + data0002) / 2)
                                 .toStringAsFixed(desinal);
                             datainpcsi.dimensionX = 2;
 
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
 
-                            passlist.add(checkdata(maxdata, mindata, data0002)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0002).toString(),
+                            );
                           } else if (PIC4dataBUFF == '0') {
                             //
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
-                            double data0002 =
-                                double.parse(ConverstStr(PIC2dataBUFF));
-                            double data0003 =
-                                double.parse(ConverstStr(PIC3dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
+                            double data0002 = double.parse(
+                              ConverstStr(PIC2dataBUFF),
+                            );
+                            double data0003 = double.parse(
+                              ConverstStr(PIC3dataBUFF),
+                            );
 
                             datainpcsi.DATAAVG =
                                 ((data0001 + data0002 + data0003) / 3)
                                     .toStringAsFixed(desinal);
                             datainpcsi.dimensionX = 3;
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0002)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0003)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0002).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0003).toString(),
+                            );
                           } else {
-                            double data0001 =
-                                double.parse(ConverstStr(PIC1dataBUFF));
-                            double data0002 =
-                                double.parse(ConverstStr(PIC2dataBUFF));
-                            double data0003 =
-                                double.parse(ConverstStr(PIC3dataBUFF));
-                            double data0004 =
-                                double.parse(ConverstStr(PIC4dataBUFF));
+                            double data0001 = double.parse(
+                              ConverstStr(PIC1dataBUFF),
+                            );
+                            double data0002 = double.parse(
+                              ConverstStr(PIC2dataBUFF),
+                            );
+                            double data0003 = double.parse(
+                              ConverstStr(PIC3dataBUFF),
+                            );
+                            double data0004 = double.parse(
+                              ConverstStr(PIC4dataBUFF),
+                            );
 
                             datainpcsi.DATAAVG =
                                 ((data0001 + data0002 + data0003 + data0003) /
                                         4)
                                     .toStringAsFixed(desinal);
                             datainpcsi.dimensionX = 4;
-                            passlist.add(checkdata(maxdata, mindata, data0001)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0002)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0003)
-                                .toString());
-                            passlist.add(checkdata(maxdata, mindata, data0004)
-                                .toString());
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0001).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0002).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0003).toString(),
+                            );
+                            passlist.add(
+                              checkdata(maxdata, mindata, data0004).toString(),
+                            );
                           }
 
                           if (datainside[pcsi] != null) {
                             if (BasicCommonDATAs.PIC01 != '') {
-                              BasicCommonDATAs.PIC03 =
-                                  datainside[pcsi]['PIC1'].toString();
+                              BasicCommonDATAs.PIC03 = datainside[pcsi]['PIC1']
+                                  .toString();
                               print("-------->1");
                             }
 
@@ -2780,6 +3741,11 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                                     datainside[pcsi]['PIC2'].toString();
                                 print("-------->4");
                               }
+                              if (BasicCommonDATAs.PIC03 == '') {
+                                BasicCommonDATAs.PIC03 =
+                                    datainside[pcsi]['PIC3'].toString();
+                                print("-------->4");
+                              }
                             }
 
                             if (pcsi == 1) {
@@ -2792,8 +3758,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
 
                             if (BasicCommonDATAs.PIC01 !=
                                 datainside[pcsi]['PIC1'].toString()) {
-                              BasicCommonDATAs.PIC02 =
-                                  datainside[pcsi]['PIC1'].toString();
+                              BasicCommonDATAs.PIC02 = datainside[pcsi]['PIC1']
+                                  .toString();
                               print("-------->2");
                             }
                           }
@@ -2817,7 +3783,8 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                     String avgout = '';
                     for (var ig = 0; ig < listdataset.length; ig++) {
                       // print(ConverstStr(listdataset[ig].DATAAVG));
-                      avgall = avgall +
+                      avgall =
+                          avgall +
                           double.parse(ConverstStr(listdataset[ig].DATAAVG));
                     }
 
@@ -2830,21 +3797,23 @@ class ReportPDFCommon_Cubit extends Cubit<CommonReportOutput> {
                       avgout = "PASS";
                     }
 
-                    ITEMlist.add(FINALCHECKlistCommonClass(
-                      TYPE: "OCR",
-                      ITEM: itemss,
-                      ITEMname: ITEMname,
-                      METHOD: METHODss,
-                      METHODname: METHODname,
-                      SCMARK: SCmasks,
-                      SPECIFICATION: SPECIFICATION,
-                      NO: NO_NUMBER,
-                      FREQ: FREQ,
-                      datapackset: listdataset,
-                      RESULT: avgout,
-                      LOAD: LOAD,
-                      Remark: remark,
-                    ));
+                    ITEMlist.add(
+                      FINALCHECKlistCommonClass(
+                        TYPE: "OCR",
+                        ITEM: itemss,
+                        ITEMname: ITEMname,
+                        METHOD: METHODss,
+                        METHODname: METHODname,
+                        SCMARK: SCmasks,
+                        SPECIFICATION: SPECIFICATION,
+                        NO: NO_NUMBER,
+                        FREQ: FREQ,
+                        datapackset: listdataset,
+                        RESULT: avgout,
+                        LOAD: LOAD,
+                        Remark: remark,
+                      ),
+                    );
                   }
                 }
               }
@@ -2934,6 +3903,11 @@ class FINALCHECKlistCommonClass {
     this.Remark = '',
     this.SRAWDATA = '',
     this.RESULTDSW = '',
+    this.unitP = '',
+    this.unitPC = '',
+    this.GTC = '',
+    this.upper = const [],
+    this.lower = const [],
     //
   });
   int NO;
@@ -2955,7 +3929,12 @@ class FINALCHECKlistCommonClass {
   String Remark;
   String SRAWDATA;
   String RESULTDSW;
-//
+  String unitP;
+  String unitPC;
+  String GTC;
+  List<FlSpot> upper;
+  List<FlSpot> lower;
+  //
 }
 
 // class datainlist {
@@ -3154,6 +4133,7 @@ class BasicCommonDATA {
     this.PROCESS = '',
     this.PARTNAME = '',
     this.PARTNO = '',
+    this.PARTNO_s = '',
     this.CUSLOT = '',
     this.TPKLOT = '',
     this.MATERIAL = '',
@@ -3180,6 +4160,10 @@ class BasicCommonDATA {
     this.Check_sign = '',
     this.Approve_sign = '',
     this.GP3POINT = '',
+    this.dateInspected = '',
+    this.dateCheck = '',
+    this.dateApprove = '',
+    this.remark = '',
   });
 
   String PO;
@@ -3188,6 +4172,7 @@ class BasicCommonDATA {
   String PROCESS;
   String PARTNAME;
   String PARTNO;
+  String PARTNO_s;
   String CUSLOT;
   String TPKLOT;
   String MATERIAL;
@@ -3221,13 +4206,16 @@ class BasicCommonDATA {
   String Check_sign;
   String Approve_sign;
   String GP3POINT;
+
+  String dateInspected;
+  String dateCheck;
+  String dateApprove;
+
+  String remark;
 }
 
 class CommonReportOutput {
-  CommonReportOutput({
-    this.datain = const [],
-    required this.databasic,
-  });
+  CommonReportOutput({this.datain = const [], required this.databasic});
 
   List<FINALCHECKlistCommonClass> datain;
   BasicCommonDATA databasic;

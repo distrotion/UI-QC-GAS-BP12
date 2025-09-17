@@ -131,11 +131,10 @@ class Data_Menu_mainmenu extends StatelessWidget {
           Lv: 1,
         ),
         menu_normal(
-          name: " SUMMARY REPORT",
+          name: "SUMMARY REPORT",
           page: Page11(),
           Lv: 1,
         ),
-
         menu_normal(
           name: "Special QCFN",
           page: Page303(),

@@ -11,6 +11,7 @@ import '../../bloc/Cubit/32-Reportset.dart';
 import '../../data/CommonTestData.dart';
 import '../../data/global.dart';
 import '../../widget/GRAPH/LineGraph01.dart';
+import '../../widget/GRAPH/LineGraphCONTROL.dart';
 import '../../widget/ReportComponent/CommonReport.dart';
 import '../../widget/ReportComponent/PicSlot.dart';
 import '../../widget/ReportComponent/SignSide.dart';
@@ -21,6 +22,7 @@ import '../../widget/common/Error_NO_Popup.dart';
 import '../../widget/common/Loading.dart';
 import '../../widget/common/Safty.dart';
 import '../../widget/common/imgset.dart';
+import '../../widget/common/popup.dart';
 import '../../widget/function/helper.dart';
 import '../P303QMMASTERQC/P303QMMASTERQCVAR.dart';
 import '../page303.dart';
@@ -74,6 +76,7 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
       ReportPDFcovvar.PROCESS = _dataCOMMON.databasic.PROCESS;
       ReportPDFcovvar.PARTNAME = _dataCOMMON.databasic.PARTNAME;
       ReportPDFcovvar.PARTNO = _dataCOMMON.databasic.PARTNO;
+      ReportPDFcovvar.PARTNO_s = _dataCOMMON.databasic.PARTNO_s;
       ReportPDFcovvar.CUSLOT = _dataCOMMON.databasic.CUSLOT;
       ReportPDFcovvar.TPKLOT = _dataCOMMON.databasic.TPKLOT;
       ReportPDFcovvar.MATERIAL = _dataCOMMON.databasic.MATERIAL;
@@ -87,10 +90,12 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
 
       ReportPDFcovvar.PIC01 = _dataCOMMON.databasic.PIC01;
       ReportPDFcovvar.PIC02 = _dataCOMMON.databasic.PIC02;
+
       ReportPDFcovvar.PICstd = _dataCOMMON.databasic.PICstd;
 
       ReportPDFcovvar.PASS = _dataCOMMON.databasic.PASS;
-      ReportPDFcovvar.remark = '';
+      // ReportPDFcovvar.remark = '';
+      ReportPDFcovvar.remark = _dataCOMMON.databasic.remark;
       if (_dataCOMMON.databasic.PARTNAMEref != '') {
         ReportPDFcovvar.remark =
             'Reference data from\n${_dataCOMMON.databasic.PARTNAMEref}\n${_dataCOMMON.databasic.PARTref}';
@@ -130,15 +135,30 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
             _dataCOMMON.datain[i].SPECIFICATION;
         ReportPDFcovvar.datalist[i].RESULT = _dataCOMMON.datain[i].RESULT;
         ReportPDFcovvar.datalist[i].REMARK = _dataCOMMON.datain[i].Remark;
+
+        String unitss = _dataCOMMON.datain[i].unitP;
+        String unitss2 = _dataCOMMON.datain[i].unitPC;
         //print(ReportPDFcovvar.datalist[i].RESULT.length);
         //Surface Hardness
 
+        // if (unitss == 'HRA') {
+        //   unitss2 = 'HMV';
+        // } else if (unitss == 'HRC') {
+        //   unitss2 = 'HV';
+        // } else if (unitss == 'Hv.') {
+        //   unitss2 = 'HRA';
+        // }
+        // else
+        // if (unitss == 'HRA') {
+        //   unitss2 = '15N';
+        // }
+
         if (_dataCOMMON.datain[i].TYPE == 'Number') {
-          if (_dataCOMMON.datain[i].ITEMname
-                  .toUpperCase()
-                  .contains('HARDNESS') &&
-              _dataCOMMON.datain[i].ITEMname.toUpperCase().contains('CORE') ==
-                  false) {
+          if (_dataCOMMON.datain[i].ITEMname.toUpperCase().contains('HARDNESS')
+              //     &&
+              // _dataCOMMON.datain[i].ITEMname.toUpperCase().contains('CORE') ==
+              //     false
+              ) {
             for (var li = 0;
                 li < _dataCOMMON.datain[i].datapackset.length;
                 li++) {
@@ -151,6 +171,8 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                   DATAPCS: '1',
                   DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
                   DATA2: _dataCOMMON.datain[i].datapackset[li].DATA01c,
+                  UNIT1: unitss,
+                  UNIT2: unitss2,
                 ));
               }
               if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
@@ -159,6 +181,8 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                   DATAPCS: '2',
                   DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
                   DATA2: _dataCOMMON.datain[i].datapackset[li].DATA02c,
+                  UNIT1: unitss,
+                  UNIT2: unitss2,
                 ));
               }
               if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
@@ -308,164 +332,178 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
               HardnessNO++;
               // print('>>${HardnessNO}');
             }
-          } else if (_dataCOMMON.datain[i].ITEMname
-              .toUpperCase()
-              .contains('CORE')) {
-            for (var li = 0;
-                li < _dataCOMMON.datain[i].datapackset.length;
-                li++) {
-              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
-
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '1',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '2',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '3',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '4',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '5',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '6',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '7',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '8',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '9',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '10',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '11',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '12',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '13',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '14',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '15',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '16',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '17',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '18',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '19',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
-                ReportPDFcovvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '20',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
-                ));
-              }
-              CoreNO++;
-              // print('>>${CoreNO}');
-            }
           }
+
+          // else if (_dataCOMMON.datain[i].ITEMname
+          //     .toUpperCase()
+          //     .contains('CORE')) {
+          //   for (var li = 0;
+          //       li < _dataCOMMON.datain[i].datapackset.length;
+          //       li++) {
+          //     // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+          //     print(_dataCOMMON.datain[i].datapackset[li]);
+          //     print(_dataCOMMON.datain[i].datapackset[li].DATA01);
+          //     print(_dataCOMMON.datain[i].datapackset[li].DATA02);
+          //     print(_dataCOMMON.datain[i].datapackset[li].DATA03);
+
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '1',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+          //         UNIT1: unitss,
+          //         UNIT2: unitss2,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '2',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+          //         UNIT1: unitss,
+          //         UNIT2: unitss2,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '3',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '4',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '5',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '6',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '7',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '8',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '9',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '10',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '11',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '12',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '13',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '14',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '15',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '16',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '17',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '18',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '19',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+          //       ReportPDFcovvar.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '20',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+          //       ));
+          //     }
+          //     CoreNO++;
+          //     // print('>>${CoreNO}');
+          //   }
+          // }
           //  CoreNO++;
         }
 
         if (_dataCOMMON.datain[i].TYPE == 'Graph') {
           ReportPDFcovvar.rawlistGraph = [];
+
+          ReportPDFcovvar.GTC = _dataCOMMON.datain[i].GTC;
+          ReportPDFcovvar.lower = _dataCOMMON.datain[i].lower;
+          ReportPDFcovvar.upper = _dataCOMMON.datain[i].upper;
           if (_dataCOMMON.datain[i].ITEMname.contains('Hardness') ||
                   _dataCOMMON.datain[i].ITEMname.contains('hardness') ||
                   _dataCOMMON.datain[i].ITEMname.contains('Total') ||
@@ -872,6 +910,7 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
       ReportPDFcovvar.PROCESS = '';
       ReportPDFcovvar.PARTNAME = '';
       ReportPDFcovvar.PARTNO = '';
+      ReportPDFcovvar.PARTNO_s = '';
       ReportPDFcovvar.CUSLOT = '';
       ReportPDFcovvar.TPKLOT = '';
       ReportPDFcovvar.MATERIAL = '';
@@ -982,7 +1021,7 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
               ),
               InkWell(
                 onDoubleTap: () {
-                  //  ReportPDFCommonvar.HIDEDATAPIC
+                  //  ReportPDFcovvar.HIDEDATAPIC
                   if (ReportPDFcovvar.HIDEDATAPIC) {
                     ReportPDFcovvar.HIDEDATAPIC = false;
                   } else {
@@ -1093,68 +1132,68 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                 ),
               ),
               const Spacer(),
-              if (ReportPDFcovvar.PASS == "PASSED") ...[
-                Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: InkWell(
-                    onTap: () {
-                      PDFloader(context);
-                      Future.delayed(const Duration(milliseconds: 1000), () {
+              // if (ReportPDFcovvar.PASS == "PASSED") ...[
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: InkWell(
+                  onTap: () {
+                    PDFloader(context);
+                    Future.delayed(const Duration(milliseconds: 1000), () {
+                      // capture(
+                      captureToback(
                         // capture(
-                        captureToback(
-                          // capture(
-                          _globalKey,
-                          ReportPDFcovvar.PO,
-                        ).then((value) {
-                          print(value);
+                        _globalKey,
+                        ReportPDFcovvar.PO,
+                      ).then((value) {
+                        print(value);
 
-                          Navigator.pop(context);
-                        });
+                        Navigator.pop(context);
                       });
-                    },
-                    child: Container(
-                      color: Colors.yellow,
-                      height: 50,
-                      width: 100,
-                      child: const Center(
-                        child: Text("Print"),
-                      ),
+                    });
+                  },
+                  child: Container(
+                    color: Colors.yellow,
+                    height: 50,
+                    width: 100,
+                    child: const Center(
+                      child: Text("Print"),
                     ),
                   ),
                 ),
-              ] else ...[
-                if (USERDATA.UserLV > 5 &&
-                    _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
-                  Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: InkWell(
-                      onTap: () {
-                        PDFloader(context);
-                        Future.delayed(const Duration(milliseconds: 1000), () {
-                          // capture(
-                          captureToback(
-                            // capture(
-                            _globalKey,
-                            ReportPDFcovvar.PO,
-                          ).then((value) {
-                            print(value);
+              ),
+              // ] else ...[
+              //   if (USERDATA.UserLV > 5 &&
+              //       _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
+              //     Padding(
+              //       padding: const EdgeInsets.all(3.0),
+              //       child: InkWell(
+              //         onTap: () {
+              //           PDFloader(context);
+              //           Future.delayed(const Duration(milliseconds: 1000), () {
+              //             // capture(
+              //             captureToback(
+              //               // capture(
+              //               _globalKey,
+              //               ReportPDFcovvar.PO,
+              //             ).then((value) {
+              //               print(value);
 
-                            Navigator.pop(context);
-                          });
-                        });
-                      },
-                      child: Container(
-                        color: Colors.yellow,
-                        height: 50,
-                        width: 100,
-                        child: const Center(
-                          child: Text("Print"),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]
-              ],
+              //               Navigator.pop(context);
+              //             });
+              //           });
+              //         },
+              //         child: Container(
+              //           color: Colors.yellow,
+              //           height: 50,
+              //           width: 100,
+              //           child: const Center(
+              //             child: Text("Print"),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ]
+              // ],
             ],
           ),
           Row(children: [
@@ -1295,7 +1334,11 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                                     CUSTOMER: ReportPDFcovvar.CUSTOMER,
                                     PROCESS: ReportPDFcovvar.PROCESS,
                                     PARTNAME: ReportPDFcovvar.PARTNAME,
-                                    PARTNO: ReportPDFcovvar.PARTNO,
+                                    PARTNO: ReportPDFcovvar.PARTNO.contains("|")
+                                        ? ReportPDFcovvar.PARTNO.split("|")[1]
+                                        : ReportPDFcovvar.PARTNO == ''
+                                            ? ReportPDFcovvar.PARTNO_s
+                                            : ReportPDFcovvar.PARTNO,
                                     CUSLOT: ReportPDFcovvar.CUSLOT,
                                     TPKLOT: ReportPDFcovvar.TPKLOT,
                                     MATERIAL: ReportPDFcovvar.MATERIAL,
@@ -2684,9 +2727,14 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                                             ),
                                             BODY16SLOT(
                                               ListFlex: S16slot,
-                                              widget01: const Center(
+                                              widget01: Center(
                                                 child: Text(
-                                                  "Surface Hardness (HRA)",
+                                                  ReportPDFcovvar
+                                                              .rawlistHardness
+                                                              .length >
+                                                          0
+                                                      ? "Surface Hardness (${ReportPDFcovvar.rawlistHardness[0].UNIT1})"
+                                                      : "",
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2936,9 +2984,14 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                                             ),
                                             BODY16SLOT(
                                               ListFlex: S16slot,
-                                              widget01: const Center(
+                                              widget01: Center(
                                                 child: Text(
-                                                  "Surface Hardness (15N)",
+                                                  ReportPDFcovvar
+                                                              .rawlistHardness
+                                                              .length >
+                                                          0
+                                                      ? "Surface Hardness (${ReportPDFcovvar.rawlistHardness[0].UNIT2})"
+                                                      : "",
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3388,13 +3441,502 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                                       // )
                                     ],
                                   ),
+                                  // PICSLO2SIDEGRAPH(
+                                  //   // PIC01: _dataCOMMON.databasic.PIC01,
+                                  //   // PIC02: _dataCOMMON.databasic.PIC02 == wpic
+                                  //   //     ? _dataCOMMON.databasic.PIC03
+                                  //   //     : _dataCOMMON.databasic.PIC02,
+                                  //   // PIC01: "",
+                                  //   // PIC02: "",
+                                  //   PIC01: ReportPDFcovvar.HIDEDATAPIC
+                                  //       ? ""
+                                  //       : _dataCOMMON.databasic.PIC01,
+                                  //   PIC02: ReportPDFcovvar.HIDEDATAPIC
+                                  //       ? ""
+                                  //       : _dataCOMMON.databasic.PIC02,
+                                  //   widget01: Column(
+                                  //     children: [
+                                  //       Padding(
+                                  //         padding: const EdgeInsets.only(
+                                  //             left: 10, bottom: 10),
+                                  //         child: Container(
+                                  //           height: 320,
+                                  //           decoration: BoxDecoration(
+                                  //             border: Border.all(
+                                  //                 color: Colors.black,
+                                  //                 width: 3),
+                                  //           ),
+                                  //           child: ReportPDFcovvar
+                                  //                   .graphdata.isNotEmpty
+                                  //               ? ControlChart01(
+                                  //                   upper: ReportPDFcovvar
+                                  //                       .graphupper,
+                                  //                   data: ReportPDFcovvar
+                                  //                       .graphdata,
+                                  //                   data2: ReportPDFcovvar
+                                  //                       .graphdata2,
+                                  //                   data3: ReportPDFcovvar
+                                  //                       .graphdata3,
+                                  //                   data4: ReportPDFcovvar
+                                  //                       .graphdata4,
+                                  //                   under: ReportPDFcovvar
+                                  //                       .graphunder,
+                                  //                 )
+                                  //               : SizedBox(
+                                  //                   height: 320,
+                                  //                   width: 2000,
+                                  //                 ),
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  //   widget02: Column(
+                                  //     children: [
+                                  //       HEAD16SLOT(
+                                  //         ListFlex: S16slot,
+                                  //         widget01: const Center(
+                                  //           child: Text(
+                                  //             "Depth (mm.)",
+                                  //             style: TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget02: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     1
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[0].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget03: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     2
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[1].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget04: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     3
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[2].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget05: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     4
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[3].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget06: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     5
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[4].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget07: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     6
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[5].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget08: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     7
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[6].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget09: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     8
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[7].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget10: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     9
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[8].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget11: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     10
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[9].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget12: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     11
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[10].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget13: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     12
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[11].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget14: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     13
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[12].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget15: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     14
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[13].DATAPCS
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget16: const Center(
+                                  //           child: Text(
+                                  //             "CORE",
+                                  //             // ReportPDFcovvar
+                                  //             //     .rawlistGraphCore.DATAPCS,
+                                  //             style: TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       BODY16SLOT(
+                                  //         ListFlex: S16slot,
+                                  //         widget01: const Center(
+                                  //           child: Text(
+                                  //             "Hardness",
+                                  //             style: TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget02: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     1
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[0].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget03: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     2
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[1].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget04: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     3
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[2].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget05: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     4
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[3].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget06: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     5
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[4].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget07: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     6
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[5].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget08: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     7
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[6].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget09: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     8
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[7].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget10: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     9
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[8].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget11: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     10
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[9].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget12: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     11
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[10].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget13: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     12
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[11].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget14: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     13
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[12].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget15: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar.rawlistGraph
+                                  //                         .length >=
+                                  //                     14
+                                  //                 ? ReportPDFcovvar
+                                  //                     .rawlistGraph[13].DATA
+                                  //                 : '',
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //         widget16: Center(
+                                  //           child: Text(
+                                  //             ReportPDFcovvar
+                                  //                 .rawlistGraphCore.DATA,
+                                  //             style: const TextStyle(
+                                  //               fontSize: 16,
+                                  //               fontWeight: FontWeight.bold,
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   PICSLO2SIDEGRAPH(
                                     // PIC01: _dataCOMMON.databasic.PIC01,
                                     // PIC02: _dataCOMMON.databasic.PIC02 == wpic
                                     //     ? _dataCOMMON.databasic.PIC03
                                     //     : _dataCOMMON.databasic.PIC02,
-                                    // PIC01: "",
-                                    // PIC02: "",
                                     PIC01: ReportPDFcovvar.HIDEDATAPIC
                                         ? ""
                                         : _dataCOMMON.databasic.PIC01,
@@ -3403,38 +3945,118 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                                         : _dataCOMMON.databasic.PIC02,
                                     widget01: Column(
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, bottom: 10),
-                                          child: Container(
-                                            height: 320,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black,
-                                                  width: 3),
+                                        if (ReportPDFcovvar.GTC == '' ||
+                                            ReportPDFcovvar.GTC == '-') ...[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, bottom: 10),
+                                            child: Container(
+                                              height: 320,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black,
+                                                    width: 3),
+                                              ),
+                                              child: ReportPDFcovvar
+                                                      .graphdata.isNotEmpty
+                                                  ? ControlChart01(
+                                                      upper: ReportPDFcovvar
+                                                          .graphupper,
+                                                      data: ReportPDFcovvar
+                                                          .graphdata,
+                                                      data2: ReportPDFcovvar
+                                                          .graphdata2,
+                                                      data3: ReportPDFcovvar
+                                                          .graphdata3,
+                                                      data4: ReportPDFcovvar
+                                                          .graphdata4,
+                                                      under: ReportPDFcovvar
+                                                          .graphunder,
+                                                    )
+                                                  : SizedBox(
+                                                      height: 320,
+                                                      width: 2000,
+                                                    ),
                                             ),
-                                            child: ReportPDFcovvar
-                                                    .graphdata.isNotEmpty
-                                                ? ControlChart01(
-                                                    upper: ReportPDFcovvar
-                                                        .graphupper,
-                                                    data: ReportPDFcovvar
-                                                        .graphdata,
-                                                    data2: ReportPDFcovvar
-                                                        .graphdata2,
-                                                    data3: ReportPDFcovvar
-                                                        .graphdata3,
-                                                    data4: ReportPDFcovvar
-                                                        .graphdata4,
-                                                    under: ReportPDFcovvar
-                                                        .graphunder,
-                                                  )
-                                                : SizedBox(
-                                                    height: 320,
-                                                    width: 2000,
-                                                  ),
                                           ),
-                                        ),
+                                        ] else ...[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, bottom: 10),
+                                            child: Container(
+                                              height: 320,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black,
+                                                    width: 3),
+                                              ),
+                                              child: ReportPDFcovvar
+                                                      .graphdata.isNotEmpty
+                                                  ? LineGraphCONTROL(
+                                                      upper: ReportPDFcovvar
+                                                          .graphupper,
+                                                      data: ReportPDFcovvar
+                                                          .graphdata,
+                                                      data2: ReportPDFcovvar
+                                                          .graphdata2,
+                                                      data3: ReportPDFcovvar
+                                                          .graphdata3,
+                                                      data4: ReportPDFcovvar
+                                                          .graphdata4,
+                                                      under: ReportPDFcovvar
+                                                          .graphunder,
+                                                      //----------------------
+                                                      // data_2: ReportPDFcovvar
+                                                      //     .graphdataS,
+                                                      // data_2: [
+                                                      //   FlSpot(0.1, 800),
+                                                      //   // FlSpot(0.2, 750),
+                                                      //   FlSpot(0.3, 780),
+                                                      //   // FlSpot(0.4, 660),
+                                                      //   FlSpot(0.5, 760),
+                                                      //   // FlSpot(0.6, 700),
+                                                      //   // FlSpot(0.7, 550),
+                                                      //   // FlSpot(0.8, 650),
+                                                      //   FlSpot(0.9, 670),
+                                                      //   // FlSpot(1, 500)
+                                                      // ],
+                                                      data_2:
+                                                          ReportPDFcovvar.lower,
+                                                      // data2_2:
+                                                      //     ReportPDFcovvar
+                                                      //         .graphdata2S,
+                                                      // data3_2:
+                                                      //     ReportPDFcovvar
+                                                      //         .graphdata3S,
+                                                      //----------------------
+                                                      // data_3: ReportPDFcovvar
+                                                      //     .graphdataSS,
+                                                      data_3:
+                                                          ReportPDFcovvar.upper,
+                                                      // data2_3:
+                                                      //     ReportPDFcovvar
+                                                      //         .graphdata2SS,
+                                                      // data3_3:
+                                                      //     ReportPDFcovvar
+                                                      //         .graphdata3SS,
+                                                      //----------------------
+                                                      // data_4: ReportPDFcovvar
+                                                      //     .graphdataSSS,
+                                                      // data2_4:
+                                                      //     ReportPDFcovvar
+                                                      //         .graphdata2SSS,
+                                                      // data3_4:
+                                                      //     ReportPDFcovvar
+                                                      //         .graphdata3SSS,
+                                                      //----------------------
+                                                    )
+                                                  : SizedBox(
+                                                      height: 320,
+                                                      width: 2000,
+                                                    ),
+                                            ),
+                                          ),
+                                        ],
                                       ],
                                     ),
                                     widget02: Column(
@@ -3879,6 +4501,7 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                                       ],
                                     ),
                                   ),
+
                                   TAILSLOT(
                                     PASS: ReportPDFcovvar.PASS,
                                     PICS: _dataCOMMON.databasic.PICstd,
@@ -3888,6 +4511,36 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                                         _dataCOMMON.databasic.Inspected_sign,
                                     NAME02: _dataCOMMON.databasic.Check_sign,
                                     NAME03: _dataCOMMON.databasic.Approve_sign,
+                                    NAME01date: _dataCOMMON
+                                                .databasic.dateInspected !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateInspected)) *
+                                                    1))
+                                        : "",
+                                    NAME02date: _dataCOMMON
+                                                .databasic.dateCheck !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateCheck) *
+                                                    1)))
+                                        : "",
+                                    NAME03date: _dataCOMMON
+                                                .databasic.dateApprove !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateApprove) *
+                                                    1)))
+                                        : "",
                                   ),
                                 ],
                               ),
@@ -3905,23 +4558,35 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Inspected-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFcovvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFcovvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Inspected == '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Inspected-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFcovvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFcovvar.PO, "");
+                              });
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Inspected == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Inspected"),
                             ),
@@ -3934,23 +4599,44 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Check-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFcovvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFcovvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Check == '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Check-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFcovvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFcovvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Check == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Check"),
                             ),
@@ -3963,23 +4649,48 @@ class _ReportPDFcovState extends State<ReportPDFcov> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Approve-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFcovvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFcovvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Approve == '' &&
+                                _dataCOMMON.databasic.Check != '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Approve-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFcovvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFcovvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              } else if (_dataCOMMON.databasic.Check == '') {
+                                WORNINGpop(context,
+                                    ["", "Please Check first", ""], 60, 200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Approve == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Approve"),
                             ),

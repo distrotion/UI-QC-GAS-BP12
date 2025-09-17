@@ -298,7 +298,7 @@ class GRAPH2SIDEGRAPH extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: SizedBox(
-                    height: 340,
+                    height: HIs ?? 340,
                     // decoration: BoxDecoration(
                     //   border: Border.all(color: Colors.black, width: 3),
                     // ),
@@ -311,7 +311,7 @@ class GRAPH2SIDEGRAPH extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: SizedBox(
-                    height: 340,
+                    height: HIs ?? 340,
                     // decoration: BoxDecoration(
                     //   border: Border.all(color: Colors.black, width: 3),
                     // ),

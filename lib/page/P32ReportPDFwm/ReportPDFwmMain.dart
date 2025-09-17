@@ -19,6 +19,7 @@ import '../../widget/common/Error_NO_Popup.dart';
 import '../../widget/common/Loading.dart';
 import '../../widget/common/Safty.dart';
 import '../../widget/common/imgset.dart';
+import '../../widget/common/popup.dart';
 import '../../widget/function/helper.dart';
 import '../P303QMMASTERQC/P303QMMASTERQCVAR.dart';
 import '../page303.dart';
@@ -71,6 +72,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
       ReportPDFwmvar.PROCESS = _dataCOMMON.databasic.PROCESS;
       ReportPDFwmvar.PARTNAME = _dataCOMMON.databasic.PARTNAME;
       ReportPDFwmvar.PARTNO = _dataCOMMON.databasic.PARTNO;
+      ReportPDFwmvar.PARTNO_s = _dataCOMMON.databasic.PARTNO_s;
       ReportPDFwmvar.CUSLOT = _dataCOMMON.databasic.CUSLOT;
       ReportPDFwmvar.TPKLOT = _dataCOMMON.databasic.TPKLOT;
       ReportPDFwmvar.MATERIAL = _dataCOMMON.databasic.MATERIAL;
@@ -87,7 +89,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
       ReportPDFwmvar.PICstd = _dataCOMMON.databasic.PICstd;
 
       ReportPDFwmvar.PASS = _dataCOMMON.databasic.PASS;
-      ReportPDFwmvar.remark = '';
+      // ReportPDFwmvar.remark = '';
+      ReportPDFwmvar.remark = _dataCOMMON.databasic.remark;
       if (_dataCOMMON.databasic.PARTNAMEref != '') {
         ReportPDFwmvar.remark =
             'Reference data from\n${_dataCOMMON.databasic.PARTNAMEref}\n${_dataCOMMON.databasic.PARTref}';
@@ -847,6 +850,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
       ReportPDFwmvar.PROCESS = '';
       ReportPDFwmvar.PARTNAME = '';
       ReportPDFwmvar.PARTNO = '';
+      ReportPDFwmvar.PARTNO_s = '';
       ReportPDFwmvar.CUSLOT = '';
       ReportPDFwmvar.TPKLOT = '';
       ReportPDFwmvar.MATERIAL = '';
@@ -957,7 +961,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
               ),
               InkWell(
                 onDoubleTap: () {
-                  //  ReportPDFCommonvar.HIDEDATAPIC
+                  //  ReportPDFwmvar.HIDEDATAPIC
                   if (ReportPDFwmvar.HIDEDATAPIC) {
                     ReportPDFwmvar.HIDEDATAPIC = false;
                   } else {
@@ -1068,68 +1072,68 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                 ),
               ),
               const Spacer(),
-              if (ReportPDFwmvar.PASS == "PASSED") ...[
-                Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: InkWell(
-                    onTap: () {
-                      PDFloader(context);
-                      Future.delayed(const Duration(milliseconds: 1000), () {
+              // if (ReportPDFwmvar.PASS == "PASSED") ...[
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: InkWell(
+                  onTap: () {
+                    PDFloader(context);
+                    Future.delayed(const Duration(milliseconds: 1000), () {
+                      // capture(
+                      captureToback(
                         // capture(
-                        captureToback(
-                          // capture(
-                          _globalKey,
-                          ReportPDFwmvar.PO,
-                        ).then((value) {
-                          print(value);
+                        _globalKey,
+                        ReportPDFwmvar.PO,
+                      ).then((value) {
+                        print(value);
 
-                          Navigator.pop(context);
-                        });
+                        Navigator.pop(context);
                       });
-                    },
-                    child: Container(
-                      color: Colors.yellow,
-                      height: 50,
-                      width: 100,
-                      child: const Center(
-                        child: Text("Print"),
-                      ),
+                    });
+                  },
+                  child: Container(
+                    color: Colors.yellow,
+                    height: 50,
+                    width: 100,
+                    child: const Center(
+                      child: Text("Print"),
                     ),
                   ),
                 ),
-              ] else ...[
-                if (USERDATA.UserLV > 5 &&
-                    _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
-                  Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: InkWell(
-                      onTap: () {
-                        PDFloader(context);
-                        Future.delayed(const Duration(milliseconds: 1000), () {
-                          // capture(
-                          captureToback(
-                            // capture(
-                            _globalKey,
-                            ReportPDFwmvar.PO,
-                          ).then((value) {
-                            print(value);
+              ),
+              // ] else ...[
+              //   if (USERDATA.UserLV > 5 &&
+              //       _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
+              //     Padding(
+              //       padding: const EdgeInsets.all(3.0),
+              //       child: InkWell(
+              //         onTap: () {
+              //           PDFloader(context);
+              //           Future.delayed(const Duration(milliseconds: 1000), () {
+              //             // capture(
+              //             captureToback(
+              //               // capture(
+              //               _globalKey,
+              //               ReportPDFwmvar.PO,
+              //             ).then((value) {
+              //               print(value);
 
-                            Navigator.pop(context);
-                          });
-                        });
-                      },
-                      child: Container(
-                        color: Colors.yellow,
-                        height: 50,
-                        width: 100,
-                        child: const Center(
-                          child: Text("Print"),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]
-              ],
+              //               Navigator.pop(context);
+              //             });
+              //           });
+              //         },
+              //         child: Container(
+              //           color: Colors.yellow,
+              //           height: 50,
+              //           width: 100,
+              //           child: const Center(
+              //             child: Text("Print"),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ]
+              // ],
             ],
           ),
           Row(children: [
@@ -1270,7 +1274,11 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                     CUSTOMER: ReportPDFwmvar.CUSTOMER,
                                     PROCESS: ReportPDFwmvar.PROCESS,
                                     PARTNAME: ReportPDFwmvar.PARTNAME,
-                                    PARTNO: ReportPDFwmvar.PARTNO,
+                                    PARTNO: ReportPDFwmvar.PARTNO.contains("|")
+                                        ? ReportPDFwmvar.PARTNO.split("|")[1]
+                                        : ReportPDFwmvar.PARTNO == ''
+                                            ? ReportPDFwmvar.PARTNO_s
+                                            : ReportPDFwmvar.PARTNO,
                                     CUSLOT: ReportPDFwmvar.CUSLOT,
                                     TPKLOT: ReportPDFwmvar.TPKLOT,
                                     MATERIAL: ReportPDFwmvar.MATERIAL,
@@ -2178,7 +2186,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           2
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[1]
+                                                          .rawlistHardness[2]
                                                           .DATANO
                                                       : '',
                                                   style: const TextStyle(
@@ -2193,7 +2201,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           3
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[2]
+                                                          .rawlistHardness[4]
                                                           .DATANO
                                                       : '',
                                                   style: const TextStyle(
@@ -2208,7 +2216,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           4
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[3]
+                                                          .rawlistHardness[6]
                                                           .DATANO
                                                       : '',
                                                   style: const TextStyle(
@@ -2223,7 +2231,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           5
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[4]
+                                                          .rawlistHardness[8]
                                                           .DATANO
                                                       : '',
                                                   style: const TextStyle(
@@ -2234,13 +2242,14 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget07: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          6
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[5]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         6
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[10]
+                                                  //         .DATANO
+                                                  //     :
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2249,13 +2258,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget08: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          7
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[6]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         7
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[6]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2264,13 +2275,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget09: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          8
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[7]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         8
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[7]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2279,13 +2292,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget10: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          9
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[8]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         9
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[8]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2294,13 +2309,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget11: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          10
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[9]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         10
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[9]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2309,13 +2326,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget12: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          11
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[10]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         11
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[10]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2324,13 +2343,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget13: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          12
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[11]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         12
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[11]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2339,13 +2360,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget14: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          13
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[12]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         13
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[12]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2354,13 +2377,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget15: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          14
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[13]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         14
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[13]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2369,13 +2394,14 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget16: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          15
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[14]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         15
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[14]
+                                                  //         .DATANO
+                                                  //     :
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2401,7 +2427,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                           1
                                                       ? ReportPDFwmvar
                                                           .rawlistHardness[0]
-                                                          .DATAPCS
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2415,8 +2441,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           2
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[1]
-                                                          .DATAPCS
+                                                          .rawlistHardness[2]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2430,8 +2456,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           3
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[2]
-                                                          .DATAPCS
+                                                          .rawlistHardness[4]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2445,8 +2471,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           4
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[3]
-                                                          .DATAPCS
+                                                          .rawlistHardness[6]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2460,8 +2486,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           5
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[4]
-                                                          .DATAPCS
+                                                          .rawlistHardness[8]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2471,13 +2497,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget07: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          6
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[5]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         6
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[10]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2486,13 +2514,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget08: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          7
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[6]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         7
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[12]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2501,13 +2531,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget09: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          8
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[7]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         8
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[14]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2516,13 +2548,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget10: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          9
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[8]
-                                                          .DATAPCS
-                                                      : '',
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2531,13 +2557,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget11: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          10
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[9]
-                                                          .DATAPCS
-                                                      : '',
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2546,13 +2566,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget12: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          11
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[10]
-                                                          .DATAPCS
-                                                      : '',
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2561,13 +2575,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget13: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          12
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[11]
-                                                          .DATAPCS
-                                                      : '',
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2576,13 +2584,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget14: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          13
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[12]
-                                                          .DATAPCS
-                                                      : '',
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2591,13 +2593,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget15: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          14
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[13]
-                                                          .DATAPCS
-                                                      : '',
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2606,13 +2602,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget16: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          15
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[14]
-                                                          .DATAPCS
-                                                      : '',
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2637,8 +2627,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           1
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[0]
-                                                          .DATAPCS
+                                                          .rawlistHardness[1]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2652,8 +2642,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           2
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[1]
-                                                          .DATAPCS
+                                                          .rawlistHardness[3]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2667,8 +2657,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           3
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[2]
-                                                          .DATAPCS
+                                                          .rawlistHardness[5]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2682,8 +2672,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           4
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[3]
-                                                          .DATAPCS
+                                                          .rawlistHardness[7]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2697,8 +2687,8 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                               .length >=
                                                           5
                                                       ? ReportPDFwmvar
-                                                          .rawlistHardness[4]
-                                                          .DATAPCS
+                                                          .rawlistHardness[9]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2708,13 +2698,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget07: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          6
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[5]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         6
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[5]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2723,13 +2715,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget08: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          7
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[6]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         7
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[6]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2738,13 +2732,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget09: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          8
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[7]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         8
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[7]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2753,13 +2749,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget10: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          9
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[8]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         9
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[8]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2768,13 +2766,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget11: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          10
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[9]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         10
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[9]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2783,13 +2783,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget12: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          11
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[10]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         11
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[10]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2798,13 +2800,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget13: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          12
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[11]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         12
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[11]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2813,13 +2817,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget14: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          13
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[12]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         13
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[12]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2828,13 +2834,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget15: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          14
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[13]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         14
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[13]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2843,13 +2851,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget16: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          15
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[14]
-                                                          .DATAPCS
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         15
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[14]
+                                                  //         .DATAPCS
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3111,9 +3121,18 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                   ReportPDFwmvar.rawlistHardness
                                                               .length >=
                                                           1
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[0]
-                                                          .DATA
+                                                      ? ((double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              0]
+                                                                          .DATA)) +
+                                                                  double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              1]
+                                                                          .DATA))) /
+                                                              2)
+                                                          .toStringAsFixed(1)
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -3126,9 +3145,18 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                   ReportPDFwmvar.rawlistHardness
                                                               .length >=
                                                           2
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[1]
-                                                          .DATA
+                                                      ? ((double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              2]
+                                                                          .DATA)) +
+                                                                  double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              3]
+                                                                          .DATA))) /
+                                                              2)
+                                                          .toStringAsFixed(1)
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -3141,9 +3169,18 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                   ReportPDFwmvar.rawlistHardness
                                                               .length >=
                                                           3
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[2]
-                                                          .DATA
+                                                      ? ((double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              4]
+                                                                          .DATA)) +
+                                                                  double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              5]
+                                                                          .DATA))) /
+                                                              2)
+                                                          .toStringAsFixed(1)
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -3156,9 +3193,18 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                   ReportPDFwmvar.rawlistHardness
                                                               .length >=
                                                           4
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[3]
-                                                          .DATA
+                                                      ? ((double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              6]
+                                                                          .DATA)) +
+                                                                  double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              7]
+                                                                          .DATA))) /
+                                                              2)
+                                                          .toStringAsFixed(1)
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -3171,9 +3217,18 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                                   ReportPDFwmvar.rawlistHardness
                                                               .length >=
                                                           5
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[4]
-                                                          .DATA
+                                                      ? ((double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              8]
+                                                                          .DATA)) +
+                                                                  double.parse(ConverstStr(
+                                                                      ReportPDFwmvar
+                                                                          .rawlistHardness[
+                                                                              9]
+                                                                          .DATA))) /
+                                                              2)
+                                                          .toStringAsFixed(1)
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -3183,13 +3238,14 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget07: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          6
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[5]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         6
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[5]
+                                                  //         .DATA
+                                                  //     :
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3198,13 +3254,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget08: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          7
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[6]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         7
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[6]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3213,13 +3271,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget09: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          8
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[7]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         8
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[7]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3228,13 +3288,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget10: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          9
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[8]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         9
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[8]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3243,13 +3305,14 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget11: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          10
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[9]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         10
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[9]
+                                                  //         .DATA
+                                                  //     :
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3258,13 +3321,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget12: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          11
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[10]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         11
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[10]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3273,13 +3338,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget13: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          12
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[11]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         12
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[11]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3288,13 +3355,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget14: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          13
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[12]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         13
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[12]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3303,13 +3372,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget15: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          14
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[13]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         14
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[13]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3318,13 +3389,15 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                               ),
                                               widget16: Center(
                                                 child: Text(
-                                                  ReportPDFwmvar.rawlistHardness
-                                                              .length >=
-                                                          15
-                                                      ? ReportPDFwmvar
-                                                          .rawlistHardness[14]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwmvar.rawlistHardness
+                                                  //             .length >=
+                                                  //         15
+                                                  //     ? ReportPDFwmvar
+                                                  //         .rawlistHardness[14]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -4032,6 +4105,36 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                                         _dataCOMMON.databasic.Inspected_sign,
                                     NAME02: _dataCOMMON.databasic.Check_sign,
                                     NAME03: _dataCOMMON.databasic.Approve_sign,
+                                    NAME01date: _dataCOMMON
+                                                .databasic.dateInspected !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateInspected)) *
+                                                    1))
+                                        : "",
+                                    NAME02date: _dataCOMMON
+                                                .databasic.dateCheck !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateCheck) *
+                                                    1)))
+                                        : "",
+                                    NAME03date: _dataCOMMON
+                                                .databasic.dateApprove !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateApprove) *
+                                                    1)))
+                                        : "",
                                   ),
                                 ],
                               ),
@@ -4049,23 +4152,35 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Inspected-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFwmvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFwmvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Inspected == '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Inspected-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFwmvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFwmvar.PO, "");
+                              });
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Inspected == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Inspected"),
                             ),
@@ -4078,23 +4193,44 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Check-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFwmvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFwmvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Check == '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Check-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFwmvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFwmvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Check == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Check"),
                             ),
@@ -4107,23 +4243,48 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Approve-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFwmvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFwmvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Approve == '' &&
+                                _dataCOMMON.databasic.Check != '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Approve-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFwmvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFwmvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              } else if (_dataCOMMON.databasic.Check == '') {
+                                WORNINGpop(context,
+                                    ["", "Please Check first", ""], 60, 200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Approve == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Approve"),
                             ),

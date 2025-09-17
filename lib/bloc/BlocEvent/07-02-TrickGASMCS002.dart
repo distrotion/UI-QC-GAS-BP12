@@ -9,7 +9,7 @@ import '07-01-GASMCS002.dart';
 
 //-------------------------------------------------
 String server = GLOserver;
-String serverR = 'http://172.101.33.151:1880/';
+String serverR = 'http://172.23.10.40:1885/';
 
 abstract class TRICKER_Event {}
 
@@ -102,6 +102,8 @@ class TRICKER_GASMCS002_Bloc extends Bloc<TRICKER_Event, String> {
       data: {
         "PO": FIRSTUI.POACTIVE,
         "CP": FIRSTUI.CPACTIVE,
+        "USER": USERDATA.NAME,
+        "USERID": USERDATA.ID,
       },
     );
     String output = '';

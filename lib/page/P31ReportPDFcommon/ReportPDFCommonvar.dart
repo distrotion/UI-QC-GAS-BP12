@@ -10,10 +10,13 @@ class ReportPDFCommonvar {
 
   static String STATUS = '';
 
+  static String INSG = '';
+
   static String CUSTOMER = '';
   static String PROCESS = '';
   static String PARTNAME = '';
   static String PARTNO = '';
+  static String PARTNO_s = '';
   static String CUSLOT = '';
   static String TPKLOT = '';
   static String MATERIAL = '';
@@ -48,6 +51,8 @@ class ReportPDFCommonvar {
 
   static String SignInsBy = '';
 
+  static String GTC = '';
+
   static List<ReportPDFCommonlist> datalist = [
     ReportPDFCommonlist(),
     ReportPDFCommonlist(),
@@ -69,6 +74,9 @@ class ReportPDFCommonvar {
   static List<FlSpot> graphdata3 = [];
   static List<FlSpot> graphdata4 = [];
   static List<FlSpot> graphunder = [];
+
+  static List<FlSpot> upper = [];
+  static List<FlSpot> lower = [];
 }
 
 class ReportPDFCommonlist {

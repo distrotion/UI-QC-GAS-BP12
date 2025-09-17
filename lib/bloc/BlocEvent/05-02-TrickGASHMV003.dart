@@ -108,6 +108,8 @@ class TRICKER_GASHMV003_Bloc extends Bloc<TRICKER_Event, String> {
       data: {
         "PO": FIRSTUI.POACTIVE,
         "CP": FIRSTUI.CPACTIVE,
+        "USER": USERDATA.NAME,
+        "USERID": USERDATA.ID,
       },
     );
     String output = '';
@@ -158,7 +160,7 @@ class TRICKER_GASHMV003_Bloc extends Bloc<TRICKER_Event, String> {
   Future<void> _TRICKER_GASHMV003confirmdata1(
       String toAdd, Emitter<String> emit) async {
     final response = await Dio().post(
-      'http://172.101.33.151:1880/' + 'deptmv03',
+      'http://172.23.10.40:1885/' + 'deptmv03',
       data: {},
     );
     emit('');
@@ -167,7 +169,7 @@ class TRICKER_GASHMV003_Bloc extends Bloc<TRICKER_Event, String> {
   Future<void> _TRICKER_GASHMV003confirmdata2(
       String toAdd, Emitter<String> emit) async {
     final response = await Dio().post(
-      'http://172.101.33.151:1880/' + 'surfacemv03',
+      'http://172.23.10.40:1885/' + 'surfacemv03',
       data: {},
     );
     emit('');
@@ -176,7 +178,7 @@ class TRICKER_GASHMV003_Bloc extends Bloc<TRICKER_Event, String> {
   Future<void> _TRICKER_GASHMV003confirmdata3(
       String toAdd, Emitter<String> emit) async {
     final response = await Dio().post(
-      'http://172.101.33.151:1880/' + 'surfacemv03',
+      'http://172.23.10.40:1885/' + 'surfacemv03',
       data: {},
     );
     emit('');

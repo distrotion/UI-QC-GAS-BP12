@@ -19,6 +19,7 @@ import '../../widget/common/Error_NO_Popup.dart';
 import '../../widget/common/Loading.dart';
 import '../../widget/common/Safty.dart';
 import '../../widget/common/imgset.dart';
+import '../../widget/common/popup.dart';
 import '../../widget/function/helper.dart';
 import '../P303QMMASTERQC/P303QMMASTERQCVAR.dart';
 import '../page303.dart';
@@ -71,6 +72,7 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
       ReportPDFwm3var.PROCESS = _dataCOMMON.databasic.PROCESS;
       ReportPDFwm3var.PARTNAME = _dataCOMMON.databasic.PARTNAME;
       ReportPDFwm3var.PARTNO = _dataCOMMON.databasic.PARTNO;
+      ReportPDFwm3var.PARTNO_s = _dataCOMMON.databasic.PARTNO_s;
       ReportPDFwm3var.CUSLOT = _dataCOMMON.databasic.CUSLOT;
       ReportPDFwm3var.TPKLOT = _dataCOMMON.databasic.TPKLOT;
       ReportPDFwm3var.MATERIAL = _dataCOMMON.databasic.MATERIAL;
@@ -87,7 +89,8 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
       ReportPDFwm3var.PICstd = _dataCOMMON.databasic.PICstd;
 
       ReportPDFwm3var.PASS = _dataCOMMON.databasic.PASS;
-      ReportPDFwm3var.remark = '';
+      // ReportPDFwm3var.remark = '';
+      ReportPDFwm3var.remark = _dataCOMMON.databasic.remark;
       if (_dataCOMMON.databasic.PARTNAMEref != '') {
         ReportPDFwm3var.remark =
             'Reference data from\n${_dataCOMMON.databasic.PARTNAMEref}\n${_dataCOMMON.databasic.PARTref}';
@@ -131,313 +134,316 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
         //Surface Hardness
 
         if (_dataCOMMON.datain[i].TYPE == 'Number') {
-          if (_dataCOMMON.datain[i].ITEMname
-                  .toUpperCase()
-                  .contains('HARDNESS') &&
-              _dataCOMMON.datain[i].ITEMname.toUpperCase().contains('CORE') ==
-                  false) {
-            for (var li = 0;
-                li < _dataCOMMON.datain[i].datapackset.length;
-                li++) {
-              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+          print("->ss");
+          // if (_dataCOMMON.datain[i].ITEMname
+          //         .toUpperCase()
+          //         .contains('HARDNESS') &&
+          //     _dataCOMMON.datain[i].ITEMname.toUpperCase().contains('CORE') ==
+          //         false) {
+          for (var li = 0;
+              li < _dataCOMMON.datain[i].datapackset.length;
+              li++) {
+            // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
 
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '1',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '2',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '3',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '4',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '5',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '6',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '7',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '8',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '9',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '10',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '11',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '12',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '13',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '14',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '15',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '16',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '17',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '18',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '19',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
-                ReportPDFwm3var.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '20',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
-                ));
-              }
-              HardnessNO++;
-              // print('>>${HardnessNO}');
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '1',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+              ));
             }
-          } else if (_dataCOMMON.datain[i].ITEMname
-              .toUpperCase()
-              .contains('CORE')) {
-            for (var li = 0;
-                li < _dataCOMMON.datain[i].datapackset.length;
-                li++) {
-              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
-
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '1',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '2',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '3',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '4',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '5',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '6',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '7',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '8',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '9',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '10',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '11',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '12',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '13',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '14',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '15',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '16',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '17',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '18',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '19',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
-                ReportPDFwm3var.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '20',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
-                ));
-              }
-              CoreNO++;
-              // print('>>${CoreNO}');
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '2',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+              ));
             }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '3',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '4',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '5',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '6',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '7',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '8',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '9',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '10',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '11',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '12',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '13',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '14',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '15',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '16',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '17',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '18',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '19',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+              ));
+            }
+            if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+              ReportPDFwm3var.rawlistHardness.add(rawlist(
+                DATANO: HardnessNO.toString(),
+                DATAPCS: '20',
+                DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+              ));
+            }
+            HardnessNO++;
+            // print('>>${HardnessNO}');
           }
+          // }
+
+          // else if (_dataCOMMON.datain[i].ITEMname
+          //     .toUpperCase()
+          //     .contains('CORE')) {
+          //   for (var li = 0;
+          //       li < _dataCOMMON.datain[i].datapackset.length;
+          //       li++) {
+          //     // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '1',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '2',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '3',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '4',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '5',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '6',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '7',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '8',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '9',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '10',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '11',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '12',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '13',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '14',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '15',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '16',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '17',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '18',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '19',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+          //       ));
+          //     }
+          //     if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+          //       ReportPDFwm3var.rawlistCORE.add(rawlist(
+          //         DATANO: CoreNO.toString(),
+          //         DATAPCS: '20',
+          //         DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+          //       ));
+          //     }
+          //     CoreNO++;
+          //     // print('>>${CoreNO}');
+          //   }
+          // }
           //  CoreNO++;
         }
 
@@ -849,6 +855,7 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
       ReportPDFwm3var.PROCESS = '';
       ReportPDFwm3var.PARTNAME = '';
       ReportPDFwm3var.PARTNO = '';
+      ReportPDFwm3var.PARTNO_s = '';
       ReportPDFwm3var.CUSLOT = '';
       ReportPDFwm3var.TPKLOT = '';
       ReportPDFwm3var.MATERIAL = '';
@@ -959,7 +966,7 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
               ),
               InkWell(
                 onDoubleTap: () {
-                  //  ReportPDFCommonvar.HIDEDATAPIC
+                  //  ReportPDFwm3var.HIDEDATAPIC
                   if (ReportPDFwm3var.HIDEDATAPIC) {
                     ReportPDFwm3var.HIDEDATAPIC = false;
                   } else {
@@ -1070,68 +1077,68 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                 ),
               ),
               const Spacer(),
-              if (ReportPDFwm3var.PASS == "PASSED") ...[
-                Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: InkWell(
-                    onTap: () {
-                      PDFloader(context);
-                      Future.delayed(const Duration(milliseconds: 1000), () {
+              // if (ReportPDFwm3var.PASS == "PASSED") ...[
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: InkWell(
+                  onTap: () {
+                    PDFloader(context);
+                    Future.delayed(const Duration(milliseconds: 1000), () {
+                      // capture(
+                      captureToback(
                         // capture(
-                        captureToback(
-                          // capture(
-                          _globalKey,
-                          ReportPDFwm3var.PO,
-                        ).then((value) {
-                          print(value);
+                        _globalKey,
+                        ReportPDFwm3var.PO,
+                      ).then((value) {
+                        print(value);
 
-                          Navigator.pop(context);
-                        });
+                        Navigator.pop(context);
                       });
-                    },
-                    child: Container(
-                      color: Colors.yellow,
-                      height: 50,
-                      width: 100,
-                      child: const Center(
-                        child: Text("Print"),
-                      ),
+                    });
+                  },
+                  child: Container(
+                    color: Colors.yellow,
+                    height: 50,
+                    width: 100,
+                    child: const Center(
+                      child: Text("Print"),
                     ),
                   ),
                 ),
-              ] else ...[
-                if (USERDATA.UserLV > 5 &&
-                    _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
-                  Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: InkWell(
-                      onTap: () {
-                        PDFloader(context);
-                        Future.delayed(const Duration(milliseconds: 1000), () {
-                          // capture(
-                          captureToback(
-                            // capture(
-                            _globalKey,
-                            ReportPDFwm3var.PO,
-                          ).then((value) {
-                            print(value);
+              ),
+              // ] else ...[
+              //   if (USERDATA.UserLV > 5 &&
+              //       _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
+              //     Padding(
+              //       padding: const EdgeInsets.all(3.0),
+              //       child: InkWell(
+              //         onTap: () {
+              //           PDFloader(context);
+              //           Future.delayed(const Duration(milliseconds: 1000), () {
+              //             // capture(
+              //             captureToback(
+              //               // capture(
+              //               _globalKey,
+              //               ReportPDFwm3var.PO,
+              //             ).then((value) {
+              //               print(value);
 
-                            Navigator.pop(context);
-                          });
-                        });
-                      },
-                      child: Container(
-                        color: Colors.yellow,
-                        height: 50,
-                        width: 100,
-                        child: const Center(
-                          child: Text("Print"),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]
-              ],
+              //               Navigator.pop(context);
+              //             });
+              //           });
+              //         },
+              //         child: Container(
+              //           color: Colors.yellow,
+              //           height: 50,
+              //           width: 100,
+              //           child: const Center(
+              //             child: Text("Print"),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ]
+              // ],
             ],
           ),
           Row(children: [
@@ -1272,7 +1279,11 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                     CUSTOMER: ReportPDFwm3var.CUSTOMER,
                                     PROCESS: ReportPDFwm3var.PROCESS,
                                     PARTNAME: ReportPDFwm3var.PARTNAME,
-                                    PARTNO: ReportPDFwm3var.PARTNO,
+                                    PARTNO: ReportPDFwm3var.PARTNO.contains("|")
+                                        ? ReportPDFwm3var.PARTNO.split("|")[1]
+                                        : ReportPDFwm3var.PARTNO == ''
+                                            ? ReportPDFwm3var.PARTNO_s
+                                            : ReportPDFwm3var.PARTNO,
                                     CUSLOT: ReportPDFwm3var.CUSLOT,
                                     TPKLOT: ReportPDFwm3var.TPKLOT,
                                     MATERIAL: ReportPDFwm3var.MATERIAL,
@@ -2180,14 +2191,15 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                               ),
                                               widget03: Center(
                                                 child: Text(
-                                                  ReportPDFwm3var
-                                                              .rawlistHardness
-                                                              .length >=
-                                                          2
-                                                      ? ReportPDFwm3var
-                                                          .rawlistHardness[1]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwm3var
+                                                  //             .rawlistHardness
+                                                  //             .length >=
+                                                  //         2
+                                                  //     ? ReportPDFwm3var
+                                                  //         .rawlistHardness[1]
+                                                  //         .DATANO
+                                                  //     :
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2196,14 +2208,16 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                               ),
                                               widget04: Center(
                                                 child: Text(
-                                                  ReportPDFwm3var
-                                                              .rawlistHardness
-                                                              .length >=
-                                                          3
-                                                      ? ReportPDFwm3var
-                                                          .rawlistHardness[2]
-                                                          .DATANO
-                                                      : '',
+                                                  // ReportPDFwm3var
+                                                  //             .rawlistHardness
+                                                  //             .length >=
+                                                  //         3
+                                                  //     ? ReportPDFwm3var
+                                                  //         .rawlistHardness[2]
+                                                  //         .DATANO
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -2422,7 +2436,7 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                           1
                                                       ? ReportPDFwm3var
                                                           .rawlistHardness[0]
-                                                          .DATAPCS
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2435,9 +2449,9 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                   ReportPDFwm3var
                                                               .rawlistHardness
                                                               .length >=
-                                                          2
+                                                          4
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[1]
+                                                          .rawlistHardness[4]
                                                           .DATAPCS
                                                       : '',
                                                   style: const TextStyle(
@@ -2451,9 +2465,9 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                   ReportPDFwm3var
                                                               .rawlistHardness
                                                               .length >=
-                                                          3
+                                                          7
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[2]
+                                                          .rawlistHardness[7]
                                                           .DATAPCS
                                                       : '',
                                                   style: const TextStyle(
@@ -2673,8 +2687,8 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                               .length >=
                                                           1
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[0]
-                                                          .DATAPCS
+                                                          .rawlistHardness[1]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2687,9 +2701,9 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                   ReportPDFwm3var
                                                               .rawlistHardness
                                                               .length >=
-                                                          2
+                                                          5
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[1]
+                                                          .rawlistHardness[5]
                                                           .DATAPCS
                                                       : '',
                                                   style: const TextStyle(
@@ -2703,9 +2717,9 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                   ReportPDFwm3var
                                                               .rawlistHardness
                                                               .length >=
-                                                          3
+                                                          8
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[2]
+                                                          .rawlistHardness[8]
                                                           .DATAPCS
                                                       : '',
                                                   style: const TextStyle(
@@ -2923,10 +2937,10 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                   ReportPDFwm3var
                                                               .rawlistHardness
                                                               .length >=
-                                                          1
+                                                          2
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[0]
-                                                          .DATAPCS
+                                                          .rawlistHardness[2]
+                                                          .DATA
                                                       : '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
@@ -2939,9 +2953,9 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                   ReportPDFwm3var
                                                               .rawlistHardness
                                                               .length >=
-                                                          2
+                                                          6
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[1]
+                                                          .rawlistHardness[6]
                                                           .DATAPCS
                                                       : '',
                                                   style: const TextStyle(
@@ -2955,9 +2969,9 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                                   ReportPDFwm3var
                                                               .rawlistHardness
                                                               .length >=
-                                                          3
+                                                          9
                                                       ? ReportPDFwm3var
-                                                          .rawlistHardness[2]
+                                                          .rawlistHardness[9]
                                                           .DATAPCS
                                                       : '',
                                                   style: const TextStyle(
@@ -3172,14 +3186,35 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                               ),
                                               widget02: Center(
                                                 child: Text(
-                                                  ReportPDFwm3var
-                                                              .rawlistHardness
+                                                  // ReportPDFwm3var
+                                                  //             .rawlistHardness
+                                                  //             .length >=
+                                                  //         1
+                                                  //     ? ReportPDFwm3var
+                                                  //         .rawlistHardness[0]
+                                                  //         .DATA
+                                                  ReportPDFwm3var.rawlistHardness
                                                               .length >=
                                                           1
-                                                      ? ReportPDFwm3var
-                                                          .rawlistHardness[0]
-                                                          .DATA
+                                                      ? ((double.parse(
+                                                                      ConverstStr(ReportPDFwm3var
+                                                                          .rawlistHardness[
+                                                                              0]
+                                                                          .DATA)) +
+                                                                  double.parse(ConverstStr(
+                                                                      ReportPDFwm3var
+                                                                          .rawlistHardness[
+                                                                              1]
+                                                                          .DATA)) +
+                                                                  double.parse(ConverstStr(
+                                                                      ReportPDFwm3var
+                                                                          .rawlistHardness[
+                                                                              2]
+                                                                          .DATA))) /
+                                                              3)
+                                                          .toStringAsFixed(1)
                                                       : '',
+
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3188,14 +3223,16 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                               ),
                                               widget03: Center(
                                                 child: Text(
-                                                  ReportPDFwm3var
-                                                              .rawlistHardness
-                                                              .length >=
-                                                          2
-                                                      ? ReportPDFwm3var
-                                                          .rawlistHardness[1]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwm3var
+                                                  //             .rawlistHardness
+                                                  //             .length >=
+                                                  //         2
+                                                  //     ? ReportPDFwm3var
+                                                  //         .rawlistHardness[1]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -3204,14 +3241,16 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                               ),
                                               widget04: Center(
                                                 child: Text(
-                                                  ReportPDFwm3var
-                                                              .rawlistHardness
-                                                              .length >=
-                                                          3
-                                                      ? ReportPDFwm3var
-                                                          .rawlistHardness[2]
-                                                          .DATA
-                                                      : '',
+                                                  // ReportPDFwm3var
+                                                  //             .rawlistHardness
+                                                  //             .length >=
+                                                  //         3
+                                                  //     ? ReportPDFwm3var
+                                                  //         .rawlistHardness[2]
+                                                  //         .DATA
+                                                  //     :
+
+                                                  '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -4111,6 +4150,36 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                                         _dataCOMMON.databasic.Inspected_sign,
                                     NAME02: _dataCOMMON.databasic.Check_sign,
                                     NAME03: _dataCOMMON.databasic.Approve_sign,
+                                    NAME01date: _dataCOMMON
+                                                .databasic.dateInspected !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateInspected)) *
+                                                    1))
+                                        : "",
+                                    NAME02date: _dataCOMMON
+                                                .databasic.dateCheck !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateCheck) *
+                                                    1)))
+                                        : "",
+                                    NAME03date: _dataCOMMON
+                                                .databasic.dateApprove !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateApprove) *
+                                                    1)))
+                                        : "",
                                   ),
                                 ],
                               ),
@@ -4128,23 +4197,35 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Inspected-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFwm3var.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFwm3var.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Inspected == '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Inspected-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFwm3var.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFwm3var.PO, "");
+                              });
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Inspected == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Inspected"),
                             ),
@@ -4157,23 +4238,44 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Check-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFwm3var.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFwm3var.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Check == '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Check-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFwm3var.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFwm3var.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Check == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Check"),
                             ),
@@ -4186,23 +4288,48 @@ class _ReportPDFwm3State extends State<ReportPDFwm3> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Approve-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFwm3var.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(ReportPDFwm3var.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Approve == '' &&
+                                _dataCOMMON.databasic.Check != '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Approve-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFwm3var.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFwm3var.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              } else if (_dataCOMMON.databasic.Check == '') {
+                                WORNINGpop(context,
+                                    ["", "Please Check first", ""], 60, 200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Approve == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Approve"),
                             ),

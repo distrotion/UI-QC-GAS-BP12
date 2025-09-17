@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../bloc/cubit/NotificationEvent.dart';
 import '../../Layout/head.dart';
 import '../../bloc/Cubit/31-ReportPDFCommoncubit.dart';
 import '../../bloc/Cubit/32-Reportset.dart';
 import '../../data/CommonTestData.dart';
 import '../../data/global.dart';
 import '../../widget/GRAPH/LineGraph01.dart';
+import '../../widget/GRAPH/LineGraphCONTROL.dart';
 import '../../widget/ReportComponent/CommonReport.dart';
 import '../../widget/ReportComponent/PicSlot.dart';
 import '../../widget/ReportComponent/SignSide.dart';
@@ -20,6 +22,7 @@ import '../../widget/common/Error_NO_Popup.dart';
 import '../../widget/common/Loading.dart';
 import '../../widget/common/Safty.dart';
 import '../../widget/common/imgset.dart';
+import '../../widget/common/popup.dart';
 import '../../widget/function/helper.dart';
 import '../P303QMMASTERQC/P303QMMASTERQCVAR.dart';
 import '../page303.dart';
@@ -73,6 +76,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
       ReportPDFCommonvar.PROCESS = _dataCOMMON.databasic.PROCESS;
       ReportPDFCommonvar.PARTNAME = _dataCOMMON.databasic.PARTNAME;
       ReportPDFCommonvar.PARTNO = _dataCOMMON.databasic.PARTNO;
+      ReportPDFCommonvar.PARTNO_s = _dataCOMMON.databasic.PARTNO_s;
       ReportPDFCommonvar.CUSLOT = _dataCOMMON.databasic.CUSLOT;
       ReportPDFCommonvar.TPKLOT = _dataCOMMON.databasic.TPKLOT;
       ReportPDFCommonvar.MATERIAL = _dataCOMMON.databasic.MATERIAL;
@@ -89,7 +93,8 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
       ReportPDFCommonvar.PICstd = _dataCOMMON.databasic.PICstd;
 
       ReportPDFCommonvar.PASS = _dataCOMMON.databasic.PASS;
-      ReportPDFCommonvar.remark = '';
+      ReportPDFCommonvar.remark = _dataCOMMON.databasic.remark;
+      print("--->" + ReportPDFCommonvar.remark);
       if (_dataCOMMON.databasic.PARTNAMEref != '') {
         ReportPDFCommonvar.remark =
             'Reference data from\n${_dataCOMMON.databasic.PARTNAMEref}\n${_dataCOMMON.databasic.PARTref}';
@@ -112,6 +117,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
       ReportPDFCommonvar.graphdata3 = [];
       ReportPDFCommonvar.graphdata4 = [];
       ReportPDFCommonvar.graphunder = [];
+      ReportPDFCommonvar.GTC = '';
 
       for (var i = 0; i < _dataCOMMON.datain.length; i++) {
         String Loadin = '';
@@ -447,6 +453,12 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
 
         if (_dataCOMMON.datain[i].TYPE == 'Graph') {
           ReportPDFCommonvar.rawlistGraph = [];
+          ReportPDFCommonvar.GTC = _dataCOMMON.datain[i].GTC;
+
+          ReportPDFCommonvar.lower = _dataCOMMON.datain[i].lower;
+          ReportPDFCommonvar.upper = _dataCOMMON.datain[i].upper;
+
+          print('GTC>' + ReportPDFCommonvar.GTC);
           if (_dataCOMMON.datain[i].ITEMname.contains('Hardness') ||
                   _dataCOMMON.datain[i].ITEMname.contains('hardness') ||
                   _dataCOMMON.datain[i].ITEMname.contains('Total') ||
@@ -854,6 +866,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
       ReportPDFCommonvar.PROCESS = '';
       ReportPDFCommonvar.PARTNAME = '';
       ReportPDFCommonvar.PARTNO = '';
+      ReportPDFCommonvar.PARTNO_s = '';
       ReportPDFCommonvar.CUSLOT = '';
       ReportPDFCommonvar.TPKLOT = '';
       ReportPDFCommonvar.MATERIAL = '';
@@ -1075,68 +1088,68 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                 ),
               ),
               const Spacer(),
-              if (ReportPDFCommonvar.PASS == "PASSED") ...[
-                Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: InkWell(
-                    onTap: () {
-                      PDFloader(context);
-                      Future.delayed(const Duration(milliseconds: 1000), () {
+              // if (ReportPDFCommonvar.PASS == "PASSED") ...[
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: InkWell(
+                  onTap: () {
+                    PDFloader(context);
+                    Future.delayed(const Duration(milliseconds: 1000), () {
+                      // capture(
+                      captureToback(
                         // capture(
-                        captureToback(
-                          // capture(
-                          _globalKey,
-                          ReportPDFCommonvar.PO,
-                        ).then((value) {
-                          print(value);
+                        _globalKey,
+                        ReportPDFCommonvar.PO,
+                      ).then((value) {
+                        print(value);
 
-                          Navigator.pop(context);
-                        });
+                        Navigator.pop(context);
                       });
-                    },
-                    child: Container(
-                      color: Colors.yellow,
-                      height: 50,
-                      width: 100,
-                      child: const Center(
-                        child: Text("Print"),
-                      ),
+                    });
+                  },
+                  child: Container(
+                    color: Colors.yellow,
+                    height: 50,
+                    width: 100,
+                    child: const Center(
+                      child: Text("Print"),
                     ),
                   ),
                 ),
-              ] else ...[
-                if (USERDATA.UserLV > 5 &&
-                    _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
-                  Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: InkWell(
-                      onTap: () {
-                        PDFloader(context);
-                        Future.delayed(const Duration(milliseconds: 1000), () {
-                          // capture(
-                          captureToback(
-                            // capture(
-                            _globalKey,
-                            ReportPDFCommonvar.PO,
-                          ).then((value) {
-                            print(value);
+              ),
+              // ] else ...[
+              //   if (USERDATA.UserLV > 5 &&
+              //       _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
+              //     Padding(
+              //       padding: const EdgeInsets.all(3.0),
+              //       child: InkWell(
+              //         onTap: () {
+              //           PDFloader(context);
+              //           Future.delayed(const Duration(milliseconds: 1000), () {
+              //             // capture(
+              //             captureToback(
+              //               // capture(
+              //               _globalKey,
+              //               ReportPDFCommonvar.PO,
+              //             ).then((value) {
+              //               print(value);
 
-                            Navigator.pop(context);
-                          });
-                        });
-                      },
-                      child: Container(
-                        color: Colors.yellow,
-                        height: 50,
-                        width: 100,
-                        child: const Center(
-                          child: Text("Print"),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]
-              ],
+              //               Navigator.pop(context);
+              //             });
+              //           });
+              //         },
+              //         child: Container(
+              //           color: Colors.yellow,
+              //           height: 50,
+              //           width: 100,
+              //           child: const Center(
+              //             child: Text("Print"),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ]
+              // ],
             ],
           ),
           Row(children: [
@@ -1179,40 +1192,80 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: InkWell(
-                onTap: () {
-                  //ReportPDFCommonvar.PO
-                  String server = 'http://172.23.10.40:1885/';
-                  String sap = "sap_GASHES_GB";
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: const BorderRadius.all(Radius.circular(0)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: SizedBox(
+                        height: 40,
+                        width: 150,
+                        child: AdvanceDropDown(
+                          imgpath: 'assets/icons/icon-down_4@3x.png',
+                          listdropdown: const [
+                            MapEntry("", ""),
+                            MapEntry("-", "-"),
+                            MapEntry("GAS-HMV-001", "GAS-HMV-001"),
+                            MapEntry("GAS-HMV-002", "GAS-HMV-002"),
+                            MapEntry("GAS-HMV-003", "GAS-HMV-003"),
+                          ],
+                          onChangeinside: (d, v) {
+                            // print(d);
+                            ReportPDFCommonvar.INSG = d;
+                          },
+                          value: ReportPDFCommonvar.INSG,
+                          height: 40,
+                          width: 150,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: InkWell(
+                        onTap: () {
+                          //ReportPDFCommonvar.PO
 
-                  Dio().post(
-                    server + sap,
-                    data: {},
-                  ).then((v) {
-                    //
-                    var databuff = v.data;
-                    for (var i = 0; i < databuff.length; i++) {
-                      //
+                          Dio().post(
+                            "${GLOserver}GRAPH-recal",
+                            data: {
+                              "PO": ReportPDFCommonvar.PO,
+                              "ITEMs": "ITEMs-5f19aaa2fe12be0020dbd3c2",
+                              "MODE": "CDE",
+                              "NAME_INS": ReportPDFCommonvar.INSG,
+                              "INTERSEC": ""
+                            },
+                          ).then((v) {
+                            //
+                            if (v.data == 'OK1') {
+                              WORNINGpop(context, ["", "OK", ""], 140, 200);
 
-                      if (databuff[i]['PO'] == ReportPDFCommonvar.PO) {
-                        print(
-                            databuff[i]['PO'] + ':' + databuff[i]['FG_CHARG']);
-                        // print(databuff[i]);
-                        ReportPDFCommonvar.TPKLOTEDIT = databuff[i]['FG_CHARG'];
-                        setState(() {});
-                      }
-                    }
-                  });
-                },
-                child: Container(
-                  color: Colors.orange,
-                  height: 50,
-                  width: 100,
-                  child: const Center(
-                    child: Text("Re Lot"),
-                  ),
+                              context
+                                  .read<ReportPDFCommon_Cubit>()
+                                  .ReportPDFCommonCubit(
+                                      ReportPDFCommonvar.PO, "");
+                            } else {
+                              WORNINGpop(
+                                  context, ["", "No this INS", ""], 140, 200);
+                            }
+                          });
+                        },
+                        child: Container(
+                          color: Colors.orange,
+                          height: 50,
+                          width: 100,
+                          child: const Center(
+                            child: Text("Re Graph"),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -1277,7 +1330,13 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                     CUSTOMER: ReportPDFCommonvar.CUSTOMER,
                                     PROCESS: ReportPDFCommonvar.PROCESS,
                                     PARTNAME: ReportPDFCommonvar.PARTNAME,
-                                    PARTNO: ReportPDFCommonvar.PARTNO,
+                                    PARTNO:
+                                        ReportPDFCommonvar.PARTNO.contains("|")
+                                            ? ReportPDFCommonvar.PARTNO
+                                                .split("|")[1]
+                                            : ReportPDFCommonvar.PARTNO == ''
+                                                ? ReportPDFCommonvar.PARTNO_s
+                                                : ReportPDFCommonvar.PARTNO,
                                     CUSLOT: ReportPDFCommonvar.CUSLOT,
                                     TPKLOT: ReportPDFCommonvar.TPKLOT,
                                     MATERIAL: ReportPDFCommonvar.MATERIAL,
@@ -3168,38 +3227,118 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                         : _dataCOMMON.databasic.PIC02,
                                     widget01: Column(
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, bottom: 10),
-                                          child: Container(
-                                            height: 320,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black,
-                                                  width: 3),
+                                        if (ReportPDFCommonvar.GTC == '' ||
+                                            ReportPDFCommonvar.GTC == '-') ...[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, bottom: 10),
+                                            child: Container(
+                                              height: 320,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black,
+                                                    width: 3),
+                                              ),
+                                              child: ReportPDFCommonvar
+                                                      .graphdata.isNotEmpty
+                                                  ? ControlChart01(
+                                                      upper: ReportPDFCommonvar
+                                                          .graphupper,
+                                                      data: ReportPDFCommonvar
+                                                          .graphdata,
+                                                      data2: ReportPDFCommonvar
+                                                          .graphdata2,
+                                                      data3: ReportPDFCommonvar
+                                                          .graphdata3,
+                                                      data4: ReportPDFCommonvar
+                                                          .graphdata4,
+                                                      under: ReportPDFCommonvar
+                                                          .graphunder,
+                                                    )
+                                                  : SizedBox(
+                                                      height: 320,
+                                                      width: 2000,
+                                                    ),
                                             ),
-                                            child: ReportPDFCommonvar
-                                                    .graphdata.isNotEmpty
-                                                ? ControlChart01(
-                                                    upper: ReportPDFCommonvar
-                                                        .graphupper,
-                                                    data: ReportPDFCommonvar
-                                                        .graphdata,
-                                                    data2: ReportPDFCommonvar
-                                                        .graphdata2,
-                                                    data3: ReportPDFCommonvar
-                                                        .graphdata3,
-                                                    data4: ReportPDFCommonvar
-                                                        .graphdata4,
-                                                    under: ReportPDFCommonvar
-                                                        .graphunder,
-                                                  )
-                                                : SizedBox(
-                                                    height: 320,
-                                                    width: 2000,
-                                                  ),
                                           ),
-                                        ),
+                                        ] else ...[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, bottom: 10),
+                                            child: Container(
+                                              height: 320,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black,
+                                                    width: 3),
+                                              ),
+                                              child: ReportPDFCommonvar
+                                                      .graphdata.isNotEmpty
+                                                  ? LineGraphCONTROL(
+                                                      upper: ReportPDFCommonvar
+                                                          .graphupper,
+                                                      data: ReportPDFCommonvar
+                                                          .graphdata,
+                                                      data2: ReportPDFCommonvar
+                                                          .graphdata2,
+                                                      data3: ReportPDFCommonvar
+                                                          .graphdata3,
+                                                      data4: ReportPDFCommonvar
+                                                          .graphdata4,
+                                                      under: ReportPDFCommonvar
+                                                          .graphunder,
+                                                      //----------------------
+                                                      // data_2: ReportPDFCommonvar
+                                                      //     .graphdataS,
+                                                      // data_2: [
+                                                      //   FlSpot(0.1, 800),
+                                                      //   // FlSpot(0.2, 750),
+                                                      //   FlSpot(0.3, 780),
+                                                      //   // FlSpot(0.4, 660),
+                                                      //   FlSpot(0.5, 760),
+                                                      //   // FlSpot(0.6, 700),
+                                                      //   // FlSpot(0.7, 550),
+                                                      //   // FlSpot(0.8, 650),
+                                                      //   FlSpot(0.9, 670),
+                                                      //   // FlSpot(1, 500)
+                                                      // ],
+                                                      data_2: ReportPDFCommonvar
+                                                          .lower,
+                                                      // data2_2:
+                                                      //     ReportPDFCommonvar
+                                                      //         .graphdata2S,
+                                                      // data3_2:
+                                                      //     ReportPDFCommonvar
+                                                      //         .graphdata3S,
+                                                      //----------------------
+                                                      // data_3: ReportPDFCommonvar
+                                                      //     .graphdataSS,
+                                                      data_3: ReportPDFCommonvar
+                                                          .upper,
+                                                      // data2_3:
+                                                      //     ReportPDFCommonvar
+                                                      //         .graphdata2SS,
+                                                      // data3_3:
+                                                      //     ReportPDFCommonvar
+                                                      //         .graphdata3SS,
+                                                      //----------------------
+                                                      // data_4: ReportPDFCommonvar
+                                                      //     .graphdataSSS,
+                                                      // data2_4:
+                                                      //     ReportPDFCommonvar
+                                                      //         .graphdata2SSS,
+                                                      // data3_4:
+                                                      //     ReportPDFCommonvar
+                                                      //         .graphdata3SSS,
+                                                      //----------------------
+                                                    )
+                                                  : SizedBox(
+                                                      height: 320,
+                                                      width: 2000,
+                                                    ),
+                                            ),
+                                          ),
+                                        ],
                                       ],
                                     ),
                                     widget02: Column(
@@ -3653,9 +3792,36 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                         _dataCOMMON.databasic.Inspected_sign,
                                     NAME02: _dataCOMMON.databasic.Check_sign,
                                     NAME03: _dataCOMMON.databasic.Approve_sign,
-                                    // NAME01: "",
-                                    // NAME02: "",
-                                    // NAME03: "",
+                                    NAME01date: _dataCOMMON
+                                                .databasic.dateInspected !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateInspected)) *
+                                                    1))
+                                        : "",
+                                    NAME02date: _dataCOMMON
+                                                .databasic.dateCheck !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateCheck) *
+                                                    1)))
+                                        : "",
+                                    NAME03date: _dataCOMMON
+                                                .databasic.dateApprove !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateApprove) *
+                                                    1)))
+                                        : "",
                                   ),
                                 ],
                               ),
@@ -3673,24 +3839,35 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Inspected-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFCommonvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(
-                                      ReportPDFCommonvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Inspected == '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Inspected-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFCommonvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFCommonvar.PO, "");
+                              });
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Inspected == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Inspected"),
                             ),
@@ -3703,24 +3880,44 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Check-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFCommonvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(
-                                      ReportPDFCommonvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Check == '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Check-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFCommonvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFCommonvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    140,
+                                    200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Check == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Check"),
                             ),
@@ -3733,24 +3930,48 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Approve-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDFCommonvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(
-                                      ReportPDFCommonvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Approve == '' &&
+                                _dataCOMMON.databasic.Check != '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Approve-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDFCommonvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDFCommonvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    140,
+                                    200);
+                              } else if (_dataCOMMON.databasic.Check == '') {
+                                WORNINGpop(context,
+                                    ["", "Please Check first", ""], 140, 200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Approve == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Approve"),
                             ),

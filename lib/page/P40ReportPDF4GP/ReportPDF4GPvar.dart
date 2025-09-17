@@ -2,11 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../widget/common/imgset.dart';
 
-class ReportPDFcovvar {
+class ReportPDF4GPvar {
   static bool iscontrol = false;
   static bool canf = true;
   static String PO = '';
-  static bool HIDEDATAPIC = false;
 
   static String STATUS = '';
 
@@ -35,8 +34,17 @@ class ReportPDFcovvar {
 
   //rawlistCORE
 
+  static List<String> ListItemGraph = [];
+  static List<String> ListItemNumber = [];
+
   static List<rawlist> rawlistGraph = [];
+  static List<rawlist> rawlistGraphs = [];
+  static List<rawlist> rawlistGraphss = [];
+  static List<rawlist> rawlistGraphsss = [];
   static rawlist rawlistGraphCore = rawlist();
+  static rawlist rawlistGraphCoreS = rawlist();
+  static rawlist rawlistGraphCoreSS = rawlist();
+  static rawlist rawlistGraphCoreSSS = rawlist();
 
   static String remark = '';
 
@@ -49,36 +57,55 @@ class ReportPDFcovvar {
 
   static String SignInsBy = '';
 
-  static List<ReportPDFcovlist> datalist = [
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
+  static List<ReportPDF4GPlist> datalist = [
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
   ];
+//
+  static int graphset = 0;
   static List<FlSpot> graphupper = [];
   static List<FlSpot> graphdata = [];
   static List<FlSpot> graphdata2 = [];
   static List<FlSpot> graphdata3 = [];
   static List<FlSpot> graphdata4 = [];
   static List<FlSpot> graphunder = [];
-
-  static String GTC = '';
-
-  static List<FlSpot> upper = [];
-  static List<FlSpot> lower = [];
+//
+  // static List<FlSpot> graphupperS = [];
+  static List<FlSpot> graphdataS = [];
+  static List<FlSpot> graphdata2S = [];
+  static List<FlSpot> graphdata3S = [];
+  // static List<FlSpot> graphdata4S = [];
+  // static List<FlSpot> graphunderS = [];
+//
+  // static List<FlSpot> graphupperSS = [];
+  static List<FlSpot> graphdataSS = [];
+  static List<FlSpot> graphdata2SS = [];
+  static List<FlSpot> graphdata3SS = [];
+  // static List<FlSpot> graphdata4SS = [];
+  // static List<FlSpot> graphunderSS = [];
+//
+  // static List<FlSpot> graphupperSSS = [];
+  static List<FlSpot> graphdataSSS = [];
+  static List<FlSpot> graphdata2SSS = [];
+  static List<FlSpot> graphdata3SSS = [];
+  // static List<FlSpot> graphdata4SSS = [];
+  // static List<FlSpot> graphunderSSS = [];
+//
 }
 
-class ReportPDFcovlist {
-  ReportPDFcovlist({
+class ReportPDF4GPlist {
+  ReportPDF4GPlist({
     this.ITEM = '',
     this.ITEMname = '',
     this.METHOD = '',
@@ -119,48 +146,42 @@ class rawlist {
     this.DATANO = '',
     this.DATAPCS = '',
     this.DATA = '',
-    this.DATA2 = '',
-    this.UNIT1 = '',
-    this.UNIT2 = '',
   });
   String DATANO;
   String DATAPCS = '';
   String DATA = '';
-  String DATA2 = '';
-  String UNIT1 = '';
-  String UNIT2 = '';
 }
 
 ReportPDFACTclear() {
-  ReportPDFcovvar.PO = '';
+  ReportPDF4GPvar.PO = '';
 
-  ReportPDFcovvar.CUSTOMER = '';
-  ReportPDFcovvar.PROCESS = '';
-  ReportPDFcovvar.PARTNAME = '';
-  ReportPDFcovvar.PARTNO = '';
-  ReportPDFcovvar.CUSLOT = '';
-  ReportPDFcovvar.TPKLOT = '';
-  ReportPDFcovvar.MATERIAL = '';
-  ReportPDFcovvar.QTY = '';
+  ReportPDF4GPvar.CUSTOMER = '';
+  ReportPDF4GPvar.PROCESS = '';
+  ReportPDF4GPvar.PARTNAME = '';
+  ReportPDF4GPvar.PARTNO = '';
+  ReportPDF4GPvar.CUSLOT = '';
+  ReportPDF4GPvar.TPKLOT = '';
+  ReportPDF4GPvar.MATERIAL = '';
+  ReportPDF4GPvar.QTY = '';
 
-  ReportPDFcovvar.PICstd = '';
-  ReportPDFcovvar.PIC01 = '';
-  ReportPDFcovvar.PIC02 = '';
+  ReportPDF4GPvar.PICstd = '';
+  ReportPDF4GPvar.PIC01 = '';
+  ReportPDF4GPvar.PIC02 = '';
 
-  ReportPDFcovvar.SignInsBy = '';
-  ReportPDFcovvar.datalist = [
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
-    ReportPDFcovlist(),
+  ReportPDF4GPvar.SignInsBy = '';
+  ReportPDF4GPvar.datalist = [
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
+    ReportPDF4GPlist(),
   ];
 }

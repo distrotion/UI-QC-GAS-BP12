@@ -35,6 +35,7 @@ import '../page34.dart';
 import '../page35.dart';
 import '../page36.dart';
 import '../page37.dart';
+import '../page40.dart';
 import '../page50.dart';
 import 'P30SELECTReportvar.dart';
 
@@ -108,6 +109,9 @@ class _SELECTReportState extends State<SELECTReport> {
       } else if (_dataCommon.databasic.reportset == 'GAS12-STD-C-NOPIC') {
         ReportPDFcovvar.HIDEDATAPIC = true;
         return Page36();
+      } else if (_dataCommon.databasic.reportset == 'GAS12-STD-C') {
+        ReportPDFcovvar.HIDEDATAPIC = false;
+        return Page36();
       } else if (_dataCommon.databasic.reportset == 'ASI1-NOPIC') {
         ReportPDFASIvar.HIDEDATAPIC = true;
         return Page37();
@@ -122,6 +126,8 @@ class _SELECTReportState extends State<SELECTReport> {
           _dataCommon.databasic.reportset == 'GAS12-STD-NOPIC') {
         ReportPDFCommonvar.HIDEDATAPIC = true;
         return Page31();
+      } else if (_dataCommon.databasic.reportset == 'REPORT4GP') {
+        return Page40();
       } else if (_dataCommon.databasic.reportset == 'COMMON1') {
         return Page50();
       } else {

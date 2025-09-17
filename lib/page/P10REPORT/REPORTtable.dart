@@ -29,6 +29,7 @@ import '../P34ReportPDF3PIC/ReportPDF3PICvar.dart';
 import '../P35ReportPDFwm3/ReportPDFwm3var.dart';
 import '../P36ReportPDFcov/ReportPDFcovvar.dart';
 import '../P37ReportPDFASI/ReportPDFASIvar.dart';
+import '../P40ReportPDF4GP/ReportPDF4GPvar.dart';
 import '../P50ReportPDFcommonlist/ReportPDFcommonlistvar.dart';
 import '../page30.dart';
 
@@ -223,7 +224,7 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       columns: [
@@ -563,6 +564,7 @@ class _MyData extends DataTableSource {
                     ReportPDFcommonlistvar.PO = data.f01;
                     ReportPDFcovvar.PO = data.f01;
                     ReportPDFASIvar.PO = data.f01;
+                    ReportPDF4GPvar.PO = data.f01;
                     STDreport(context);
                   },
                   child: Container(

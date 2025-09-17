@@ -222,6 +222,9 @@ class TAILSLOT extends StatelessWidget {
     this.NAME02,
     this.NAME03,
     this.signs,
+    this.NAME01date,
+    this.NAME02date,
+    this.NAME03date,
   }) : super(key: key);
   Widget? widget01;
   Widget? widget02;
@@ -236,13 +239,17 @@ class TAILSLOT extends StatelessWidget {
   String? NAME02;
   String? NAME03;
 
+  String? NAME01date;
+  String? NAME02date;
+  String? NAME03date;
+
   bool? signs;
 
   @override
   Widget build(BuildContext context) {
-    var now = DateTime.now();
-    var formatter = DateFormat('dd-MMM-yyyy');
-    String formattedDate = formatter.format(now);
+    // var now = DateTime.now();
+    // var formatter = DateFormat('dd-MMM-yyyy');
+    // String formattedDate = formatter.format(now);
     return Padding(
       padding: const EdgeInsets.only(
         // top: 12,
@@ -346,7 +353,7 @@ class TAILSLOT extends StatelessWidget {
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(top: 4),
-                                          child: Text(formattedDate),
+                                          child: Text(NAME01date ?? ""),
                                         ),
                                       ),
                                     ],
@@ -381,7 +388,7 @@ class TAILSLOT extends StatelessWidget {
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(top: 4),
-                                          child: Text(formattedDate),
+                                          child: Text(NAME02date ?? ""),
                                         ),
                                       ),
                                     ],
@@ -415,7 +422,7 @@ class TAILSLOT extends StatelessWidget {
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(top: 4),
-                                          child: Text(formattedDate),
+                                          child: Text(NAME03date ?? ""),
                                         ),
                                       ),
                                     ],

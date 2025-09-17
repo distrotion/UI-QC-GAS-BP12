@@ -20,6 +20,7 @@ import '../../widget/common/Error_NO_Popup.dart';
 import '../../widget/common/Loading.dart';
 import '../../widget/common/Safty.dart';
 import '../../widget/common/imgset.dart';
+import '../../widget/common/popup.dart';
 import '../../widget/function/helper.dart';
 import '../P303QMMASTERQC/P303QMMASTERQCVAR.dart';
 import '../page303.dart';
@@ -72,6 +73,7 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
       ReportPDF3PICvar.PROCESS = _dataCOMMON.databasic.PROCESS;
       ReportPDF3PICvar.PARTNAME = _dataCOMMON.databasic.PARTNAME;
       ReportPDF3PICvar.PARTNO = _dataCOMMON.databasic.PARTNO;
+      ReportPDF3PICvar.PARTNO_s = _dataCOMMON.databasic.PARTNO_s;
       ReportPDF3PICvar.CUSLOT = _dataCOMMON.databasic.CUSLOT;
       ReportPDF3PICvar.TPKLOT = _dataCOMMON.databasic.TPKLOT;
       ReportPDF3PICvar.MATERIAL = _dataCOMMON.databasic.MATERIAL;
@@ -85,10 +87,12 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
 
       ReportPDF3PICvar.PIC01 = _dataCOMMON.databasic.PIC01;
       ReportPDF3PICvar.PIC02 = _dataCOMMON.databasic.PIC02;
+      ReportPDF3PICvar.PIC03 = _dataCOMMON.databasic.PIC03;
       ReportPDF3PICvar.PICstd = _dataCOMMON.databasic.PICstd;
 
       ReportPDF3PICvar.PASS = _dataCOMMON.databasic.PASS;
-      ReportPDF3PICvar.remark = '';
+      // ReportPDF3PICvar.remark = '';
+      ReportPDF3PICvar.remark = _dataCOMMON.databasic.remark;
       if (_dataCOMMON.databasic.PARTNAMEref != '') {
         ReportPDF3PICvar.remark =
             'Reference data from\n${_dataCOMMON.databasic.PARTNAMEref}\n${_dataCOMMON.databasic.PARTref}';
@@ -850,6 +854,7 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
       ReportPDF3PICvar.PROCESS = '';
       ReportPDF3PICvar.PARTNAME = '';
       ReportPDF3PICvar.PARTNO = '';
+      ReportPDF3PICvar.PARTNO_s = '';
       ReportPDF3PICvar.CUSLOT = '';
       ReportPDF3PICvar.TPKLOT = '';
       ReportPDF3PICvar.MATERIAL = '';
@@ -858,6 +863,7 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
       ReportPDF3PICvar.PICstd = '';
       ReportPDF3PICvar.PIC01 = '';
       ReportPDF3PICvar.PIC02 = '';
+      ReportPDF3PICvar.PIC03 = '';
 
       ReportPDF3PICvar.rawlistHardness = [];
       ReportPDF3PICvar.rawlistCompound = [];
@@ -1060,68 +1066,68 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
                 ),
               ),
               const Spacer(),
-              if (ReportPDF3PICvar.PASS == "PASSED") ...[
-                Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: InkWell(
-                    onTap: () {
-                      PDFloader(context);
-                      Future.delayed(const Duration(milliseconds: 1000), () {
+              // if (ReportPDF3PICvar.PASS == "PASSED") ...[
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: InkWell(
+                  onTap: () {
+                    PDFloader(context);
+                    Future.delayed(const Duration(milliseconds: 1000), () {
+                      // capture(
+                      captureToback(
                         // capture(
-                        captureToback(
-                          // capture(
-                          _globalKey,
-                          ReportPDF3PICvar.PO,
-                        ).then((value) {
-                          print(value);
+                        _globalKey,
+                        ReportPDF3PICvar.PO,
+                      ).then((value) {
+                        print(value);
 
-                          Navigator.pop(context);
-                        });
+                        Navigator.pop(context);
                       });
-                    },
-                    child: Container(
-                      color: Colors.yellow,
-                      height: 50,
-                      width: 100,
-                      child: const Center(
-                        child: Text("Print"),
-                      ),
+                    });
+                  },
+                  child: Container(
+                    color: Colors.yellow,
+                    height: 50,
+                    width: 100,
+                    child: const Center(
+                      child: Text("Print"),
                     ),
                   ),
                 ),
-              ] else ...[
-                if (USERDATA.UserLV > 5 &&
-                    _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
-                  Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: InkWell(
-                      onTap: () {
-                        PDFloader(context);
-                        Future.delayed(const Duration(milliseconds: 1000), () {
-                          // capture(
-                          captureToback(
-                            // capture(
-                            _globalKey,
-                            ReportPDF3PICvar.PO,
-                          ).then((value) {
-                            print(value);
+              ),
+              // ] else ...[
+              //   if (USERDATA.UserLV > 5 &&
+              //       _dataCOMMON.databasic.USER_STATUS == 'QCFN') ...[
+              //     Padding(
+              //       padding: const EdgeInsets.all(3.0),
+              //       child: InkWell(
+              //         onTap: () {
+              //           PDFloader(context);
+              //           Future.delayed(const Duration(milliseconds: 1000), () {
+              //             // capture(
+              //             captureToback(
+              //               // capture(
+              //               _globalKey,
+              //               ReportPDF3PICvar.PO,
+              //             ).then((value) {
+              //               print(value);
 
-                            Navigator.pop(context);
-                          });
-                        });
-                      },
-                      child: Container(
-                        color: Colors.yellow,
-                        height: 50,
-                        width: 100,
-                        child: const Center(
-                          child: Text("Print"),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]
-              ],
+              //               Navigator.pop(context);
+              //             });
+              //           });
+              //         },
+              //         child: Container(
+              //           color: Colors.yellow,
+              //           height: 50,
+              //           width: 100,
+              //           child: const Center(
+              //             child: Text("Print"),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ]
+              // ],
             ],
           ),
           Row(children: [
@@ -1262,7 +1268,12 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
                                     CUSTOMER: ReportPDF3PICvar.CUSTOMER,
                                     PROCESS: ReportPDF3PICvar.PROCESS,
                                     PARTNAME: ReportPDF3PICvar.PARTNAME,
-                                    PARTNO: ReportPDF3PICvar.PARTNO,
+                                    PARTNO: ReportPDF3PICvar.PARTNO
+                                            .contains("|")
+                                        ? ReportPDF3PICvar.PARTNO.split("|")[1]
+                                        : ReportPDF3PICvar.PARTNO == ''
+                                            ? ReportPDF3PICvar.PARTNO_s
+                                            : ReportPDF3PICvar.PARTNO,
                                     CUSLOT: ReportPDF3PICvar.CUSLOT,
                                     TPKLOT: ReportPDF3PICvar.TPKLOT,
                                     MATERIAL: ReportPDF3PICvar.MATERIAL,
@@ -3120,6 +3131,36 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
                                         _dataCOMMON.databasic.Inspected_sign,
                                     NAME02: _dataCOMMON.databasic.Check_sign,
                                     NAME03: _dataCOMMON.databasic.Approve_sign,
+                                    NAME01date: _dataCOMMON
+                                                .databasic.dateInspected !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateInspected)) *
+                                                    1))
+                                        : "",
+                                    NAME02date: _dataCOMMON
+                                                .databasic.dateCheck !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateCheck) *
+                                                    1)))
+                                        : "",
+                                    NAME03date: _dataCOMMON
+                                                .databasic.dateApprove !=
+                                            ''
+                                        ? DateFormat('dd/MM/yyyy').format(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(ConverstStr(
+                                                        _dataCOMMON.databasic
+                                                            .dateApprove) *
+                                                    1)))
+                                        : "",
                                   ),
                                 ],
                               ),
@@ -3137,24 +3178,35 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Inspected-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDF3PICvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(
-                                      ReportPDF3PICvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Inspected == '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Inspected-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDF3PICvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDF3PICvar.PO, "");
+                              });
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Inspected == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Inspected"),
                             ),
@@ -3167,24 +3219,44 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Check-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDF3PICvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(
-                                      ReportPDF3PICvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Check == '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Check-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDF3PICvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDF3PICvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Check == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Check"),
                             ),
@@ -3197,24 +3269,48 @@ class _ReportPDF3PICState extends State<ReportPDF3PIC> {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {
-                            Dio().post(
-                              GLOserver + "Approve-sign",
-                              data: {
-                                "ID": USERDATA.ID,
-                                "PO": ReportPDF3PICvar.PO,
-                              },
-                            ).then((v) {
-                              var databuff = v.data;
-                              context
-                                  .read<ReportPDFCommon_Cubit>()
-                                  .ReportPDFCommonCubit(
-                                      ReportPDF3PICvar.PO, "");
-                            });
+                            if (_dataCOMMON.databasic.Approve == '' &&
+                                _dataCOMMON.databasic.Check != '' &&
+                                _dataCOMMON.databasic.Inspected != '') {
+                              Dio().post(
+                                options: Options(
+                                  // contentType: "application/json",
+
+                                  headers: {
+                                    "server": "BP12-GAS",
+                                  },
+                                ),
+                                GLOserverMASTER + "Approve-sign",
+                                data: {
+                                  "ID": USERDATA.ID,
+                                  "PO": ReportPDF3PICvar.PO,
+                                },
+                              ).then((v) {
+                                var databuff = v.data;
+                                context
+                                    .read<ReportPDFCommon_Cubit>()
+                                    .ReportPDFCommonCubit(
+                                        ReportPDF3PICvar.PO, "");
+                              });
+                            } else {
+                              if (_dataCOMMON.databasic.Inspected == '') {
+                                WORNINGpop(
+                                    context,
+                                    ["", "Please Inspected first", ""],
+                                    60,
+                                    200);
+                              } else if (_dataCOMMON.databasic.Check == '') {
+                                WORNINGpop(context,
+                                    ["", "Please Check first", ""], 60, 200);
+                              }
+                            }
                           },
                           child: Container(
                             height: 40,
                             width: 80,
-                            color: Colors.blue,
+                            color: _dataCOMMON.databasic.Approve == ''
+                                ? Colors.blue
+                                : Colors.red,
                             child: Center(
                               child: Text("Approve"),
                             ),

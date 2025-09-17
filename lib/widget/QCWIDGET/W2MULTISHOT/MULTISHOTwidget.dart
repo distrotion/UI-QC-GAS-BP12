@@ -138,10 +138,13 @@ class MULTISHOTmain extends StatelessWidget {
                             height: 40,
                             color: Colors.blue,
                             child: const Center(
-                              child: Text("Surface",
-                                  style: TxtStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
+                              child: Text(
+                                "Compound",
+                                style: TxtStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -159,10 +162,13 @@ class MULTISHOTmain extends StatelessWidget {
                             height: 40,
                             color: Colors.blue,
                             child: const Center(
-                              child: Text("Compound",
-                                  style: TxtStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
+                              child: Text(
+                                "Surface",
+                                style: TxtStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -180,10 +186,13 @@ class MULTISHOTmain extends StatelessWidget {
                             height: 40,
                             color: Colors.blue,
                             child: const Center(
-                              child: Text("NEXT >",
-                                  style: TxtStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
+                              child: Text(
+                                "NEXT >",
+                                style: TxtStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -207,10 +216,13 @@ class MULTISHOTmain extends StatelessWidget {
                               height: 50,
                               color: Colors.green,
                               child: const Center(
-                                child: Text("FINISH",
-                                    style: TxtStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
+                                child: Text(
+                                  "FINISH",
+                                  style: TxtStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -236,8 +248,9 @@ class MULTISHOTmain extends StatelessWidget {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black),
                             color: Colors.grey,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(0)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(0),
+                            ),
                           ),
                           child: const Text(
                             "Value",
@@ -260,7 +273,7 @@ class MULTISHOTmain extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
       ],
       childTOP: [
         _topboxfull(
@@ -279,7 +292,7 @@ class MULTISHOTmain extends StatelessWidget {
           GAPname: GAPname,
           GAPnameList: GAPnameList,
           GAPnamePick: GAPnamePick,
-        )
+        ),
       ],
       childRIGHT: [
         Row(
@@ -296,10 +309,13 @@ class MULTISHOTmain extends StatelessWidget {
                     height: 40,
                     color: Colors.orange,
                     child: const Center(
-                      child: Text("CLEAR",
-                          style: TxtStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
+                      child: Text(
+                        "CLEAR",
+                        style: TxtStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -321,10 +337,13 @@ class MULTISHOTmain extends StatelessWidget {
                     height: 40,
                     color: Colors.blue,
                     child: const Center(
-                      child: Text("BACK PAGE",
-                          style: TxtStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
+                      child: Text(
+                        "BACK PAGE",
+                        style: TxtStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -346,10 +365,13 @@ class MULTISHOTmain extends StatelessWidget {
                     height: 40,
                     color: Colors.red,
                     child: const Center(
-                      child: Text("RESET VALUE",
-                          style: TxtStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
+                      child: Text(
+                        "RESET VALUE",
+                        style: TxtStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -383,9 +405,7 @@ class MULTISHOTmain extends StatelessWidget {
                 child: SizedBox(
                   height: 50,
                   child: SingleChildScrollView(
-                    child: _tabtableB2(
-                      value: ITEMleftUNIT ?? [INSDATA()],
-                    ),
+                    child: _tabtableB2(value: ITEMleftUNIT ?? [INSDATA()]),
                   ),
                 ),
               ),
@@ -402,12 +422,7 @@ class MULTISHOTmain extends StatelessWidget {
                   height: 25,
                   color: Colors.grey,
                   child: _tabtableB2(
-                    value: [
-                      INSDATA(
-                        V1: "ITEM",
-                        V2: "Values",
-                      ),
-                    ],
+                    value: [INSDATA(V1: "ITEM", V2: "Values")],
                   ),
                 ),
               ),
@@ -423,9 +438,8 @@ class MULTISHOTmain extends StatelessWidget {
                 child: SizedBox(
                   height: 100,
                   child: SingleChildScrollView(
-                      child: _tabtableB2(
-                    value: ITEMleftVALUE ?? [INSDATA()],
-                  )),
+                    child: _tabtableB2(value: ITEMleftVALUE ?? [INSDATA()]),
+                  ),
                 ),
               ),
             ),
@@ -443,9 +457,7 @@ class MULTISHOTmain extends StatelessWidget {
                     border: Border.all(color: Colors.black),
                     borderRadius: const BorderRadius.all(Radius.circular(0)),
                   ),
-                  child: PicShow(
-                    base64: PICB64 ?? "",
-                  ),
+                  child: PicShow(base64: PICB64 ?? ""),
                 ),
               ),
             ),
@@ -507,13 +519,9 @@ class __topboxfullState extends State<_topboxfull> {
                 height: 38,
                 width: 100,
                 color: Colors.blueGrey,
-                child: const Center(
-                  child: Text('FINAL'),
-                ),
+                child: const Center(child: Text('FINAL')),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               EasyDropDown(
                 borderRaio: 0,
                 imgpath: 'assets/icons/icon-down_4@3x.png',
@@ -528,24 +536,23 @@ class __topboxfullState extends State<_topboxfull> {
                 height: 38,
                 width: 200,
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               SizedBox(
                 height: 38,
                 width: 100,
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 1,
-                        child: Text(
-                          'POINTs',
-                          style: TxtStyle(
-                            color: Colors.black,
-                            // fontSize: 12
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
+                      flex: 1,
+                      child: Text(
+                        'POINTs',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 1, child: Text(widget.POINTs ?? '')),
                   ],
                 ),
@@ -563,53 +570,58 @@ class __topboxfullState extends State<_topboxfull> {
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 2,
-                        child: Text('PSC',
-                            style: TxtStyle(
-                              color: Colors.black,
-                              // fontSize: 12
-                              fontWeight: FontWeight.bold,
-                            ))),
+                      flex: 2,
+                      child: Text(
+                        'PSC',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 1, child: Text(widget.PCS ?? '')),
                   ],
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               SizedBox(
                 height: 38,
                 width: 125,
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 2,
-                        child: Text('PSC left',
-                            style: TxtStyle(
-                              color: Colors.black,
-                              // fontSize: 12
-                              fontWeight: FontWeight.bold,
-                            ))),
+                      flex: 2,
+                      child: Text(
+                        'PSC left',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 1, child: Text(widget.PCSleft ?? '')),
                   ],
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               SizedBox(
                 height: 38,
                 width: 125,
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 1,
-                        child: Text('UNIT',
-                            style: TxtStyle(
-                              color: Colors.black,
-                              // fontSize: 12
-                              fontWeight: FontWeight.bold,
-                            ))),
+                      flex: 1,
+                      child: Text(
+                        'UNIT',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 2, child: Text(widget.UNIT ?? '')),
                   ],
                 ),
@@ -645,53 +657,58 @@ class __topboxfullState extends State<_topboxfull> {
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 1,
-                        child: Text('FORMAT',
-                            style: TxtStyle(
-                              color: Colors.black,
-                              // fontSize: 12
-                              fontWeight: FontWeight.bold,
-                            ))),
+                      flex: 1,
+                      child: Text(
+                        'FORMAT',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 1, child: Text(widget.RESULTFORMAT ?? '')),
                   ],
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               SizedBox(
                 height: 38,
                 width: 100,
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 2,
-                        child: Text('Gh type',
-                            style: TxtStyle(
-                              color: Colors.black,
-                              // fontSize: 12
-                              fontWeight: FontWeight.bold,
-                            ))),
+                      flex: 2,
+                      child: Text(
+                        'Gh type',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 1, child: Text(widget.Ghtype ?? '')),
                   ],
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               SizedBox(
                 height: 38,
                 width: 125,
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 2,
-                        child: Text('Intersec @',
-                            style: TxtStyle(
-                              color: Colors.black,
-                              // fontSize: 12
-                              fontWeight: FontWeight.bold,
-                            ))),
+                      flex: 2,
+                      child: Text(
+                        'Intersec @',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 1, child: Text(widget.INTERSEC ?? '')),
                   ],
                 ),
@@ -702,13 +719,16 @@ class __topboxfullState extends State<_topboxfull> {
                 child: Row(
                   children: [
                     const Expanded(
-                        flex: 1,
-                        child: Text('GAP',
-                            style: TxtStyle(
-                              color: Colors.black,
-                              // fontSize: 12
-                              fontWeight: FontWeight.bold,
-                            ))),
+                      flex: 1,
+                      child: Text(
+                        'GAP',
+                        style: TxtStyle(
+                          color: Colors.black,
+                          // fontSize: 12
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Expanded(flex: 1, child: Text(widget.GAP ?? '')),
                   ],
                 ),
@@ -722,13 +742,8 @@ class __topboxfullState extends State<_topboxfull> {
 }
 
 class _tabtableB2 extends StatelessWidget {
-  _tabtableB2({
-    Key? key,
-    this.value,
-    this.txtsize,
-    this.txtcolor,
-    this.height,
-  }) : super(key: key);
+  _tabtableB2({Key? key, this.value, this.txtsize, this.txtcolor, this.height})
+    : super(key: key);
   List<INSDATA>? value;
   double? txtsize;
   Color? txtcolor;
@@ -755,10 +770,10 @@ class _tabtableB2 extends StatelessWidget {
                       child: Text(
                         value?[i].V1 ?? '',
                         style: TxtStyle(
-                            color: txtcolor ?? Colors.black,
-                            fontSize: txtsize ?? 12
-                            // fontWeight: FontWeight.bold,
-                            ),
+                          color: txtcolor ?? Colors.black,
+                          fontSize: txtsize ?? 12,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -775,10 +790,10 @@ class _tabtableB2 extends StatelessWidget {
                       child: Text(
                         value?[i].V2 ?? '',
                         style: TxtStyle(
-                            color: txtcolor ?? Colors.black,
-                            fontSize: txtsize ?? 12
-                            // fontWeight: FontWeight.bold,
-                            ),
+                          color: txtcolor ?? Colors.black,
+                          fontSize: txtsize ?? 12,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -792,13 +807,8 @@ class _tabtableB2 extends StatelessWidget {
 }
 
 class _tabtableB3 extends StatelessWidget {
-  _tabtableB3({
-    Key? key,
-    this.value,
-    this.txtsize,
-    this.txtcolor,
-    this.height,
-  }) : super(key: key);
+  _tabtableB3({Key? key, this.value, this.txtsize, this.txtcolor, this.height})
+    : super(key: key);
   List<INSDATA>? value;
   double? txtsize;
   Color? txtcolor;
@@ -825,10 +835,10 @@ class _tabtableB3 extends StatelessWidget {
                       child: Text(
                         value?[i].V5 ?? '',
                         style: TxtStyle(
-                            color: txtcolor ?? Colors.black,
-                            fontSize: txtsize ?? 12
-                            // fontWeight: FontWeight.bold,
-                            ),
+                          color: txtcolor ?? Colors.black,
+                          fontSize: txtsize ?? 12,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -845,10 +855,10 @@ class _tabtableB3 extends StatelessWidget {
                       child: Text(
                         value?[i].V1 ?? '',
                         style: TxtStyle(
-                            color: txtcolor ?? Colors.black,
-                            fontSize: txtsize ?? 12
-                            // fontWeight: FontWeight.bold,
-                            ),
+                          color: txtcolor ?? Colors.black,
+                          fontSize: txtsize ?? 12,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -865,10 +875,10 @@ class _tabtableB3 extends StatelessWidget {
                       child: Text(
                         value?[i].V2 ?? '',
                         style: TxtStyle(
-                            color: txtcolor ?? Colors.black,
-                            fontSize: txtsize ?? 12
-                            // fontWeight: FontWeight.bold,
-                            ),
+                          color: txtcolor ?? Colors.black,
+                          fontSize: txtsize ?? 12,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -885,10 +895,10 @@ class _tabtableB3 extends StatelessWidget {
                       child: Text(
                         value?[i].V3 ?? '',
                         style: TxtStyle(
-                            color: txtcolor ?? Colors.black,
-                            fontSize: txtsize ?? 12
-                            // fontWeight: FontWeight.bold,
-                            ),
+                          color: txtcolor ?? Colors.black,
+                          fontSize: txtsize ?? 12,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -905,10 +915,10 @@ class _tabtableB3 extends StatelessWidget {
                       child: Text(
                         value?[i].V4 ?? '',
                         style: TxtStyle(
-                            color: txtcolor ?? Colors.black,
-                            fontSize: txtsize ?? 12
-                            // fontWeight: FontWeight.bold,
-                            ),
+                          color: txtcolor ?? Colors.black,
+                          fontSize: txtsize ?? 12,
+                          // fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

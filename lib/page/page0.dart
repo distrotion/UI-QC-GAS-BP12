@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qc_ui_isn_hes/page/page30.dart';
 
 import '../bloc/BlocEvent/ChangePageEvent.dart';
 import '../data/datapattern.dart';
@@ -23,6 +24,8 @@ import 'page32.dart';
 import 'page33.dart';
 import 'page34.dart';
 import 'page35.dart';
+import 'page36.dart';
+import 'page37.dart';
 
 bool isChecked = false;
 
