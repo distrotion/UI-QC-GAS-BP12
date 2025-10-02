@@ -23,6 +23,10 @@ class TRICKERMASTER_GETINtoGASOHR001 extends TRICKERMASTER_Event {}
 
 class TRICKERMASTER_GETINtoRefgraph extends TRICKERMASTER_Event {}
 
+class TRICKERMASTER_GETINtoTotalNitriding extends TRICKERMASTER_Event {}
+
+//
+
 //
 
 class TRICKERMASTER_GETINtoGASMCS002 extends TRICKERMASTER_Event {}
@@ -67,6 +71,10 @@ class TRICKERMASTER_Bloc extends Bloc<TRICKERMASTER_Event, String> {
 
     on<TRICKERMASTER_GETINtoRefgraph>((event, emit) {
       return _TRICKERMASTER_GETINtoRefgraph('', emit);
+    });
+    //
+    on<TRICKERMASTER_GETINtoTotalNitriding>((event, emit) {
+      return _TRICKERMASTER_GETINtoTotalNitriding('', emit);
     });
 
     on<TRICKERMASTER_FLUSH>((event, emit) {
@@ -274,11 +282,37 @@ class TRICKERMASTER_Bloc extends Bloc<TRICKERMASTER_Event, String> {
     }
     emit(output);
   }
+  //TRICKERMASTER_GETINtoTotalNitriding
 
   Future<void> _TRICKERMASTER_GETINtoRefgraph(
       String toAdd, Emitter<String> emit) async {
     final response = await Dio().post(
       server + 'GETINtoRefgraph',
+      data: {
+        "PO": FIRSTUI.POACTIVE,
+        "CP": FIRSTUI.CPACTIVE,
+        "USER": USERDATA.NAME,
+        "USERID": USERDATA.ID,
+      },
+    );
+    String output = '';
+    if (response.statusCode == 200) {
+      var databuff = response.data;
+      if (databuff.toString() == 'OK') {
+        output = 'OK';
+      } else {
+        output = 'NOK';
+      }
+    } else {
+      //
+    }
+    emit(output);
+  }
+
+  Future<void> _TRICKERMASTER_GETINtoTotalNitriding(
+      String toAdd, Emitter<String> emit) async {
+    final response = await Dio().post(
+      server + 'GETINtoTotalNitriding',
       data: {
         "PO": FIRSTUI.POACTIVE,
         "CP": FIRSTUI.CPACTIVE,
