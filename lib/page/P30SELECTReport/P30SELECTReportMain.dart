@@ -36,6 +36,7 @@ import '../page35.dart';
 import '../page36.dart';
 import '../page37.dart';
 import '../page40.dart';
+import '../page41.dart';
 import '../page50.dart';
 import 'P30SELECTReportvar.dart';
 
@@ -128,6 +129,8 @@ class _SELECTReportState extends State<SELECTReport> {
         return Page31();
       } else if (_dataCommon.databasic.reportset == 'REPORT4GP') {
         return Page40();
+      } else if (_dataCommon.databasic.reportset == 'REPORT-STD-ALL') {
+        return Page41();
       } else if (_dataCommon.databasic.reportset == 'COMMON1') {
         return Page50();
       } else {
