@@ -139,306 +139,308 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                   .contains('HARDNESS') &&
               _dataCOMMON.datain[i].ITEMname.toUpperCase().contains('CORE') ==
                   false) {
-            for (var li = 0;
-                li < _dataCOMMON.datain[i].datapackset.length;
-                li++) {
-              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+            if (_dataCOMMON.datain[i].SRAWDATA != 'NO') {
+              for (var li = 0;
+                  li < _dataCOMMON.datain[i].datapackset.length;
+                  li++) {
+                // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
 
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '1',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
-                ));
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '1',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '2',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '3',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '4',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '5',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '6',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '7',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '8',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '9',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '10',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '11',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '12',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '13',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '14',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '15',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '16',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '17',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '18',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '19',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+                  ReportPDFwmvar.rawlistHardness.add(rawlist(
+                    DATANO: HardnessNO.toString(),
+                    DATAPCS: '20',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+                  ));
+                }
+                HardnessNO++;
+                // print('>>${HardnessNO}');
               }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '2',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '3',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '4',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '5',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '6',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '7',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '8',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '9',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '10',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '11',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '12',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '13',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '14',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '15',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '16',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '17',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '18',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '19',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
-                ReportPDFwmvar.rawlistHardness.add(rawlist(
-                  DATANO: HardnessNO.toString(),
-                  DATAPCS: '20',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
-                ));
-              }
-              HardnessNO++;
-              // print('>>${HardnessNO}');
-            }
-          } else if (_dataCOMMON.datain[i].ITEMname
-              .toUpperCase()
-              .contains('CORE')) {
-            for (var li = 0;
-                li < _dataCOMMON.datain[i].datapackset.length;
-                li++) {
-              // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
+            } else if (_dataCOMMON.datain[i].ITEMname
+                .toUpperCase()
+                .contains('CORE')) {
+              for (var li = 0;
+                  li < _dataCOMMON.datain[i].datapackset.length;
+                  li++) {
+                // print(_dataCOMMON.datain[i].datapackset[li].dimensionX);
 
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '1',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
-                ));
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX == 0) {}
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 1) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '1',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA01,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '2',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '3',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '4',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '5',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '6',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '7',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '8',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '9',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '10',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '11',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '12',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '13',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '14',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '15',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '16',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '17',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '18',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '19',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
+                  ));
+                }
+                if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
+                  ReportPDFwmvar.rawlistCORE.add(rawlist(
+                    DATANO: CoreNO.toString(),
+                    DATAPCS: '20',
+                    DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
+                  ));
+                }
+                CoreNO++;
+                // print('>>${CoreNO}');
               }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 2) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '2',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA02,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 3) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '3',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA03,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 4) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '4',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA04,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 5) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '5',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA05,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 6) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '6',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA06,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 7) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '7',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA07,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 8) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '8',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA08,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 9) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '9',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA09,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 10) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '10',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA10,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 11) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '11',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA11,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 12) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '12',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA12,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 13) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '13',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA13,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 14) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '14',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA14,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 15) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '15',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA15,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 16) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '16',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA16,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 17) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '17',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA17,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 18) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '18',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA18,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 19) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '19',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA19,
-                ));
-              }
-              if (_dataCOMMON.datain[i].datapackset[li].dimensionX >= 20) {
-                ReportPDFwmvar.rawlistCORE.add(rawlist(
-                  DATANO: CoreNO.toString(),
-                  DATAPCS: '20',
-                  DATA: _dataCOMMON.datain[i].datapackset[li].DATA20,
-                ));
-              }
-              CoreNO++;
-              // print('>>${CoreNO}');
             }
           }
           //  CoreNO++;
@@ -1147,6 +1149,7 @@ class _ReportPDFwmState extends State<ReportPDFwm> {
                   P303QMMASTERQCVAR.day = DateFormat('dd').format(now);
                   P303QMMASTERQCVAR.month = DateFormat('MM').format(now);
                   P303QMMASTERQCVAR.year = DateFormat('yyyy').format(now);
+                  P303QMMASTERQCVAR.BATCH = _dataCOMMON.databasic.TPKLOT;
                   STDreport2(context);
                 },
                 child: Container(

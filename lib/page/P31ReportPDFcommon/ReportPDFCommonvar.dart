@@ -53,6 +53,8 @@ class ReportPDFCommonvar {
 
   static String GTC = '';
 
+  static String BATCH = '';
+
   static List<ReportPDFCommonlist> datalist = [
     ReportPDFCommonlist(),
     ReportPDFCommonlist(),

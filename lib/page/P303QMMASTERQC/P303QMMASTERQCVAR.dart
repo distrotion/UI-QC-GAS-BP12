@@ -26,6 +26,8 @@ class P303QMMASTERQCVAR {
   // static SELECTED_SETHSclass iSELECTEDSETset = SELECTED_SETHSclass();
   static List<UDCODEclass> UDCODEdata = [];
 
+  static String BATCH = '';
+
   static String DATASUM = '';
 
   static String TO_ALL = '';

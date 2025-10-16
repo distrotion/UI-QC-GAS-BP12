@@ -2373,6 +2373,7 @@ class _ReportPDF4GPState extends State<ReportPDF4GP> {
                   P303QMMASTERQCVAR.day = DateFormat('dd').format(now);
                   P303QMMASTERQCVAR.month = DateFormat('MM').format(now);
                   P303QMMASTERQCVAR.year = DateFormat('yyyy').format(now);
+                  P303QMMASTERQCVAR.BATCH = _dataCOMMON.databasic.TPKLOT;
                   STDreport2(context);
                 },
                 child: Container(

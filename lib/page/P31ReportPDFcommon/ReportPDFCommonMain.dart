@@ -1163,6 +1163,8 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                   P303QMMASTERQCVAR.day = DateFormat('dd').format(now);
                   P303QMMASTERQCVAR.month = DateFormat('MM').format(now);
                   P303QMMASTERQCVAR.year = DateFormat('yyyy').format(now);
+
+                  P303QMMASTERQCVAR.BATCH = _dataCOMMON.databasic.TPKLOT;
                   STDreport2(context);
                 },
                 child: Container(
@@ -2512,7 +2514,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          16
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[15]
                                                           .DATANO
@@ -2528,7 +2530,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          17
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[16]
                                                           .DATANO
@@ -2544,7 +2546,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          18
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[17]
                                                           .DATANO
@@ -2560,7 +2562,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          19
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[18]
                                                           .DATANO
@@ -2828,7 +2830,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          16
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[15]
                                                           .DATAPCS
@@ -2844,7 +2846,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          17
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[16]
                                                           .DATAPCS
@@ -2860,7 +2862,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          18
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[17]
                                                           .DATAPCS
@@ -2876,7 +2878,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          19
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[18]
                                                           .DATAPCS
@@ -3144,7 +3146,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          16
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[15]
                                                           .DATA
@@ -3160,7 +3162,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          17
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[16]
                                                           .DATA
@@ -3176,7 +3178,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          18
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[17]
                                                           .DATA
@@ -3192,7 +3194,7 @@ class _ReportPDFCommonState extends State<ReportPDFCommon> {
                                                   ReportPDFCommonvar
                                                               .rawlistHardness
                                                               .length >=
-                                                          15
+                                                          19
                                                       ? ReportPDFCommonvar
                                                           .rawlistHardness[18]
                                                           .DATA

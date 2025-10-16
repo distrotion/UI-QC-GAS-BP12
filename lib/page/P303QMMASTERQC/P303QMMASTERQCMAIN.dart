@@ -27,10 +27,7 @@ late BuildContext P303QMMASTERQCMAINcontext;
 late BuildContext P303QMMASTERQCMAINcontextpop1;
 
 class P303QMMASTERQCMAIN extends StatefulWidget {
-  P303QMMASTERQCMAIN({
-    super.key,
-    this.data,
-  });
+  P303QMMASTERQCMAIN({super.key, this.data});
   List<P303QMMASTERQCgetclass>? data;
 
   @override
@@ -59,7 +56,7 @@ class _P303QMMASTERQCMAINState extends State<P303QMMASTERQCMAIN> {
     // P303QMMASTERQCVAR.month_next = "04";
     // P303QMMASTERQCVAR.year_next = "2025";
 
-    P303QMMASTERQCVAR.PLANT = "2300";
+    P303QMMASTERQCVAR.PLANT = "2100";
     P303QMMASTERQCVAR.LOT_ORI = "03";
 
     P303QMMASTERQCVAR.iscontrol = true;
@@ -119,7 +116,7 @@ class _P303QMMASTERQCMAINState extends State<P303QMMASTERQCMAIN> {
                       shaderCallback: (bounds) => LinearGradient(
                         colors: const [
                           Colors.blueAccent,
-                          Colors.lightBlueAccent
+                          Colors.lightBlueAccent,
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -177,9 +174,10 @@ class _P303QMMASTERQCMAINState extends State<P303QMMASTERQCMAIN> {
                       child: Text(
                         "บริษัท ไทยปาร์คเกอร์ไรซิ่ง จำกัด",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.white),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -198,7 +196,9 @@ class _P303QMMASTERQCMAINState extends State<P303QMMASTERQCMAIN> {
                       child: Text(
                         "Incoming Table",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -206,17 +206,20 @@ class _P303QMMASTERQCMAINState extends State<P303QMMASTERQCMAIN> {
                     onTap: () {
                       DateTime calendaset = DateTime.now();
                       //
-                      CalendaSelectDates(context, calendaset,
-                          (day, month, year) {
+                      CalendaSelectDates(context, calendaset, (
+                        day,
+                        month,
+                        year,
+                      ) {
                         //
                         P303QMMASTERQCVAR.day = day;
                         P303QMMASTERQCVAR.month = month;
                         P303QMMASTERQCVAR.year = year;
 
                         setState(() {});
-                        context
-                            .read<P303QMMASTERQCget_Bloc>()
-                            .add(P303QMMASTERQCget_GET());
+                        context.read<P303QMMASTERQCget_Bloc>().add(
+                              P303QMMASTERQCget_GET(),
+                            );
                       });
                     },
                     child: Container(
@@ -245,17 +248,20 @@ class _P303QMMASTERQCMAINState extends State<P303QMMASTERQCMAIN> {
                     onTap: () {
                       DateTime calendaset = DateTime.now();
                       //
-                      CalendaSelectDates(context, calendaset,
-                          (day, month, year) {
+                      CalendaSelectDates(context, calendaset, (
+                        day,
+                        month,
+                        year,
+                      ) {
                         //
                         P303QMMASTERQCVAR.day_next = day;
                         P303QMMASTERQCVAR.month_next = month;
                         P303QMMASTERQCVAR.year_next = year;
 
                         setState(() {});
-                        context
-                            .read<P303QMMASTERQCget_Bloc>()
-                            .add(P303QMMASTERQCget_GET());
+                        context.read<P303QMMASTERQCget_Bloc>().add(
+                              P303QMMASTERQCget_GET(),
+                            );
                       });
                     },
                     child: Container(
@@ -273,7 +279,9 @@ class _P303QMMASTERQCMAINState extends State<P303QMMASTERQCMAIN> {
                         child: Text(
                           "ถึงวันที่ : ${P303QMMASTERQCVAR.day_next}-${P303QMMASTERQCVAR.month_next}-${P303QMMASTERQCVAR.year_next}",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.black),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -387,38 +395,30 @@ void _QMI003POP(BuildContext contextin) {
     context: contextin,
     barrierDismissible: true,
     builder: (BuildContext context) {
-      return Dialog(
-        child: QMI003POPBloc(),
-      );
+      return Dialog(child: QMI003POPBloc());
     },
   );
 }
 
 class QMI003POPBloc extends StatelessWidget {
-  QMI003POPBloc({
-    Key? key,
-  }) : super(key: key);
+  QMI003POPBloc({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => P303QMMASTERQCgetINSP_SPEC_Bloc(),
-        child: BlocBuilder<P303QMMASTERQCgetINSP_SPEC_Bloc,
-            P303QMMASTERQCgetINSP_SPECclassSET>(
-          builder: (context, data) {
-            return NEWNEWREQUEST(
-              datain: data,
-            );
-          },
-        ));
+      create: (_) => P303QMMASTERQCgetINSP_SPEC_Bloc(),
+      child: BlocBuilder<P303QMMASTERQCgetINSP_SPEC_Bloc,
+          P303QMMASTERQCgetINSP_SPECclassSET>(
+        builder: (context, data) {
+          return NEWNEWREQUEST(datain: data);
+        },
+      ),
+    );
   }
 }
 
 class NEWNEWREQUEST extends StatefulWidget {
-  NEWNEWREQUEST({
-    super.key,
-    this.datain,
-  });
+  NEWNEWREQUEST({super.key, this.datain});
   P303QMMASTERQCgetINSP_SPECclassSET? datain;
   @override
   State<NEWNEWREQUEST> createState() => _NEWNEWREQUESTState();
@@ -429,9 +429,9 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context
-        .read<P303QMMASTERQCgetINSP_SPEC_Bloc>()
-        .add(P303QMMASTERQCgetINSP_SPEC_GET());
+    context.read<P303QMMASTERQCgetINSP_SPEC_Bloc>().add(
+          P303QMMASTERQCgetINSP_SPEC_GET(),
+        );
   }
 
   @override
@@ -444,41 +444,43 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
           UDCODE: [],
         );
 
-//INSP_LOT
+    //INSP_LOT
     if (P303QMMASTERQCVAR.INSP_SPECdata.length == 0) {
       for (var i = 0; i < _datain.INSP_SPEC.length; i++) {
         //
         if (P303QMMASTERQCVAR.INSP_LOTset == _datain.INSP_SPEC[i].INSP_LOT) {
-          P303QMMASTERQCVAR.INSP_SPECdata.add(PINSP_SPECHSclass(
-            INSP_LOT: _datain.INSP_SPEC[i].INSP_LOT,
-            NODE: _datain.INSP_SPEC[i].NODE,
-            INSP_CHAR: _datain.INSP_SPEC[i].INSP_CHAR,
-            INSP_STATUS: _datain.INSP_SPEC[i].INSP_STATUS,
-            CONTROL_IND: _datain.INSP_SPEC[i].CONTROL_IND,
-            CHAR_TYPE: _datain.INSP_SPEC[i].CHAR_TYPE,
-            REC_TYPE: _datain.INSP_SPEC[i].REC_TYPE,
-            MIC_PLANT: _datain.INSP_SPEC[i].MIC_PLANT,
-            MIC: _datain.INSP_SPEC[i].MIC,
-            MIC_VERSION: _datain.INSP_SPEC[i].MIC_VERSION,
-            MIC_SHORTTEXT: _datain.INSP_SPEC[i].MIC_SHORTTEXT,
-            METHOD_PLANT: _datain.INSP_SPEC[i].METHOD_PLANT,
-            METHOD: _datain.INSP_SPEC[i].METHOD,
-            METHOD_VERSION: _datain.INSP_SPEC[i].METHOD_VERSION,
-            SELECTEDSET_IND: _datain.INSP_SPEC[i].SELECTEDSET_IND,
-            CATALOGTYPE: _datain.INSP_SPEC[i].CATALOGTYPE,
-            SLECTEDSET: _datain.INSP_SPEC[i].SLECTEDSET,
-            SELECTEDSET_PLANT: _datain.INSP_SPEC[i].SELECTEDSET_PLANT,
-            DECIMAL: _datain.INSP_SPEC[i].DECIMAL,
-            UOM: _datain.INSP_SPEC[i].UOM,
-            UPPER: _datain.INSP_SPEC[i].UPPER,
-            UPPER_IND: _datain.INSP_SPEC[i].UPPER_IND,
-            LOWER: _datain.INSP_SPEC[i].LOWER,
-            LOWER_IND: _datain.INSP_SPEC[i].LOWER_IND,
-            STUPPER: _datain.INSP_SPEC[i].STUPPER,
-            STUPPER_IND: _datain.INSP_SPEC[i].STUPPER_IND,
-            STLOWER: _datain.INSP_SPEC[i].STLOWER,
-            STLOWER_IND: _datain.INSP_SPEC[i].STLOWER_IND,
-          ));
+          P303QMMASTERQCVAR.INSP_SPECdata.add(
+            PINSP_SPECHSclass(
+              INSP_LOT: _datain.INSP_SPEC[i].INSP_LOT,
+              NODE: _datain.INSP_SPEC[i].NODE,
+              INSP_CHAR: _datain.INSP_SPEC[i].INSP_CHAR,
+              INSP_STATUS: _datain.INSP_SPEC[i].INSP_STATUS,
+              CONTROL_IND: _datain.INSP_SPEC[i].CONTROL_IND,
+              CHAR_TYPE: _datain.INSP_SPEC[i].CHAR_TYPE,
+              REC_TYPE: _datain.INSP_SPEC[i].REC_TYPE,
+              MIC_PLANT: _datain.INSP_SPEC[i].MIC_PLANT,
+              MIC: _datain.INSP_SPEC[i].MIC,
+              MIC_VERSION: _datain.INSP_SPEC[i].MIC_VERSION,
+              MIC_SHORTTEXT: _datain.INSP_SPEC[i].MIC_SHORTTEXT,
+              METHOD_PLANT: _datain.INSP_SPEC[i].METHOD_PLANT,
+              METHOD: _datain.INSP_SPEC[i].METHOD,
+              METHOD_VERSION: _datain.INSP_SPEC[i].METHOD_VERSION,
+              SELECTEDSET_IND: _datain.INSP_SPEC[i].SELECTEDSET_IND,
+              CATALOGTYPE: _datain.INSP_SPEC[i].CATALOGTYPE,
+              SLECTEDSET: _datain.INSP_SPEC[i].SLECTEDSET,
+              SELECTEDSET_PLANT: _datain.INSP_SPEC[i].SELECTEDSET_PLANT,
+              DECIMAL: _datain.INSP_SPEC[i].DECIMAL,
+              UOM: _datain.INSP_SPEC[i].UOM,
+              UPPER: _datain.INSP_SPEC[i].UPPER,
+              UPPER_IND: _datain.INSP_SPEC[i].UPPER_IND,
+              LOWER: _datain.INSP_SPEC[i].LOWER,
+              LOWER_IND: _datain.INSP_SPEC[i].LOWER_IND,
+              STUPPER: _datain.INSP_SPEC[i].STUPPER,
+              STUPPER_IND: _datain.INSP_SPEC[i].STUPPER_IND,
+              STLOWER: _datain.INSP_SPEC[i].STLOWER,
+              STLOWER_IND: _datain.INSP_SPEC[i].STLOWER_IND,
+            ),
+          );
         }
       }
     }
@@ -491,17 +493,11 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 24),
               const SizedBox(
-                height: 24,
+                child: Center(child: Text("Quality control management")),
               ),
-              const SizedBox(
-                child: Center(
-                  child: Text("Quality control management"),
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
+              const SizedBox(height: 24),
 
               SingleChildScrollView(
                 child: Container(
@@ -583,30 +579,38 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                   color: Colors.yellow,
                                   height: 50,
                                   width: 100,
-                                  child: const Center(
-                                    child: Text("QCFN ONLY"),
-                                  ),
+                                  child: const Center(child: Text("QCFN ONLY")),
                                 ),
                               ),
                             ),
                             for (int i = 0; i < _datain.UDCODE.length; i++) ...[
                               if (int.parse(
-                                      ConverstStr(P303QMMASTERQCVAR.TO_ALL)) ==
-                                  int.parse(ConverstStr(
-                                      P303QMMASTERQCVAR.TO_BL))) ...[
+                                    ConverstStr(P303QMMASTERQCVAR.TO_ALL),
+                                  ) ==
+                                  int.parse(
+                                    ConverstStr(P303QMMASTERQCVAR.TO_BL),
+                                  )) ...[
                                 if (_datain.UDCODE[i].CODE == 'R1' ||
                                     _datain.UDCODE[i].CODE == 'R2') ...[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
-                                        if (int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_ALL)) ==
-                                            (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR.TO_UR))) +
-                                                (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR
-                                                        .TO_BL)))) {
+                                        if (int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_ALL,
+                                              ),
+                                            ) ==
+                                            (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_UR,
+                                                  ),
+                                                )) +
+                                                (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_BL,
+                                                  ),
+                                                ))) {
                                           Map<String, Map<String, String>>
                                               output = {
                                             "UD": {
@@ -619,7 +623,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE": _datain.UDCODE[i].CODE,
                                               "TO_UR": "",
                                               "TO_BLOCKED": "",
-                                              "TO_RETURN": ""
+                                              "TO_RETURN": "",
                                             },
                                             "UDTEMPSAVE": {
                                               "GOOD": P303QMMASTERQCVAR.TO_UR,
@@ -631,7 +635,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE_GROUP":
                                                   _datain.UDCODE[i].CODEGROUP,
                                               "UD_CODE": _datain.UDCODE[i].CODE,
-                                            }
+                                            },
                                           };
 
                                           Dio()
@@ -653,12 +657,14 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                                         .toString() ==
                                                     'E') {
                                                   showErrorPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 } else {
                                                   showGoodPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 }
                                               }
                                             }
@@ -702,10 +708,11 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                         } else {
                                           //
                                           WORNINGpop(
-                                              context,
-                                              ["", "QTY is not same"],
-                                              120,
-                                              200);
+                                            context,
+                                            ["", "QTY is not same"],
+                                            120,
+                                            200,
+                                          );
                                         }
                                       },
                                       child: Container(
@@ -723,21 +730,31 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                 ],
                               ] else ...[
                                 if (_datain.UDCODE[i].CODE == 'A1' &&
-                                    int.parse(ConverstStr(
-                                            P303QMMASTERQCVAR.TO_ALL)) ==
-                                        int.parse(ConverstStr(
-                                            P303QMMASTERQCVAR.TO_UR))) ...[
+                                    int.parse(
+                                          ConverstStr(P303QMMASTERQCVAR.TO_ALL),
+                                        ) ==
+                                        int.parse(
+                                          ConverstStr(P303QMMASTERQCVAR.TO_UR),
+                                        )) ...[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
-                                        if (int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_ALL)) ==
-                                            (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR.TO_UR))) +
-                                                (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR
-                                                        .TO_BL)))) {
+                                        if (int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_ALL,
+                                              ),
+                                            ) ==
+                                            (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_UR,
+                                                  ),
+                                                )) +
+                                                (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_BL,
+                                                  ),
+                                                ))) {
                                           Map<String, Map<String, String>>
                                               output = {
                                             "UD": {
@@ -750,7 +767,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE": _datain.UDCODE[i].CODE,
                                               "TO_UR": "",
                                               "TO_BLOCKED": "",
-                                              "TO_RETURN": ""
+                                              "TO_RETURN": "",
                                             },
                                             "UDTEMPSAVE": {
                                               "GOOD": P303QMMASTERQCVAR.TO_UR,
@@ -762,7 +779,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE_GROUP":
                                                   _datain.UDCODE[i].CODEGROUP,
                                               "UD_CODE": _datain.UDCODE[i].CODE,
-                                            }
+                                            },
                                           };
 
                                           Dio()
@@ -785,12 +802,14 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                                         .toString() ==
                                                     'E') {
                                                   showErrorPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 } else {
                                                   showGoodPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 }
                                               }
                                             }
@@ -835,10 +854,11 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                         } else {
                                           //
                                           WORNINGpop(
-                                              context,
-                                              ["", "QTY is not same"],
-                                              120,
-                                              200);
+                                            context,
+                                            ["", "QTY is not same"],
+                                            120,
+                                            200,
+                                          );
                                         }
                                       },
                                       child: Container(
@@ -855,26 +875,45 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                   ),
                                 ],
                                 if (_datain.UDCODE[i].CODE == 'A5' &&
-                                    (int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_ALL)) !=
-                                            int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_UR)) ||
-                                        (int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_ALL)) !=
-                                            int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR
-                                                    .TO_BL))))) ...[
+                                    (int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_ALL,
+                                              ),
+                                            ) !=
+                                            int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_UR,
+                                              ),
+                                            ) ||
+                                        (int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_ALL,
+                                              ),
+                                            ) !=
+                                            int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_BL,
+                                              ),
+                                            )))) ...[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
-                                        if (int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_ALL)) ==
-                                            (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR.TO_UR))) +
-                                                (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR
-                                                        .TO_BL)))) {
+                                        if (int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_ALL,
+                                              ),
+                                            ) ==
+                                            (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_UR,
+                                                  ),
+                                                )) +
+                                                (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_BL,
+                                                  ),
+                                                ))) {
                                           Map<String, Map<String, String>>
                                               output = {
                                             "UD": {
@@ -887,7 +926,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE": _datain.UDCODE[i].CODE,
                                               "TO_UR": "",
                                               "TO_BLOCKED": "",
-                                              "TO_RETURN": ""
+                                              "TO_RETURN": "",
                                             },
                                             "UDTEMPSAVE": {
                                               "GOOD": P303QMMASTERQCVAR.TO_UR,
@@ -899,7 +938,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE_GROUP":
                                                   _datain.UDCODE[i].CODEGROUP,
                                               "UD_CODE": _datain.UDCODE[i].CODE,
-                                            }
+                                            },
                                           };
 
                                           Dio()
@@ -922,12 +961,14 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                                         .toString() ==
                                                     'E') {
                                                   showErrorPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 } else {
                                                   showGoodPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 }
                                               }
                                             }
@@ -971,10 +1012,11 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                         } else {
                                           //
                                           WORNINGpop(
-                                              context,
-                                              ["", "QTY is not same"],
-                                              120,
-                                              200);
+                                            context,
+                                            ["", "QTY is not same"],
+                                            120,
+                                            200,
+                                          );
                                         }
                                       },
                                       child: Container(
@@ -991,21 +1033,31 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                   ),
                                 ],
                                 if (_datain.UDCODE[i].CODE == 'R2' &&
-                                    (int.parse(ConverstStr(
-                                            P303QMMASTERQCVAR.TO_ALL)) !=
-                                        int.parse(ConverstStr(
-                                            P303QMMASTERQCVAR.TO_UR)))) ...[
+                                    (int.parse(
+                                          ConverstStr(P303QMMASTERQCVAR.TO_ALL),
+                                        ) !=
+                                        int.parse(
+                                          ConverstStr(P303QMMASTERQCVAR.TO_UR),
+                                        ))) ...[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
-                                        if (int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_ALL)) ==
-                                            (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR.TO_UR))) +
-                                                (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR
-                                                        .TO_BL)))) {
+                                        if (int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_ALL,
+                                              ),
+                                            ) ==
+                                            (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_UR,
+                                                  ),
+                                                )) +
+                                                (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_BL,
+                                                  ),
+                                                ))) {
                                           Map<String, Map<String, String>>
                                               output = {
                                             "UD": {
@@ -1018,7 +1070,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE": _datain.UDCODE[i].CODE,
                                               "TO_UR": "",
                                               "TO_BLOCKED": "",
-                                              "TO_RETURN": ""
+                                              "TO_RETURN": "",
                                             },
                                             "UDTEMPSAVE": {
                                               "GOOD": P303QMMASTERQCVAR.TO_UR,
@@ -1030,7 +1082,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE_GROUP":
                                                   _datain.UDCODE[i].CODEGROUP,
                                               "UD_CODE": _datain.UDCODE[i].CODE,
-                                            }
+                                            },
                                           };
 
                                           Dio()
@@ -1052,12 +1104,14 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                                         .toString() ==
                                                     'E') {
                                                   showErrorPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 } else {
                                                   showGoodPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 }
                                               }
                                             }
@@ -1101,10 +1155,11 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                         } else {
                                           //
                                           WORNINGpop(
-                                              context,
-                                              ["", "QTY is not same"],
-                                              120,
-                                              200);
+                                            context,
+                                            ["", "QTY is not same"],
+                                            120,
+                                            200,
+                                          );
                                         }
                                       },
                                       child: Container(
@@ -1121,21 +1176,31 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                   ),
                                 ],
                                 if (_datain.UDCODE[i].CODE == 'A6' &&
-                                    (int.parse(ConverstStr(
-                                            P303QMMASTERQCVAR.TO_ALL)) !=
-                                        int.parse(ConverstStr(
-                                            P303QMMASTERQCVAR.TO_UR)))) ...[
+                                    (int.parse(
+                                          ConverstStr(P303QMMASTERQCVAR.TO_ALL),
+                                        ) !=
+                                        int.parse(
+                                          ConverstStr(P303QMMASTERQCVAR.TO_UR),
+                                        ))) ...[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
-                                        if (int.parse(ConverstStr(
-                                                P303QMMASTERQCVAR.TO_ALL)) ==
-                                            (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR.TO_UR))) +
-                                                (int.parse(ConverstStr(
-                                                    P303QMMASTERQCVAR
-                                                        .TO_BL)))) {
+                                        if (int.parse(
+                                              ConverstStr(
+                                                P303QMMASTERQCVAR.TO_ALL,
+                                              ),
+                                            ) ==
+                                            (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_UR,
+                                                  ),
+                                                )) +
+                                                (int.parse(
+                                                  ConverstStr(
+                                                    P303QMMASTERQCVAR.TO_BL,
+                                                  ),
+                                                ))) {
                                           Map<String, Map<String, String>>
                                               output = {
                                             "UD": {
@@ -1148,7 +1213,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE": _datain.UDCODE[i].CODE,
                                               "TO_UR": "",
                                               "TO_BLOCKED": "",
-                                              "TO_RETURN": ""
+                                              "TO_RETURN": "",
                                             },
                                             "UDTEMPSAVE": {
                                               "GOOD": P303QMMASTERQCVAR.TO_UR,
@@ -1160,7 +1225,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                               "UD_CODE_GROUP":
                                                   _datain.UDCODE[i].CODEGROUP,
                                               "UD_CODE": _datain.UDCODE[i].CODE,
-                                            }
+                                            },
                                           };
 
                                           Dio()
@@ -1182,12 +1247,14 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                                         .toString() ==
                                                     'E') {
                                                   showErrorPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 } else {
                                                   showGoodPopup(
-                                                      P303QMMASTERQCMAINcontext,
-                                                      v.data.toString());
+                                                    P303QMMASTERQCMAINcontext,
+                                                    v.data.toString(),
+                                                  );
                                                 }
                                               }
                                             }
@@ -1231,10 +1298,11 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                         } else {
                                           //
                                           WORNINGpop(
-                                              context,
-                                              ["", "QTY is not same"],
-                                              120,
-                                              200);
+                                            context,
+                                            ["", "QTY is not same"],
+                                            120,
+                                            200,
+                                          );
                                         }
                                       },
                                       child: Container(
@@ -1250,7 +1318,7 @@ class _NEWNEWREQUESTState extends State<NEWNEWREQUEST> {
                                     ),
                                   ),
                                 ],
-                              ]
+                              ],
                             ],
                           ],
                         ),
@@ -1274,9 +1342,7 @@ void _QMI003POPapp(BuildContext contextin) {
     context: contextin,
     barrierDismissible: true,
     builder: (BuildContext context) {
-      return Dialog(
-        child: QMI003POPapp(),
-      );
+      return Dialog(child: QMI003POPapp());
     },
   );
 }
@@ -1298,24 +1364,14 @@ class _QMI003POPappState extends State<QMI003POPapp> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 24,
-            ),
-            const SizedBox(
-              child: Center(
-                child: Text("Selected set"),
-              ),
-            ),
+            const SizedBox(height: 24),
+            const SizedBox(child: Center(child: Text("Selected set"))),
             if (P303QMMASTERQCVAR.pagepopapp == 0) ...[
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    const SizedBox(
-                      child: Center(
-                        child: Text("Appearance"),
-                      ),
-                    ),
+                    const SizedBox(child: Center(child: Text("Appearance"))),
 
                     // if (_datasearch
                     //     .any((item) => item.PLANT == 'noxrust'))
@@ -1379,7 +1435,7 @@ class _QMI003POPappState extends State<QMI003POPapp> {
                                   ),
                                 ),
                               ),
-                            ]
+                            ],
                           ],
                         ),
                       ),
@@ -1389,11 +1445,7 @@ class _QMI003POPappState extends State<QMI003POPapp> {
               ),
             ] else if (P303QMMASTERQCVAR.pagepopapp == 1) ...[
               //
-              const SizedBox(
-                child: Center(
-                  child: Text("DATA"),
-                ),
-              ),
+              const SizedBox(child: Center(child: Text("DATA"))),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ComInputText(
@@ -1431,9 +1483,7 @@ class _QMI003POPappState extends State<QMI003POPapp> {
                   width: 200,
                   height: 40,
                   color: Colors.blue,
-                  child: Center(
-                    child: Text("save"),
-                  ),
+                  child: Center(child: Text("save")),
                 ),
               ),
             ],
@@ -1449,9 +1499,7 @@ void _QCFN(BuildContext contextin) {
     context: contextin,
     barrierDismissible: true,
     builder: (BuildContext context) {
-      return Dialog(
-        child: QCFNWD(),
-      );
+      return Dialog(child: QCFNWD());
     },
   );
 }
@@ -1480,7 +1528,7 @@ class _QCFNWDState extends State<QCFNWD> {
                 data: {
                   "BAPI_NAME": "ZFMPP_QCFN_IN",
                   "ORDERID": P303QMMASTERQCVAR.PROCESS_ORDERset,
-                  "PERNR_ID": USERDATA.ID
+                  "PERNR_ID": USERDATA.ID,
                 },
               ).then((v) {
                 // Navigator.pop(context);
@@ -1491,12 +1539,20 @@ class _QCFNWDState extends State<QCFNWD> {
                   if (v.data['ExportParameter']['INACT_NEW'].toString() ==
                       'E') {
                     showErrorPopup(
-                        P303QMMASTERQCMAINcontext, v.data.toString());
+                      P303QMMASTERQCMAINcontext,
+                      v.data.toString(),
+                    );
                   } else {
-                    showGoodPopup(P303QMMASTERQCMAINcontext, v.data.toString());
+                    showGoodPopup(
+                      P303QMMASTERQCMAINcontext,
+                      v.data.toString(),
+                    );
                   }
                 } else {
-                  showErrorPopup(P303QMMASTERQCMAINcontext, v.data.toString());
+                  showErrorPopup(
+                    P303QMMASTERQCMAINcontext,
+                    v.data.toString(),
+                  );
                 }
               });
             },
@@ -1504,9 +1560,7 @@ class _QCFNWDState extends State<QCFNWD> {
               width: 400,
               height: 100,
               color: Colors.blue,
-              child: Center(
-                child: Text("QCFN"),
-              ),
+              child: Center(child: Text("QCFN")),
             ),
           ),
         ),

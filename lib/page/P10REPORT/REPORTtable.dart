@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:js' as js;
 
@@ -20,6 +21,7 @@ import '../../widget/common/ComInputText.dart';
 import '../../widget/common/Freescroll.dart';
 import '../../widget/common/Loading.dart';
 import '../../widget/onlyINqcui/popup.dart';
+import '../P303QMMASTERQC/P303QMMASTERQCVAR.dart';
 import '../P30SELECTReport/P30SELECTReportvar.dart';
 import '../P31ReportPDFcommon/ReportPDFCommonvar.dart';
 
@@ -33,6 +35,7 @@ import '../P40ReportPDF4GP/ReportPDF4GPvar.dart';
 import '../P50ReportPDFcommonlist/ReportPDFcommonlistvar.dart';
 import '../page30.dart';
 
+import '../page303.dart';
 import 'REPORTvar.dart';
 
 late BuildContext REPORTuiMAINcontext;
@@ -47,9 +50,7 @@ class REPORTuiMAIN extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Page10BlocTableCALL(
-      data: data,
-    );
+    return Page10BlocTableCALL(data: data);
   }
 }
 
@@ -59,15 +60,13 @@ class Page10BlocTableCALL extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => REPORT_CALL_Bloc(),
-        child: BlocBuilder<REPORT_CALL_Bloc, String>(
-          builder: (context, ret) {
-            return REPORTuiBODY(
-              data: data,
-              ret: ret,
-            );
-          },
-        ));
+      create: (_) => REPORT_CALL_Bloc(),
+      child: BlocBuilder<REPORT_CALL_Bloc, String>(
+        builder: (context, ret) {
+          return REPORTuiBODY(data: data, ret: ret);
+        },
+      ),
+    );
   }
 }
 
@@ -98,8 +97,11 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
     REPORTuiMAINcontext = context;
     final _MyData _data = _MyData(context, widget.data ?? []);
 
-    void _sort<T>(Comparable<T> Function(dataset d) getField, int columnIndex,
-        bool ascending) {
+    void _sort<T>(
+      Comparable<T> Function(dataset d) getField,
+      int columnIndex,
+      bool ascending,
+    ) {
       _data._sort<T>(getField, ascending);
       setState(() {
         _sortColumnIndex = columnIndex;
@@ -146,11 +148,17 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
     if (widget.ret == 'C_OK') {
       context.read<REPORT_CALL_Bloc>().add(REPORT_CALL_FLUSH());
       BlocProvider.of<BlocNotification>(contextGB).UpdateNotification(
-          "Success", "PO have returned", enumNotificationlist.Success);
+        "Success",
+        "PO have returned",
+        enumNotificationlist.Success,
+      );
     } else if (widget.ret == 'C_NOK') {
       context.read<REPORT_CALL_Bloc>().add(REPORT_CALL_FLUSH());
       BlocProvider.of<BlocNotification>(contextGB).UpdateNotification(
-          "Error", "PO have problem", enumNotificationlist.Error);
+        "Error",
+        "PO have problem",
+        enumNotificationlist.Error,
+      );
     }
 
     return SingleChildScrollView(
@@ -162,14 +170,17 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
               child: ListTile(
                 leading: const Icon(Icons.search),
                 title: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                        hintText: 'Search', border: InputBorder.none),
-                    onChanged: (value) {
-                      setState(() {
-                        _REPORTuiVAR.searchResult = value;
-                      });
-                    }),
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _REPORTuiVAR.searchResult = value;
+                    });
+                  },
+                ),
                 trailing: IconButton(
                   icon: const Icon(Icons.cancel),
                   onPressed: () {
@@ -181,9 +192,7 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Center(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -204,7 +213,11 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                           const Spacer(),
                           Padding(
                             padding: const EdgeInsetsDirectional.only(
-                                start: 2, end: 2, top: 10, bottom: 10),
+                              start: 2,
+                              end: 2,
+                              top: 10,
+                              bottom: 10,
+                            ),
                             child: InkWell(
                               onTap: () {
                                 // WORNINGpop(context, "Please clear cookies ");
@@ -233,42 +246,79 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                         //     onSort: (int columnIndex, bool ascending) => _sort<num>(
                         //         (dataset d) => d.id, columnIndex, ascending)),
                         DataColumn(
-                            label: const Text('PO'),
-                            onSort: (int columnIndex, bool ascending) =>
-                                _sort<String>((dataset d) => d.f01, columnIndex,
-                                    ascending)),
+                          label: const Text('PO'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f01,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
                         DataColumn(
-                            label: const Text('CP'),
-                            onSort: (int columnIndex, bool ascending) =>
-                                _sort<String>((dataset d) => d.f02, columnIndex,
-                                    ascending)),
+                          label: const Text('CP'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f02,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
                         DataColumn(
-                            label: const Text('CUSTOMER'),
-                            onSort: (int columnIndex, bool ascending) =>
-                                _sort<String>((dataset d) => d.f03, columnIndex,
-                                    ascending)),
+                          label: const Text('CUSTOMER'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f03,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
                         DataColumn(
-                            label: const Text('PART'),
-                            onSort: (int columnIndex, bool ascending) =>
-                                _sort<String>((dataset d) => d.f04, columnIndex,
-                                    ascending)),
+                          label: const Text('PART'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f04,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
                         DataColumn(
-                            label: const Text('PARTNAME'),
-                            onSort: (int columnIndex, bool ascending) =>
-                                _sort<String>((dataset d) => d.f05, columnIndex,
-                                    ascending)),
+                          label: const Text('PARTNAME'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f05,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
 
                         DataColumn(
-                            label: const Text('STATUS'),
-                            onSort: (int columnIndex, bool ascending) =>
-                                _sort<String>((dataset d) => d.f05, columnIndex,
-                                    ascending)),
+                          label: const Text('STATUS'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f05,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
+                        DataColumn(
+                          label: const Text('UD'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f05,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
 
                         DataColumn(
-                            label: const Text('ACTION'),
-                            onSort: (int columnIndex, bool ascending) =>
-                                _sort<String>((dataset d) => d.f05, columnIndex,
-                                    ascending)),
+                          label: const Text('ACTION'),
+                          onSort: (int columnIndex, bool ascending) =>
+                              _sort<String>(
+                                (dataset d) => d.f05,
+                                columnIndex,
+                                ascending,
+                              ),
+                        ),
                       ],
                       columnSpacing: 100,
                       horizontalMargin: 10,
@@ -288,7 +338,6 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                 child: Row(
                   children: [
                     //
-
                     ComInputText(
                       sLabel: "original",
                       height: 40,
@@ -304,9 +353,7 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                         REPORTvar.original = s;
                       },
                     ),
-                    const SizedBox(
-                      width: 15,
-                    ),
+                    const SizedBox(width: 15),
                     ComInputText(
                       sLabel: "newreport",
                       height: 40,
@@ -322,9 +369,7 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                         REPORTvar.newreport = s;
                       },
                     ),
-                    const SizedBox(
-                      width: 15,
-                    ),
+                    const SizedBox(width: 15),
                     InkWell(
                       onTap: () {
                         //
@@ -336,10 +381,11 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                         height: 40,
                         color: Colors.blue,
                         child: const Center(
-                            child: Text(
-                          "COPY",
-                          style: TextStyle(color: Colors.white),
-                        )),
+                          child: Text(
+                            "COPY",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -366,9 +412,7 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                       REPORTvar.recall = s;
                     },
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
+                  const SizedBox(width: 15),
                   InkWell(
                     onTap: () {
                       //
@@ -380,15 +424,14 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                       height: 40,
                       color: Colors.blue,
                       child: const Center(
-                          child: Text(
-                        "RECALL",
-                        style: TextStyle(color: Colors.white),
-                      )),
+                        child: Text(
+                          "RECALL",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
+                  const SizedBox(width: 15),
                   InkWell(
                     onTap: () {
                       //
@@ -400,10 +443,11 @@ class _REPORTuiBODYState extends State<REPORTuiBODY> {
                       height: 40,
                       color: Colors.red,
                       child: const Center(
-                          child: Text(
-                        "CLEAR RECALL",
-                        style: TextStyle(color: Colors.white),
-                      )),
+                        child: Text(
+                          "CLEAR RECALL",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -476,39 +520,63 @@ class _MyData extends DataTableSource {
     }
 
     return DataRow.byIndex(
-        index: index,
-        selected: data.selected,
-        onSelectChanged: (value) {
-          if (data.selected != value) {
-            //function
-          }
-        },
-        cells: [
-          // DataCell(Text(data.id.toString())),
-          DataCell(Text(data.f01)),
-          DataCell(Text(data.f02)),
-          DataCell(Text(data.f03)),
-          DataCell(Text(data.f04)),
+      index: index,
+      selected: data.selected,
+      onSelectChanged: (value) {
+        if (data.selected != value) {
+          //function
+        }
+      },
+      cells: [
+        // DataCell(Text(data.id.toString())),
+        DataCell(Text(data.f01)),
+        DataCell(Text(data.f02)),
+        DataCell(Text(data.f03)),
+        DataCell(Text(data.f04)),
 
-          DataCell(Text(data.f05)),
-          DataCell(
-            Container(
+        DataCell(Text(data.f05)),
+        DataCell(
+          Container(
+            height: 45,
+            width: 90,
+            color: STATUS == 'Inspected'
+                ? Colors.blue.shade400
+                : STATUS == 'Checked'
+                ? Colors.blue
+                : STATUS == 'Approved'
+                ? Colors.green
+                : Colors.white,
+            child: Center(child: Text(STATUS)),
+          ),
+        ),
+        DataCell(
+          InkWell(
+            onTap: () {
+              if (STATUS != '-') {
+                //
+                // print(data.f01);
+                // print(data.f24);
+                P303QMMASTERQCVAR.BATCH = data.f24;
+                P303QMMASTERQCVAR.SEARCH = data.f01;
+                P303QMMASTERQCVAR.SETDAY = 'OK';
+                var now = DateTime.now().subtract(Duration(days: 10));
+                P303QMMASTERQCVAR.day = DateFormat('dd').format(now);
+                P303QMMASTERQCVAR.month = DateFormat('MM').format(now);
+                P303QMMASTERQCVAR.year = DateFormat('yyyy').format(now);
+                STDreport2(context);
+              }
+            },
+            child: Container(
               height: 45,
               width: 90,
-              color: STATUS == 'Inspected'
-                  ? Colors.blue.shade400
-                  : STATUS == 'Checked'
-                      ? Colors.blue
-                      : STATUS == 'Approved'
-                          ? Colors.green
-                          : Colors.white,
-              child: Center(
-                child: Text(STATUS),
-              ),
+              color: Colors.blueGrey,
+              child: Center(child: Text("TAP TO UD")),
             ),
           ),
+        ),
 
-          DataCell(Padding(
+        DataCell(
+          Padding(
             padding: const EdgeInsets.all(2.0),
             child: Row(
               children: [
@@ -570,10 +638,11 @@ class _MyData extends DataTableSource {
                   child: Container(
                     color: Colors.blue,
                     child: const Center(
-                        child: Text(
-                      "REPORT",
-                      style: TxtStyle(color: Colors.white),
-                    )),
+                      child: Text(
+                        "REPORT",
+                        style: TxtStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
                 ),
                 // InkWell(
@@ -632,14 +701,14 @@ class _MyData extends DataTableSource {
                 // ),
               ],
             ),
-          )),
-        ]);
+          ),
+        ),
+      ],
+    );
   }
 }
 
-void STDreport(
-  BuildContext contextin,
-) {
+void STDreport(BuildContext contextin) {
   showDialog(
     context: contextin,
     barrierDismissible: true,
@@ -650,9 +719,26 @@ void STDreport(
           width: 1500,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Page30(),
-            ),
+            child: SingleChildScrollView(child: Page30()),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void STDreport2(BuildContext contextin) {
+  showDialog(
+    context: contextin,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: SizedBox(
+          height: 1000,
+          width: 1500,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(child: Page303()),
           ),
         ),
       );
